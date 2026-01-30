@@ -1,0 +1,844 @@
+{% comment %}
+---------------------------------------------------------
+Copyright 2023 DevLuxx Inc. All rights reserved.
+
+Any unauthorized reproduction, modification, distribution, or
+other use of this material, in whole or in part, is strictly
+forbidden. Violators will be subject to legal action to the
+maximum extent permitted by law.
+
+For inquiries or permission requests, please contact contact@devluxx.com.
+---------------------------------------------------------
+{% endcomment %}
+{%- liquid
+  assign main_heading_font = section.settings.main_heading_font
+  assign sub_heading_font = section.settings.sub_heading_font
+  assign title_position = 'center'
+
+  if section.settings.title_position == 'left'
+    assign title_position = 'left'
+  elsif section.settings.title_position == 'right'
+    assign title_position = 'right'
+  endif
+-%}
+<style>
+           {% comment %} Custom Font Configuration Start {% endcomment %}
+                      {% if section.settings.use_main_heading_font == true %}
+                        {{ main_heading_font | font_face: font_display: 'swap' }}
+
+                        .sf_{{ section.id }} h2,
+                        .sf_{{ section.id }} h3,
+                        .sf_{{ section.id }} h4 {
+                          font-family: {{ main_heading_font.family }}, {{ main_heading_font.fallback_families }};
+                          font-weight: {{ main_heading_font.weight }};
+                          font-style: {{ main_heading_font.style }};
+                        }
+                      {% endif %}
+
+                      {% if section.settings.use_sub_heading_font == true %}
+                        {{ sub_heading_font | font_face: font_display: 'swap' }}
+
+                        .sf_{{ section.id }} a,
+                        .sf_{{ section.id }} .sf_sub_heading,
+                        .sf_{{ section.id }} p {
+                          font-family: {{ sub_heading_font.family }}, {{ sub_heading_font.fallback_families }};
+                          font-weight: {{ sub_heading_font.weight }};
+                          font-style: {{ sub_heading_font.style }};
+                        }
+                      {% endif %}
+                     {% comment %} Custom Font Configuration Ends {% endcomment %}
+
+                   .section-{{ section.id }}-padding {
+                       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+                     z-index: 1;
+    position: relative;
+                       padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+                   }
+
+                   .sf_{{ section.id }} {
+                       background-color: {{ section.settings.bg_color }};
+                       {% if section.settings.enable_section_devider == true %}
+                           border-top: 1px solid {{ section.settings.color_section_devider }};
+                           border-bottom: 1px solid {{ section.settings.color_section_devider }};
+                       {% endif %}
+                   }
+
+                   .sf_{{ section.id }} .sf-container {
+                       max-width: {{ section.settings.page_width | divided_by: 10 }}rem;
+                       margin: 0 auto;
+                       padding-left: {{ section.settings.padding_mobile | divided_by: 10.0 }}rem;
+                       padding-right: {{ section.settings.padding_mobile | divided_by: 10.0 }}rem;
+                   }
+
+                   .section-{{ section.id }}-margin {
+                       margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+                       margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+                   }
+                   .sf_{{ section.id }} h1,
+                    .sf_{{ section.id }} h2,
+                    .sf_{{ section.id }} h3,
+                    .sf_{{ section.id }} h4,
+                    .sf_{{ section.id }} h5 {
+                      padding: 0;
+                      margin: 0;
+                    }
+
+                    .sf_{{ section.id }} h2 {
+                      color: {{ section.settings.text_color }};
+                    }
+                   .sf_{{ section.id }} h2 {
+                              font-size: {{ section.settings.heading_size_mobile }}px !important;
+                  }
+                  .sf_{{ section.id }} p {
+                          color: {{ section.settings.description_color }};
+                  }
+
+                   /** This section css **/
+
+
+              .sf_{{ section.id }}  .sf_custom_button {
+                   background:{{ section.settings.button_bg }};
+                   color:{{ section.settings.button_text_color }};
+                   border-color:{{ section.settings.button_border }};
+                    display: flex;
+                    width: fit-content;
+                    margin: 0 auto;
+                    padding: 10px 20px;
+                    text-decoration: none;
+                    text-transform: unset;
+                    font-weight: {{ section.settings.font_weight }};
+                    border-width: {{ section.settings.btn_thickness }}px;
+                    border-style: solid;
+                    min-height: 50px;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: {{ section.settings.btn_radious }}px;
+                    transition: all .2s cubic-bezier(.65,.05,.36,1);
+                    min-width: 200px;
+                }
+
+    .sf_{{ section.id }}  .sf_custom_button:hover {
+                   background:{{ section.settings.button_bg_hover }};
+                   color:{{ section.settings.button_text_color_hover }};
+                   border-color:{{ section.settings.button_border_hover }};
+                }
+
+
+
+ .sf_{{ section.id }}  .btn {
+	max-width: fit-content;
+	margin: 0 auto;
+	display: flex;
+}
+
+
+.sf_{{ section.id }} .sf-comparison-table-tertiary {
+    background-size:cover;
+    background-position:center center;
+    background-repeat:no-repeat
+}
+.sf_{{ section.id }} .sf-comparison-table-tertiary-content .heading-sf{
+    max-width:570px;
+    width:100%;
+    margin:0 auto
+}
+.sf_{{ section.id }} .sf-comparison-table-tertiary-content .sf-benefits-body{
+    display:block;
+    max-width:724px;
+    width:100%;
+    margin:0 auto 40px;
+    padding:20px 32px;
+    background: {{ section.settings.table_bg }};
+    line-height:normal;
+    box-shadow:2px 2px 14px #00000026;
+    border-radius:12px
+}
+.sf_{{ section.id }} .sf-comparison-table-tertiary-content .sf-benefits-body .sf-benefits-body-inner{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-bottom:1px solid {{ section.settings.table_border }};
+    padding:15px 0
+}
+.sf_{{ section.id }} .sf-comparison-table-tertiary-content .sf-benefits-body .sf-benefits-body-inner:last-child{
+    border-bottom:none
+}
+.sf_{{ section.id }} .sf-comparison-table-tertiary-content .sf-benefits-tr{
+    display:block;
+    width:30%;
+    text-align:center
+}
+.sf_{{ section.id }} .sf-comparison-table-tertiary-content .sf-benefits-tr.sf-benefits-tr-big{
+    display:block;
+    width:40%;
+    text-align:left;
+    text-transform:uppercase;
+    font-size:13px;
+    line-height:normal;
+    font-weight:500
+}
+.sf_{{ section.id }} .sf-comparison-table-tertiary-content .sf-benefits-tr h4{
+    margin-bottom:0;
+    font-size:16px;
+    line-height:normal;
+    font-weight:600;
+    display:block;
+    text-align:center
+}
+.sf_{{ section.id }} .sf-comparison-table-tertiary-content .sf-benefits-heading .sf-benefits-tr{
+    padding:16px 0
+}
+.sf_{{ section.id }} .sf-comparison-table-tertiary-content .sf-benefits-heading{
+    display:flex;
+    max-width:724px;
+    padding:0 32px;
+    width:100%;
+    flex-wrap:wrap;
+    margin:35px auto 0;
+    align-content:center;
+    justify-content:center;
+    align-items:center
+}
+.sf_{{ section.id }} .sf-comparison-table-tertiary-content .sf-benefits-tr img{
+    max-width:110px;
+    width:100%;
+    display:block;
+    margin:0 auto;
+    position:relative;
+    top:-4px
+}
+  
+                   @media (max-width: 600px) {
+                       .sf_{{ section.id }} .videosTitle {
+                           font-size: 26px;
+                           line-height: 140%;
+                           margin-bottom: 24px;
+                       }
+
+                       .sf_{{ section.id }} .videosTitle span {
+                           font-size: 26px;
+                       }
+
+                       .sf_{{ section.id }} .videosSwiper {
+                           margin-bottom: 24px;
+                       }
+
+                       .sf_{{ section.id }} .videosPagination {
+                           position: static;
+                           margin-top: 10px;
+                       }
+
+                       .sf_{{ section.id }} .videoSlide {
+                           width: 80%;
+                       }
+                   }
+
+                   /* valentines mode */
+                   [id='{{ section.id }}'].loveMode {
+                       padding: 48px 20px 0;
+                       background-color: white;
+                   }
+
+                   [id='{{ section.id }}'].loveMode .videoBody {
+                       background-color: var(--pink20);
+                   }
+
+                   [id='{{ section.id }}'].loveMode .videosTitle span {
+                       color: var(--pink);
+                   }
+                   .sf_{{ section.id }} .sf-main-header {
+                            margin: 0 0 15px 0;
+                     }
+                     .sf_{{ section.id }} .text_center {
+                            text-align: center;
+                    }
+
+                    .sf_{{ section.id }} .text_left {
+                      text-align: left;
+                    }
+
+                    .sf_{{ section.id }} .text_right {
+                      text-align: right;
+                    }
+
+          .videoBody .tiktok_logo {
+          	position: absolute;
+          	right: 0;
+          	bottom: 0;
+          	max-width: 35px;
+          	width: 100%;
+          	cursor: pointer;
+          	line-height: 0;
+          }
+            .tiktok_logo a {
+          	line-height: 0;
+          	font-size: 0;
+          }
+            .tiktok_logo img {
+          	max-width: 100%;
+          	width: 100%;
+          }
+          .swiper-pagination-bullet-active {
+        	background: black;
+        }
+      .videoContainer video {
+      	width: 100% !important;
+      	height: 100% !important;
+      	height: 100% !important;
+      }
+    .videoBody p {
+  	color: var(--color);
+  }
+                   @media screen and (min-width: 750px) {
+                       .section-{{ section.id }}-padding {
+                           padding-top: {{ section.settings.padding_top }}px;
+                           padding-bottom: {{ section.settings.padding_bottom }}px;
+                       }
+
+                       .section-{{ section.id }}-margin {
+                           margin-top: {{ section.settings.margin_top }}px;
+                           margin-bottom: {{ section.settings.margin_bottom }}px;
+                       }
+
+                       .sf_{{ section.id }} .sf-container {
+                           padding-left: {{ section.settings.padding_desktop | divided_by: 10 }}rem;
+                           padding-right: {{ section.settings.padding_desktop | divided_by: 10 }}rem;
+                       }
+                       .sf_{{ section.id }} .sf-main-header {
+                            margin: 0 0 25px 0;
+                        }
+
+                          .sf_{{ section.id }} h2 {
+                              font-size: {{ section.settings.heading_size }}px !important;
+                             }
+                   }
+
+
+  .sf_{{ section.id }}_overlay::before {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	content: "";
+	display: block;
+	background: {{ section.settings.ov_color  }};
+	opacity: {{ section.settings.overlay_opacity | divided_by: 100.0  }};
+	z-index: 0;
+}
+</style>
+
+<div class="sf-comparison-table-tertiary {% if section.settings.bg_image != blank  %}  sf_{{ section.id }}_overlay {% endif %}  sf_{{ section.id }} section-{{ section.id }}-margin " style="background-color:{{ section.settings.bg_color }}; {% if section.settings.bg_image != blank  %} background-image:url('{{ section.settings.bg_image | image_url: width: 16000 }}'); position: relative; {% endif %}">
+  <div class="sf-container section-{{ section.id }}-padding">
+    <div class="sf-comparison-table-tertiary-content sf-same-section">
+      <h2 class="heading-sf  text_{{ title_position }}" >{{ section.settings.title | newline_to_br }}</h2>
+        {% if section.settings.description %}
+          <div class="sf_circle_description text_{{ title_position }}">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+      <div>
+        <div class="sf-benefits-heading">
+          <div class="sf-benefits-tr sf-benefits-tr-big"></div>
+          <div class="sf-benefits-tr"><h4>{{ section.settings.other }}</h4></div>
+          <div class="sf-benefits-tr"> <img loading="lazy" src="{{ section.settings.logo | img_url: '200x' }}"   alt="{{ section.settings.logo.alt }}">
+          </div>
+        </div>
+        <div class="sf-benefits-body">
+          {% for block in section.blocks %}
+          <div class="sf-benefits-body-inner">
+            <div class="sf-benefits-tr sf-benefits-tr-big">{{ block.settings.t-heading }}</div>
+            <div class="sf-benefits-tr">
+              {% if block.settings.other_store == 'yes' %}
+                <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16.1621" cy="16" r="16" fill="{{ section.settings.checkmark_color }}"></circle><path d="M22.1621 10L13.9516 22L10.1621 18.2105" stroke="{{ section.settings.checkmark_middle_color }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              {% elsif block.settings.other_store_bad == 'yes' %}
+                <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16.1621" cy="16" r="16" fill="{{ section.settings.checkmarkbad_color }}"></circle><path d="M22.1621 10L13.9516 22L10.1621 18.2105" stroke="{{ section.settings.checkmark_middle_color }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              {% else %}
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="{{ section.settings.crossmark_color }}"></circle><path d="M22 10L10 22M10 10L22 22" stroke="{{ section.settings.crossmark_middle_color }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              {% endif %}
+            </div>
+            <div class="sf-benefits-tr">
+              {% if block.settings.this_store == 'yes' %}
+                <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16.1621" cy="16" r="16" fill="{{ section.settings.checkmark_color }}"></circle><path d="M22.1621 10L13.9516 22L10.1621 18.2105" stroke="{{ section.settings.checkmark_middle_color }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              {% else %}
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="{{ section.settings.crossmark_color }}"></circle><path d="M22 10L10 22M10 10L22 22" stroke="{{ section.settings.crossmark_middle_color }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+        <a class="{% if section.settings.enable_custom_btn %}sf_custom_button {% else %}  button alt btn btn--primary button--primary button-primary button__primary btn_primary btn__primary{% endif %}" href="{{ section.settings.button_url }}">{{ section.settings.button_label }}</a>
+      </div>  
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+ "name": "Comparison Table 3",
+   "blocks": [
+  {
+    "type": "block",
+    "name": "Table Row",
+    "settings": [
+  {
+      "type": "text",
+      "id": "t-heading",
+      "label": "Heading",
+    "default": "Gummy Form Factor"
+    },
+       {
+     "type": "select",
+     "id": "this_store",
+     "options": [
+       {
+         "value": "yes",
+         "label": "Yes"
+       },
+       {
+         "value": "no",
+         "label": "No"
+       }
+     ],
+     "default": "yes",
+     "label": "Our Brand Offer"
+   },
+       {
+     "type": "select",
+     "id": "other_store_bad",
+     "options": [
+       {
+         "value": "yes",
+         "label": "Yes"
+       },
+       {
+         "value": "no",
+         "label": "No"
+       }
+     ],
+     "default": "no",
+     "label": "Other Brands Offer (Bad)"
+   },
+           {
+     "type": "select",
+     "id": "other_store",
+     "options": [
+       {
+         "value": "yes",
+         "label": "Yes"
+       },
+       {
+         "value": "no",
+         "label": "No"
+       }
+     ],
+     "default": "no",
+     "label": "Other Brands Offer"
+   }
+    ]
+  }
+],
+  "settings": [
+    {
+    "type": "header",
+    "content": "Comparison Table #3",
+     "info": "Purchased from [Devluxx.com](https://www.devluxx.com/products/shopify-comparison-table-3) . Contact me or share feedback here: contact@devluxx.com"
+    },
+     {
+    "type": "header",
+    "content": "Base Settings"
+    },
+    {
+      "type": "range",
+      "id": "page_width",
+      "min": 800,
+      "max": 1600,
+      "step": 100,
+      "default": 1200,
+      "unit": "px",
+      "label": "Section Max Width"
+    },
+   {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+     },
+     {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 10
+    },
+       {
+      "type": "color",
+      "id": "ov_color",
+      "label": "Overlay Color",
+      "default": "#000"
+     },
+     {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#FAFAFA"
+     },
+    {
+      "type": "checkbox",
+      "id": "enable_section_devider",
+      "default": false,
+      "label": "Enable Section Devider"
+    },
+      {
+      "type": "color",
+      "id": "color_section_devider",
+      "default": "#000",
+      "label": "Section Devider Color"
+    },
+    {
+      "type":"header",
+      "content":"Heading Settings"
+    },
+       {
+      "type": "textarea",
+      "id": "title",
+      "label": "Heading",
+      "default": "See how we stack up against other creatine brands"
+      },
+     {
+      "type": "select",
+      "id": "title_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Heading Position"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 0,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size - Mobile",
+      "default": 20
+    },
+     {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000"
+     },
+   {
+      "type": "checkbox",
+      "id": "use_main_heading_font",
+      "label": "Use Custom Font",
+      "default": false
+    },
+    {
+      "type": "font_picker",
+      "id": "main_heading_font",
+      "label": "Heading Font Family",
+      "default": "assistant_n4"
+    },
+    {
+      "type":"header",
+      "content":"Description Settings"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Color",
+      "default": "#000"
+     },
+       {
+      "type": "checkbox",
+      "id": "use_sub_heading_font",
+      "label": "Use Custom Font",
+      "default": false
+    },
+    {
+      "type": "font_picker",
+      "id": "sub_heading_font",
+      "label": "Sub Heading Font Family",
+      "default": "assistant_n4"
+    },
+   {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>We're building photorealistic 3D capture for your smartphone. Sign up below to be notified when we launch.</p>"
+     },
+    {
+      "type":"header",
+      "content":"Branding Settings"
+    },
+    {
+      "type": "color",
+      "id": "table_bg",
+      "label": "Table Background Color",
+      "default": "#fff"
+     },
+    {
+      "type": "color",
+      "id": "table_border",
+      "label": "Table Border Color",
+      "default": "#e8e8e8"
+     },
+     {
+       "type": "image_picker",
+       "id": "logo",
+       "label": "Logo"
+     },
+       {
+       "type": "text",
+       "id": "other",
+       "label": "Other Brands Label",
+       "default": "Other Brands"
+     },
+     {
+      "type":"header",
+      "content":"Icon Settings"
+    },
+     {
+      "type": "color",
+      "id": "checkmark_color",
+      "label": "Checkmark Color",
+      "default": "#268F01"
+     },
+     {
+      "type": "color",
+      "id": "checkmarkbad_color",
+      "label": "Checkmark Bad Color",
+      "default": "#B53737"
+     },
+    {
+      "type": "color",
+      "id": "checkmark_middle_color",
+      "label": "Checkmark Middle Color",
+      "default": "#fff"
+     },
+     {
+      "type": "color",
+      "id": "crossmark_color",
+      "label": "Crossmark Color",
+      "default": "#EBEBEB"
+     },
+    {
+      "type": "color",
+      "id": "crossmark_middle_color",
+      "label": "Crossmark Middle Color",
+      "default": "#BFBFBF"
+     },
+      {
+      "type":"header",
+      "content":"Button Settings"
+    },
+      {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+       "default": "Shop Now"
+    },
+     {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button Url"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_btn",
+      "label": "Enable Custom Button Styles",
+      "default": true
+    },
+      {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button Background",
+      "default": "#fff"
+     },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#000"
+     },
+     {
+      "type": "color",
+      "id": "button_border",
+      "label": "Button Border",
+      "default": "#000"
+     },
+     {
+      "type": "range",
+      "id": "btn_radious",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Border Radious",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "btn_thickness",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Border Thickness",
+      "default": 2
+    },
+         {
+      "type": "select",
+      "id": "font_weight",
+      "options": [
+          {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "400",
+      "label": "Font Weight"
+    },
+    {
+  "type": "color",
+  "id": "button_bg_hover",
+  "label": "Button Background Hover",
+  "default": "#000"
+},
+{
+  "type": "color",
+  "id": "button_text_color_hover",
+  "label": "Button Text Color Hover",
+  "default": "#fff"
+},
+{
+  "type": "color",
+  "id": "button_border_hover",
+  "label": "Button Border Hover",
+  "default": "#000"
+},
+ {
+    "type": "header",
+    "content": "Section padding (Inside Space)"
+  },
+        {
+      "type": "range",
+      "id": "padding_desktop",
+      "min": 15,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "unit": "px",
+      "label": "Desktop Both Side Padding"
+    },
+
+     {
+      "type": "range",
+      "id": "padding_mobile",
+      "min": 15,
+      "max": 100,
+      "step": 1,
+      "default": 15,
+      "unit": "px",
+      "label": "Mobile Both Side Padding"
+    },
+  {
+    "type": "range",
+    "id": "padding_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Top Padding",
+    "default": 40
+  },
+  {
+    "type": "range",
+    "id": "padding_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Bottom Padding",
+    "default": 52
+  },
+   {
+    "type": "header",
+    "content": "Section Margin (Outside Space)"
+  },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison Table 3",
+      "blocks": [
+      {
+        "type": "block"
+      },
+       {
+        "type": "block"
+      }
+      ,
+       {
+        "type": "block"
+      }
+      ,
+       {
+        "type": "block"
+      },
+        {
+        "type": "block"
+      }
+    ]
+    }
+  ]
+}
+{% endschema %}
