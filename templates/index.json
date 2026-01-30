@@ -1,1 +1,946 @@
-{"sections":{"video_yfhjN4":{"type":"video","blocks":{"play_kgieXe":{"type":"play","settings":{}},"heading_6nd4rb":{"type":"heading","settings":{"text":"Kapture The Story","heading_tag":"h1"}},"button_AQriMh":{"type":"button","settings":{"style":"outline","size":"lg","text":"Build Your Knekt Kit","url":"shopify:\/\/collections","background":"","text_color":"#ffffff"}}},"block_order":["play_kgieXe","heading_6nd4rb","button_AQriMh"],"settings":{"full_width":true,"allow_transparent_header":true,"autoplay":true,"video_size":"fill","video":"shopify:\/\/files\/videos\/3D Homepage V1.1.mp4","external_video_url":"https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":30}},"slideshow":{"type":"slideshow","blocks":{"video_ewbmYg":{"type":"video","settings":{"video":"shopify:\/\/files\/videos\/3D Homepage V1.1.mp4","content_max_width":700,"mobile_text_position":"place-self-end-center text-center","desktop_text_position":"sm:place-self-end-center sm:text-center","subheading":"","title":"Kapture Your Story","heading_tag":"h0","button_text":"Build Your Kit Today","button_link":"shopify:\/\/collections","text_color":"#ffffff","button_background":"#ffffff","button_text_color":"#000000","overlay_color":"#000000","overlay_opacity":30,"background":"","background_gradient":""}}},"block_order":["video_ewbmYg"],"disabled":true,"settings":{"full_width":true,"allow_transparent_header":true,"show_initial_transition":false,"image_size":"auto","controls_type":"none","transition_type":"fade_with_text","autoplay":true,"cycle_speed":6,"background":"#f2f2f2","background_gradient":"linear-gradient(60deg, rgba(60, 65, 68, 1), rgba(23, 29, 33, 1) 98%)"}},"impact-text":{"type":"impact-text","blocks":{"1664424181b38582d5-0":{"type":"item","settings":{"title":"Knekt","subheading":"Magnetic Digiscoping System for Quick & Easy attachment to...","content":"","button_text":"","button_url":"","animate_impact_text":false,"animate_impact_text_duration":2}}},"block_order":["1664424181b38582d5-0"],"settings":{"full_width":true,"stack_mobile":true,"text_alignment":"center","impact_text_style":"fill","text_divider":"none","impact_text_size_ratio":1,"background":"","background_gradient":"","heading_text_color":"","heading_gradient":"linear-gradient(180deg, rgba(26, 26, 26, 0.3), rgba(26, 26, 26, 0) 100%)","text_color":"","button_background":"","button_text_color":""}},"image-link-blocks":{"type":"image-link-blocks","blocks":{"1664424046b00c932c-0":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Swarovski_3E3E3E.png","stretch_image":true,"link_text":"","link_url":"shopify:\/\/collections\/swarovski","background":"","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":0}},"1664424046b00c932c-1":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Vortex_3E3E3E.png","stretch_image":true,"link_text":"","link_url":"shopify:\/\/products\/bap-e8dc1a56-893e-4031-8f56-4a07be0d0773","background":"","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":0}},"1664424046b00c932c-2":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Maven_3E3E3E.png","stretch_image":true,"link_text":"","link_url":"shopify:\/\/collections\/maven","background":"","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":0}},"e4a0ef18-1856-4ddd-83d8-871a60d7acac":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Kowa_3E3E3E.png","stretch_image":true,"link_text":"","link_url":"shopify:\/\/products\/bap-c3cb0800-3803-4a64-a9fe-316f3a14759b","background":"","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":0}},"1664424046b00c932c-3":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Zeiss_3E3E3E.png","stretch_image":true,"link_text":"","link_url":"shopify:\/\/products\/bap-641677ad-1e72-4054-8032-204abfadad17","background":"","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":0}},"item_A8HHAe":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/View_All.png","stretch_image":true,"link_text":"","link_url":"shopify:\/\/collections","background":"","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":0}}},"block_order":["1664424046b00c932c-0","1664424046b00c932c-1","1664424046b00c932c-2","e4a0ef18-1856-4ddd-83d8-871a60d7acac","1664424046b00c932c-3","item_A8HHAe"],"settings":{"full_width":false,"block_size":"medium","subheading":"","title":"","content":"","link_url":"shopify:\/\/collections","link_text":"","background":"rgba(0,0,0,0)","background_gradient":"","text_color":"rgba(0,0,0,0)","heading_color":"","heading_gradient":""}},"hot-spots":{"type":"hot-spots","blocks":{"item_G4NUWG":{"type":"item","settings":{"horizontal_position":30,"vertical_position":48,"horizontal_position_mobile":16,"vertical_position_mobile":12,"icon_width":32,"title":"Premium Knekt Phone Case","content":"<p>Our premium phone case is luxury and class from the house to the office but rugged and ready when in the field.  With its premium soft touch feel, metal buttons, drop protection, and the Knekt System all built in, you no longer have to swap between your normal and digiscoping phone cases to <em>Kapture Your Story<\/em>.<\/p>"}},"1664424434f5b7d0e0-0":{"type":"item","settings":{"horizontal_position":34,"vertical_position":24,"horizontal_position_mobile":36,"vertical_position_mobile":48,"icon_width":32,"title":"Knekt Universal Adapter","content":"<p>Precision machined from aircraft grade aluminum, with our phone case and this Knekt Universal Adapter, you can attach any Knekt Mag Ring that matches your optic's Knekt Mount size with ease.<\/p>"}},"item_XKPxjy":{"type":"item","settings":{"horizontal_position":38,"vertical_position":33,"horizontal_position_mobile":44,"vertical_position_mobile":26,"icon_width":32,"title":"Knekt Mag Ring","content":"<p>Milled from aircraft grade aluminum, the Knekt Mag Ring, complete with heat resistant, high force magnets is the key to the Knekt system.<\/p><p>Sized to the optic, the swappable micro-adjusting Knekt Mag Ring with 90 degree rotation stops is integral to our users' simple experience.<\/p>"}},"1664424434f5b7d0e0-1":{"type":"item","settings":{"horizontal_position":44,"vertical_position":41,"horizontal_position_mobile":62,"vertical_position_mobile":44,"icon_width":32,"title":"Knekt Mount Ring","content":"<p>The virtually invisible Knekt Mount Ring is the ingenuity of the Knekt System.<\/p><p>Installed on the metal flange inside the eyecup, the Knekt Mount Ring doesn't impede regular optic usage or performance.<\/p><p>We also offer Integrated Knekt Mount Eyecups for a quick install with a factory look.<\/p>"}}},"block_order":["item_G4NUWG","1664424434f5b7d0e0-0","item_XKPxjy","1664424434f5b7d0e0-1"],"settings":{"full_width":true,"image":"shopify:\/\/shop_images\/Mount_Breakdown_5.png","mobile_image":"shopify:\/\/shop_images\/Mount_Breakdown_5_59b8c790-594e-4258-b429-84596e8363d6.png","title":"The Knekt System","content":"","button_text":"Build Your Knekt Kit","button_url":"shopify:\/\/collections","desktop_text_position":"place-self-end-center text-center","image_background":"","image_background_gradient":"","overlay_color":"#000000","overlay_opacity":5,"overlay_text_color":"#ffffff","overlay_button_background":"","overlay_button_text_color":"","hot_spot_dot_background":"#ffffff","hot_spot_dot_text_color":"#000000","hot_spot_content_background":"#ffffff","hot_spot_content_text_color":"#000000","hot_spot_content_opacity":90,"hot_spot_content_blur_radius":5}},"press":{"type":"press","blocks":{"16644243327ba53d2a-0":{"type":"quote","settings":{"logo":"shopify:\/\/shop_images\/Arizona_Custom_Hunts_BW.png","logo_width":150,"author":"Jace Wyatt | Arizona Custom Hunts","content":"I've been testing the Kapture Knekt System for a season now. Never has there been a more convenient and user friendly digiscoping system.","show_rating":true,"rating":5}},"16644243327ba53d2a-1":{"type":"quote","settings":{"logo_width":100,"author":"Joel Ingram | Kapture User","content":"Kapture finally did what no one else has done. Simple in operation, sophisticated in design, borderline bomb proof to what I’ve put it through in the field.","show_rating":true,"rating":5}},"quote_4XNEgR":{"type":"quote","settings":{"logo":"shopify:\/\/shop_images\/Pine_Creek_Outfitters_BW.png","logo_width":100,"author":"Trevor Hunt | Pine Creek Outfitters","content":"I love the slim simple design of the Kapture System. It’s also very stable and easy to use.","show_rating":true,"rating":5}}},"block_order":["16644243327ba53d2a-0","16644243327ba53d2a-1","quote_4XNEgR"],"settings":{"full_width":true,"content_size":"medium","background":"","background_gradient":"","text_color":"","heading_color":"","heading_gradient":"","logo_item_background":"","logo_item_border":""}},"media-grid":{"type":"media-grid","blocks":{"video_xNq4fy":{"type":"video","settings":{"video":"shopify:\/\/files\/videos\/loop resized.mp4","external_video_url":"https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc","show_video_controls":false,"title":"Magnetically Connect and Swap","heading_tag":"h4","link_url":"","link_text":"","mobile_text_position":"place-self-center text-center","desktop_column_span":2,"desktop_row_span":2,"desktop_text_position":"sm:place-self-center sm:text-center","background":"#000000","background_gradient":"","text_color":"#ffffff","text_gradient":"","button_background":"#000000","button_text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":60}},"item-2":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Case_in_Pocket_square.png","title":"Daily Driver Phone Case","heading_tag":"h4","link_url":"","link_text":"","mobile_text_position":"place-self-center text-center","desktop_column_span":1,"desktop_row_span":1,"desktop_text_position":"sm:place-self-center sm:text-center","background":"#666666","background_gradient":"","text_color":"#ffffff","text_gradient":"","button_background":"#000000","button_text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":50}},"item-1":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/8O1A9101.png","title":"Always Ready","heading_tag":"h4","link_url":"","link_text":"","mobile_text_position":"place-self-center text-center","desktop_column_span":1,"desktop_row_span":1,"desktop_text_position":"sm:place-self-center sm:text-center","background":"#666666","background_gradient":"","text_color":"#ffffff","text_gradient":"","button_background":"#000000","button_text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":50}},"video_fmnqy7":{"type":"video","disabled":true,"settings":{"video":"shopify:\/\/files\/videos\/3d Homepage version.mp4","external_video_url":"https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc","show_video_controls":false,"title":"Uninterrupted Optic Usage","heading_tag":"h4","link_url":"","link_text":"","mobile_text_position":"place-self-center text-center","desktop_column_span":2,"desktop_row_span":1,"desktop_text_position":"sm:place-self-center sm:text-center","background":"#000000","background_gradient":"","text_color":"#ffffff","text_gradient":"","button_background":"#000000","button_text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":40}},"image_7tKggk":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Using-Optic-Wide-8O1A8995.jpg","title":"Uninterrupted Optic Usage","heading_tag":"h4","link_url":"","link_text":"","mobile_text_position":"place-self-center text-center","desktop_column_span":2,"desktop_row_span":1,"desktop_text_position":"sm:place-self-center sm:text-center","background":"#000000","background_gradient":"","text_color":"#ffffff","text_gradient":"","button_background":"#000000","button_text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":50}}},"block_order":["video_xNq4fy","item-2","item-1","video_fmnqy7","image_7tKggk"],"settings":{"full_width":true,"reduce_width":true,"desktop_row_height":290,"mobile_row_height":150,"background":"","background_gradient":""}},"before_after_image_LyM8bc":{"type":"before-after-image","settings":{"full_width":true,"subheading":"Take Better Pictures","title":"Unlock Studio Quality Images","content":"<p>Kapture is the <strong>only digiscoping solution<\/strong> that can magnetically align your optic to <strong>both the regular and high zoom (telephoto) lenses<\/strong> of your phone. This unlocks your full potential, giving you access to higher clarity, studio quality images unlike any other system.<\/p>","before_image":"shopify:\/\/shop_images\/Elk-In-Field-with-Breath-1xb.jpg","after_image":"shopify:\/\/shop_images\/Elk-In-Field-with-Breath-5x.jpg","expand_image":true,"text_position":"center","before_after_text_position":"top","before_text":"Regular Lens","after_text":"Telephoto Lens","drag_initial_position":52,"background":"","background_gradient":"","text_color":"","before_text_color":"#ffffff","after_text_color":"#ffffff","drag_cursor_background":"#ffffff","drag_cursor_color":"#000000"}},"press_bMxw8q":{"type":"press","blocks":{"quote_jwbBmj":{"type":"quote","settings":{"logo_width":100,"author":"Jim Swanson  | Kapture User","content":"I didn't even know my phone could take images this good.  Access to the  telephoto lens is a game changer.","show_rating":true,"rating":5}},"quote_eYNpdC":{"type":"quote","settings":{"logo_width":100,"author":"Holly Jackson | Kapture User","content":"Finally a digiscoping system that lets me take full advantage of my phone's camera lenses.","show_rating":true,"rating":5}},"quote_mP6djE":{"type":"quote","disabled":true,"settings":{"logo_width":100,"author":"","content":"Write some content about what they says about your store.","show_rating":true,"rating":4}}},"block_order":["quote_jwbBmj","quote_eYNpdC","quote_mP6djE"],"settings":{"full_width":true,"content_size":"medium","background":"","background_gradient":"","text_color":"","heading_color":"","heading_gradient":"","logo_item_background":"","logo_item_border":""}},"video_tRQNeN":{"type":"video","blocks":{"play_kbVHj3":{"type":"play","settings":{}},"heading_bJ7Fym":{"type":"heading","settings":{"text":"Learn More About Kapture","heading_tag":"h1"}}},"block_order":["play_kbVHj3","heading_bJ7Fym"],"settings":{"full_width":true,"allow_transparent_header":false,"autoplay":false,"video_size":"lg","external_video_url":"https:\/\/www.youtube.com\/watch?v=pc38JTVdmSc","poster":"shopify:\/\/shop_images\/Setup_Pic_Rock.jpg","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":30}},"image_with_text_overlay_crEyLw":{"type":"image-with-text-overlay","blocks":{"subheading_GqhAJV":{"type":"subheading","disabled":true,"settings":{"text":"Subheading"}},"heading_jYpn4c":{"type":"heading","settings":{"text":"The Digiscoping Experience Redefined","heading_tag":"h2"}},"richtext_4gDBRR":{"type":"richtext","disabled":true,"settings":{"content":"<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>"}}},"block_order":["subheading_GqhAJV","heading_jYpn4c","richtext_4gDBRR"],"disabled":true,"settings":{"full_width":true,"allow_transparent_header":false,"enable_parallax":true,"image_size":"lg","image":"shopify:\/\/shop_images\/Wide_View_1.png","mobile_text_position":"place-self-center text-center","desktop_text_position":"sm:place-self-center sm:text-center","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":40}},"media_with_text_cLhPGM":{"type":"media-with-text","blocks":{"image_gkVen3":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Integrated-Eyecup.jpg","media_width":60,"media_position":"start","text_position":"place-self-center text-center","icon":"none","icon_width":48,"subheading":"","title":"Integrated Factory EyeCups","content":"<p>We offer custom eyecups from participating optic brand partners where we have integrated our Knekt Mount directly into the factory eyecup.  Offering the discerning buyer a simplified install and factory looking kit.<\/p>","link_text":"View Brand Partners","link_url":"shopify:\/\/collections\/knekt-mount-integrated-eyecups","background":"#000000","background_gradient":"","text_color":"#ffffff","text_gradient":"","button_background":"#f0f0f0","button_text_color":"#000000"}}},"block_order":["image_gkVen3"],"disabled":true,"settings":{"full_width":false,"alternate_media_position":false,"spacing":"none"}},"comparison_table_3_devluxx_nNXVwH":{"type":"comparison-table-3-devluxx","blocks":{"block_hVmLUt":{"type":"block","settings":{"t-heading":"Magnetically Align Camera to Optic","this_store":"yes","other_store_bad":"no","other_store":"yes"}},"block_yx9cPC":{"type":"block","settings":{"t-heading":"Unconditional Lifetime Warranty","this_store":"yes","other_store_bad":"no","other_store":"no"}},"block_pnxGNL":{"type":"block","settings":{"t-heading":"Daily Use MagSafe Cell Phone Case","this_store":"yes","other_store_bad":"no","other_store":"no"}},"block_CVabdm":{"type":"block","settings":{"t-heading":"Wireless Charging Compatible Case","this_store":"yes","other_store_bad":"no","other_store":"no"}},"block_hz3zyU":{"type":"block","settings":{"t-heading":"Use Both Regular & Zoom Phone Lenses","this_store":"yes","other_store_bad":"no","other_store":"no"}},"block_qkNjMc":{"type":"block","settings":{"t-heading":"Case Blocks Flashlight & other Lenses","this_store":"no","other_store_bad":"yes","other_store":"no"}},"block_B3UniJ":{"type":"block","settings":{"t-heading":"Adapter Impedes Normal Optic Use","this_store":"no","other_store_bad":"yes","other_store":"no"}},"block_xQB9kP":{"type":"block","settings":{"t-heading":"eye relief twist changes picture angle","this_store":"no","other_store_bad":"yes","other_store":"no"}},"block_exnDWx":{"type":"block","settings":{"t-heading":"Adds Wear & Tear to Eye Relief Rubber","this_store":"no","other_store_bad":"yes","other_store":"no"}},"block_HdxrtB":{"type":"block","settings":{"t-heading":"Magnets on Optic Attract Debris","this_store":"no","other_store_bad":"yes","other_store":"no"}},"block_xrJHQ4":{"type":"block","settings":{"t-heading":"military grade aluminum parts","this_store":"yes","other_store_bad":"no","other_store":"no"}},"block_cTHJCa":{"type":"block","settings":{"t-heading":"factory original eyecup integration","this_store":"yes","other_store_bad":"no","other_store":"no"}},"block_ATwcq9":{"type":"block","settings":{"t-heading":"Under $30 to add additional optics","this_store":"yes","other_store_bad":"no","other_store":"no"}}},"block_order":["block_hVmLUt","block_yx9cPC","block_pnxGNL","block_CVabdm","block_hz3zyU","block_qkNjMc","block_B3UniJ","block_xQB9kP","block_exnDWx","block_HdxrtB","block_xrJHQ4","block_cTHJCa","block_ATwcq9"],"settings":{"page_width":1200,"overlay_opacity":10,"ov_color":"#000000","bg_color":"#f0f0f0","enable_section_devider":false,"color_section_devider":"#1a1a1a","title":"How Do We Stack Up","title_position":"center","heading_size":52,"heading_size_mobile":32,"text_color":"#1a1a1a","use_main_heading_font":true,"main_heading_font":"din_next_n7","description_color":"#1a1a1a","use_sub_heading_font":true,"sub_heading_font":"din_next_n4","description":"<p>We say it is the best but don't just take our word for it.  See for yourself below.<\/p>","table_bg":"#ffffff","table_border":"#e8e8e8","logo":"shopify:\/\/shop_images\/Logo_02_Blue.png","other":"Ollin®","checkmark_color":"#268f01","checkmarkbad_color":"#b53737","checkmark_middle_color":"#ffffff","crossmark_color":"#ebebeb","crossmark_middle_color":"#bfbfbf","button_label":"Build Your Knekt Kit","button_url":"shopify:\/\/collections","enable_custom_btn":false,"button_bg":"#ffffff","button_text_color":"#000000","button_border":"#000000","btn_radious":50,"btn_thickness":2,"font_weight":"400","button_bg_hover":"#000000","button_text_color_hover":"#ffffff","button_border_hover":"#000000","padding_desktop":50,"padding_mobile":15,"padding_top":40,"padding_bottom":52,"margin_top":20,"margin_bottom":0}}},"order":["video_yfhjN4","slideshow","impact-text","image-link-blocks","hot-spots","press","media-grid","before_after_image_LyM8bc","press_bMxw8q","video_tRQNeN","image_with_text_overlay_crEyLw","media_with_text_cLhPGM","comparison_table_3_devluxx_nNXVwH"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "video_yfhjN4": {
+      "type": "video",
+      "blocks": {
+        "play_kgieXe": {
+          "type": "play",
+          "settings": {}
+        },
+        "heading_6nd4rb": {
+          "type": "heading",
+          "settings": {
+            "text": "Kapture The Story",
+            "heading_tag": "h1"
+          }
+        },
+        "button_AQriMh": {
+          "type": "button",
+          "settings": {
+            "style": "outline",
+            "size": "lg",
+            "text": "Build Your Knekt Kit",
+            "url": "shopify://collections",
+            "background": "",
+            "text_color": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "play_kgieXe",
+        "heading_6nd4rb",
+        "button_AQriMh"
+      ],
+      "settings": {
+        "full_width": true,
+        "allow_transparent_header": true,
+        "autoplay": true,
+        "video_size": "fill",
+        "video": "shopify://files/videos/3D Homepage V1.1.mp4",
+        "external_video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30
+      }
+    },
+    "slideshow": {
+      "type": "slideshow",
+      "blocks": {
+        "video_ewbmYg": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/3D Homepage V1.1.mp4",
+            "content_max_width": 700,
+            "mobile_text_position": "place-self-end-center text-center",
+            "desktop_text_position": "sm:place-self-end-center sm:text-center",
+            "subheading": "",
+            "title": "Kapture Your Story",
+            "heading_tag": "h0",
+            "button_text": "Build Your Kit Today",
+            "button_link": "shopify://collections",
+            "text_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_text_color": "#000000",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "background": "",
+            "background_gradient": ""
+          }
+        }
+      },
+      "block_order": [
+        "video_ewbmYg"
+      ],
+      "disabled": true,
+      "settings": {
+        "full_width": true,
+        "allow_transparent_header": true,
+        "show_initial_transition": false,
+        "image_size": "auto",
+        "controls_type": "none",
+        "transition_type": "fade_with_text",
+        "autoplay": true,
+        "cycle_speed": 6,
+        "background": "#f2f2f2",
+        "background_gradient": "linear-gradient(60deg, rgba(60, 65, 68, 1), rgba(23, 29, 33, 1) 98%)"
+      }
+    },
+    "impact-text": {
+      "type": "impact-text",
+      "blocks": {
+        "1664424181b38582d5-0": {
+          "type": "item",
+          "settings": {
+            "title": "Knekt",
+            "subheading": "Magnetic Digiscoping System for Quick & Easy attachment to...",
+            "content": "",
+            "button_text": "",
+            "button_url": "",
+            "animate_impact_text": false,
+            "animate_impact_text_duration": 2
+          }
+        }
+      },
+      "block_order": [
+        "1664424181b38582d5-0"
+      ],
+      "settings": {
+        "full_width": true,
+        "stack_mobile": true,
+        "text_alignment": "center",
+        "impact_text_style": "fill",
+        "text_divider": "none",
+        "impact_text_size_ratio": 1,
+        "background": "",
+        "background_gradient": "",
+        "heading_text_color": "",
+        "heading_gradient": "linear-gradient(180deg, rgba(26, 26, 26, 0.3), rgba(26, 26, 26, 0) 100%)",
+        "text_color": "",
+        "button_background": "",
+        "button_text_color": ""
+      }
+    },
+    "image-link-blocks": {
+      "type": "image-link-blocks",
+      "blocks": {
+        "1664424046b00c932c-0": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Swarovski_3E3E3E.png",
+            "stretch_image": true,
+            "link_text": "",
+            "link_url": "shopify://collections/swarovski",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "1664424046b00c932c-1": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Vortex_3E3E3E.png",
+            "stretch_image": true,
+            "link_text": "",
+            "link_url": "shopify://products/bap-e8dc1a56-893e-4031-8f56-4a07be0d0773",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "1664424046b00c932c-2": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Maven_3E3E3E.png",
+            "stretch_image": true,
+            "link_text": "",
+            "link_url": "shopify://collections/maven",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "e4a0ef18-1856-4ddd-83d8-871a60d7acac": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Kowa_3E3E3E.png",
+            "stretch_image": true,
+            "link_text": "",
+            "link_url": "shopify://products/bap-c3cb0800-3803-4a64-a9fe-316f3a14759b",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "1664424046b00c932c-3": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Zeiss_3E3E3E.png",
+            "stretch_image": true,
+            "link_text": "",
+            "link_url": "shopify://products/bap-641677ad-1e72-4054-8032-204abfadad17",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "item_A8HHAe": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/View_All.png",
+            "stretch_image": true,
+            "link_text": "",
+            "link_url": "shopify://collections",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "1664424046b00c932c-0",
+        "1664424046b00c932c-1",
+        "1664424046b00c932c-2",
+        "e4a0ef18-1856-4ddd-83d8-871a60d7acac",
+        "1664424046b00c932c-3",
+        "item_A8HHAe"
+      ],
+      "settings": {
+        "full_width": false,
+        "block_size": "medium",
+        "subheading": "",
+        "title": "",
+        "content": "",
+        "link_url": "shopify://collections",
+        "link_text": "",
+        "background": "rgba(0,0,0,0)",
+        "background_gradient": "",
+        "text_color": "rgba(0,0,0,0)",
+        "heading_color": "",
+        "heading_gradient": ""
+      }
+    },
+    "hot-spots": {
+      "type": "hot-spots",
+      "blocks": {
+        "item_G4NUWG": {
+          "type": "item",
+          "settings": {
+            "horizontal_position": 30,
+            "vertical_position": 48,
+            "horizontal_position_mobile": 16,
+            "vertical_position_mobile": 12,
+            "icon_width": 32,
+            "title": "Premium Knekt Phone Case",
+            "content": "<p>Our premium phone case is luxury and class from the house to the office but rugged and ready when in the field.  With its premium soft touch feel, metal buttons, drop protection, and the Knekt System all built in, you no longer have to swap between your normal and digiscoping phone cases to <em>Kapture Your Story</em>.</p>"
+          }
+        },
+        "1664424434f5b7d0e0-0": {
+          "type": "item",
+          "settings": {
+            "horizontal_position": 34,
+            "vertical_position": 24,
+            "horizontal_position_mobile": 36,
+            "vertical_position_mobile": 48,
+            "icon_width": 32,
+            "title": "Knekt Universal Adapter",
+            "content": "<p>Precision machined from aircraft grade aluminum, with our phone case and this Knekt Universal Adapter, you can attach any Knekt Mag Ring that matches your optic's Knekt Mount size with ease.</p>"
+          }
+        },
+        "item_XKPxjy": {
+          "type": "item",
+          "settings": {
+            "horizontal_position": 38,
+            "vertical_position": 33,
+            "horizontal_position_mobile": 44,
+            "vertical_position_mobile": 26,
+            "icon_width": 32,
+            "title": "Knekt Mag Ring",
+            "content": "<p>Milled from aircraft grade aluminum, the Knekt Mag Ring, complete with heat resistant, high force magnets is the key to the Knekt system.</p><p>Sized to the optic, the swappable micro-adjusting Knekt Mag Ring with 90 degree rotation stops is integral to our users' simple experience.</p>"
+          }
+        },
+        "1664424434f5b7d0e0-1": {
+          "type": "item",
+          "settings": {
+            "horizontal_position": 44,
+            "vertical_position": 41,
+            "horizontal_position_mobile": 62,
+            "vertical_position_mobile": 44,
+            "icon_width": 32,
+            "title": "Knekt Mount Ring",
+            "content": "<p>The virtually invisible Knekt Mount Ring is the ingenuity of the Knekt System.</p><p>Installed on the metal flange inside the eyecup, the Knekt Mount Ring doesn't impede regular optic usage or performance.</p><p>We also offer Integrated Knekt Mount Eyecups for a quick install with a factory look.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "item_G4NUWG",
+        "1664424434f5b7d0e0-0",
+        "item_XKPxjy",
+        "1664424434f5b7d0e0-1"
+      ],
+      "settings": {
+        "full_width": true,
+        "image": "shopify://shop_images/Mount_Breakdown_5.png",
+        "mobile_image": "shopify://shop_images/Mount_Breakdown_5_59b8c790-594e-4258-b429-84596e8363d6.png",
+        "title": "The Knekt System",
+        "content": "",
+        "button_text": "Build Your Knekt Kit",
+        "button_url": "shopify://collections",
+        "desktop_text_position": "place-self-end-center text-center",
+        "image_background": "",
+        "image_background_gradient": "",
+        "overlay_color": "#000000",
+        "overlay_opacity": 5,
+        "overlay_text_color": "#ffffff",
+        "overlay_button_background": "",
+        "overlay_button_text_color": "",
+        "hot_spot_dot_background": "#ffffff",
+        "hot_spot_dot_text_color": "#000000",
+        "hot_spot_content_background": "#ffffff",
+        "hot_spot_content_text_color": "#000000",
+        "hot_spot_content_opacity": 90,
+        "hot_spot_content_blur_radius": 5
+      }
+    },
+    "press": {
+      "type": "press",
+      "blocks": {
+        "16644243327ba53d2a-0": {
+          "type": "quote",
+          "settings": {
+            "logo": "shopify://shop_images/Arizona_Custom_Hunts_BW.png",
+            "logo_width": 150,
+            "author": "Jace Wyatt | Arizona Custom Hunts",
+            "content": "I've been testing the Kapture Knekt System for a season now. Never has there been a more convenient and user friendly digiscoping system.",
+            "show_rating": true,
+            "rating": 5
+          }
+        },
+        "16644243327ba53d2a-1": {
+          "type": "quote",
+          "settings": {
+            "logo_width": 100,
+            "author": "Joel Ingram | Kapture User",
+            "content": "Kapture finally did what no one else has done. Simple in operation, sophisticated in design, borderline bomb proof to what I’ve put it through in the field.",
+            "show_rating": true,
+            "rating": 5
+          }
+        },
+        "quote_4XNEgR": {
+          "type": "quote",
+          "settings": {
+            "logo": "shopify://shop_images/Pine_Creek_Outfitters_BW.png",
+            "logo_width": 100,
+            "author": "Trevor Hunt | Pine Creek Outfitters",
+            "content": "I love the slim simple design of the Kapture System. It’s also very stable and easy to use.",
+            "show_rating": true,
+            "rating": 5
+          }
+        }
+      },
+      "block_order": [
+        "16644243327ba53d2a-0",
+        "16644243327ba53d2a-1",
+        "quote_4XNEgR"
+      ],
+      "settings": {
+        "full_width": true,
+        "content_size": "medium",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "logo_item_background": "",
+        "logo_item_border": ""
+      }
+    },
+    "media-grid": {
+      "type": "media-grid",
+      "blocks": {
+        "video_xNq4fy": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/loop resized.mp4",
+            "external_video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "show_video_controls": false,
+            "title": "Magnetically Connect and Swap",
+            "heading_tag": "h4",
+            "link_url": "",
+            "link_text": "",
+            "mobile_text_position": "place-self-center text-center",
+            "desktop_column_span": 2,
+            "desktop_row_span": 2,
+            "desktop_text_position": "sm:place-self-center sm:text-center",
+            "background": "#000000",
+            "background_gradient": "",
+            "text_color": "#ffffff",
+            "text_gradient": "",
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 60
+          }
+        },
+        "item-2": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Case_in_Pocket_square.png",
+            "title": "Daily Driver Phone Case",
+            "heading_tag": "h4",
+            "link_url": "",
+            "link_text": "",
+            "mobile_text_position": "place-self-center text-center",
+            "desktop_column_span": 1,
+            "desktop_row_span": 1,
+            "desktop_text_position": "sm:place-self-center sm:text-center",
+            "background": "#666666",
+            "background_gradient": "",
+            "text_color": "#ffffff",
+            "text_gradient": "",
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 50
+          }
+        },
+        "item-1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/8O1A9101.png",
+            "title": "Always Ready",
+            "heading_tag": "h4",
+            "link_url": "",
+            "link_text": "",
+            "mobile_text_position": "place-self-center text-center",
+            "desktop_column_span": 1,
+            "desktop_row_span": 1,
+            "desktop_text_position": "sm:place-self-center sm:text-center",
+            "background": "#666666",
+            "background_gradient": "",
+            "text_color": "#ffffff",
+            "text_gradient": "",
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 50
+          }
+        },
+        "video_fmnqy7": {
+          "type": "video",
+          "disabled": true,
+          "settings": {
+            "video": "shopify://files/videos/3d Homepage version.mp4",
+            "external_video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "show_video_controls": false,
+            "title": "Uninterrupted Optic Usage",
+            "heading_tag": "h4",
+            "link_url": "",
+            "link_text": "",
+            "mobile_text_position": "place-self-center text-center",
+            "desktop_column_span": 2,
+            "desktop_row_span": 1,
+            "desktop_text_position": "sm:place-self-center sm:text-center",
+            "background": "#000000",
+            "background_gradient": "",
+            "text_color": "#ffffff",
+            "text_gradient": "",
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 40
+          }
+        },
+        "image_7tKggk": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Using-Optic-Wide-8O1A8995.jpg",
+            "title": "Uninterrupted Optic Usage",
+            "heading_tag": "h4",
+            "link_url": "",
+            "link_text": "",
+            "mobile_text_position": "place-self-center text-center",
+            "desktop_column_span": 2,
+            "desktop_row_span": 1,
+            "desktop_text_position": "sm:place-self-center sm:text-center",
+            "background": "#000000",
+            "background_gradient": "",
+            "text_color": "#ffffff",
+            "text_gradient": "",
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 50
+          }
+        }
+      },
+      "block_order": [
+        "video_xNq4fy",
+        "item-2",
+        "item-1",
+        "video_fmnqy7",
+        "image_7tKggk"
+      ],
+      "settings": {
+        "full_width": true,
+        "reduce_width": true,
+        "desktop_row_height": 290,
+        "mobile_row_height": 150,
+        "background": "",
+        "background_gradient": ""
+      }
+    },
+    "before_after_image_LyM8bc": {
+      "type": "before-after-image",
+      "settings": {
+        "full_width": true,
+        "subheading": "Take Better Pictures",
+        "title": "Unlock Studio Quality Images",
+        "content": "<p>Kapture is the <strong>only digiscoping solution</strong> that can magnetically align your optic to <strong>both the regular and high zoom (telephoto) lenses</strong> of your phone. This unlocks your full potential, giving you access to higher clarity, studio quality images unlike any other system.</p>",
+        "before_image": "shopify://shop_images/Elk-In-Field-with-Breath-1xb.jpg",
+        "after_image": "shopify://shop_images/Elk-In-Field-with-Breath-5x.jpg",
+        "expand_image": true,
+        "text_position": "center",
+        "before_after_text_position": "top",
+        "before_text": "Regular Lens",
+        "after_text": "Telephoto Lens",
+        "drag_initial_position": 52,
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "before_text_color": "#ffffff",
+        "after_text_color": "#ffffff",
+        "drag_cursor_background": "#ffffff",
+        "drag_cursor_color": "#000000"
+      }
+    },
+    "press_bMxw8q": {
+      "type": "press",
+      "blocks": {
+        "quote_jwbBmj": {
+          "type": "quote",
+          "settings": {
+            "logo_width": 100,
+            "author": "Jim Swanson  | Kapture User",
+            "content": "I didn't even know my phone could take images this good.  Access to the  telephoto lens is a game changer.",
+            "show_rating": true,
+            "rating": 5
+          }
+        },
+        "quote_eYNpdC": {
+          "type": "quote",
+          "settings": {
+            "logo_width": 100,
+            "author": "Holly Jackson | Kapture User",
+            "content": "Finally a digiscoping system that lets me take full advantage of my phone's camera lenses.",
+            "show_rating": true,
+            "rating": 5
+          }
+        },
+        "quote_mP6djE": {
+          "type": "quote",
+          "disabled": true,
+          "settings": {
+            "logo_width": 100,
+            "author": "",
+            "content": "Write some content about what they says about your store.",
+            "show_rating": true,
+            "rating": 4
+          }
+        }
+      },
+      "block_order": [
+        "quote_jwbBmj",
+        "quote_eYNpdC",
+        "quote_mP6djE"
+      ],
+      "settings": {
+        "full_width": true,
+        "content_size": "medium",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "logo_item_background": "",
+        "logo_item_border": ""
+      }
+    },
+    "video_tRQNeN": {
+      "type": "video",
+      "blocks": {
+        "play_kbVHj3": {
+          "type": "play",
+          "settings": {}
+        },
+        "heading_bJ7Fym": {
+          "type": "heading",
+          "settings": {
+            "text": "Learn More About Kapture",
+            "heading_tag": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "play_kbVHj3",
+        "heading_bJ7Fym"
+      ],
+      "settings": {
+        "full_width": true,
+        "allow_transparent_header": false,
+        "autoplay": false,
+        "video_size": "lg",
+        "external_video_url": "https://www.youtube.com/watch?v=pc38JTVdmSc",
+        "poster": "shopify://shop_images/Setup_Pic_Rock.jpg",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30
+      }
+    },
+    "image_with_text_overlay_crEyLw": {
+      "type": "image-with-text-overlay",
+      "blocks": {
+        "subheading_GqhAJV": {
+          "type": "subheading",
+          "disabled": true,
+          "settings": {
+            "text": "Subheading"
+          }
+        },
+        "heading_jYpn4c": {
+          "type": "heading",
+          "settings": {
+            "text": "The Digiscoping Experience Redefined",
+            "heading_tag": "h2"
+          }
+        },
+        "richtext_4gDBRR": {
+          "type": "richtext",
+          "disabled": true,
+          "settings": {
+            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "subheading_GqhAJV",
+        "heading_jYpn4c",
+        "richtext_4gDBRR"
+      ],
+      "disabled": true,
+      "settings": {
+        "full_width": true,
+        "allow_transparent_header": false,
+        "enable_parallax": true,
+        "image_size": "lg",
+        "image": "shopify://shop_images/Wide_View_1.png",
+        "mobile_text_position": "place-self-center text-center",
+        "desktop_text_position": "sm:place-self-center sm:text-center",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 40
+      }
+    },
+    "media_with_text_cLhPGM": {
+      "type": "media-with-text",
+      "blocks": {
+        "image_gkVen3": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Integrated-Eyecup.jpg",
+            "media_width": 60,
+            "media_position": "start",
+            "text_position": "place-self-center text-center",
+            "icon": "none",
+            "icon_width": 48,
+            "subheading": "",
+            "title": "Integrated Factory EyeCups",
+            "content": "<p>We offer custom eyecups from participating optic brand partners where we have integrated our Knekt Mount directly into the factory eyecup.  Offering the discerning buyer a simplified install and factory looking kit.</p>",
+            "link_text": "View Brand Partners",
+            "link_url": "shopify://collections/knekt-mount-integrated-eyecups",
+            "background": "#000000",
+            "background_gradient": "",
+            "text_color": "#ffffff",
+            "text_gradient": "",
+            "button_background": "#f0f0f0",
+            "button_text_color": "#000000"
+          }
+        }
+      },
+      "block_order": [
+        "image_gkVen3"
+      ],
+      "disabled": true,
+      "settings": {
+        "full_width": false,
+        "alternate_media_position": false,
+        "spacing": "none"
+      }
+    },
+    "comparison_table_3_devluxx_nNXVwH": {
+      "type": "comparison-table-3-devluxx",
+      "blocks": {
+        "block_hVmLUt": {
+          "type": "block",
+          "settings": {
+            "t-heading": "Magnetically Align Camera to Optic",
+            "this_store": "yes",
+            "other_store_bad": "no",
+            "other_store": "yes"
+          }
+        },
+        "block_yx9cPC": {
+          "type": "block",
+          "settings": {
+            "t-heading": "Unconditional Lifetime Warranty",
+            "this_store": "yes",
+            "other_store_bad": "no",
+            "other_store": "no"
+          }
+        },
+        "block_pnxGNL": {
+          "type": "block",
+          "settings": {
+            "t-heading": "Daily Use MagSafe Cell Phone Case",
+            "this_store": "yes",
+            "other_store_bad": "no",
+            "other_store": "no"
+          }
+        },
+        "block_CVabdm": {
+          "type": "block",
+          "settings": {
+            "t-heading": "Wireless Charging Compatible Case",
+            "this_store": "yes",
+            "other_store_bad": "no",
+            "other_store": "no"
+          }
+        },
+        "block_hz3zyU": {
+          "type": "block",
+          "settings": {
+            "t-heading": "Use Both Regular & Zoom Phone Lenses",
+            "this_store": "yes",
+            "other_store_bad": "no",
+            "other_store": "no"
+          }
+        },
+        "block_qkNjMc": {
+          "type": "block",
+          "settings": {
+            "t-heading": "Case Blocks Flashlight & other Lenses",
+            "this_store": "no",
+            "other_store_bad": "yes",
+            "other_store": "no"
+          }
+        },
+        "block_B3UniJ": {
+          "type": "block",
+          "settings": {
+            "t-heading": "Adapter Impedes Normal Optic Use",
+            "this_store": "no",
+            "other_store_bad": "yes",
+            "other_store": "no"
+          }
+        },
+        "block_xQB9kP": {
+          "type": "block",
+          "settings": {
+            "t-heading": "eye relief twist changes picture angle",
+            "this_store": "no",
+            "other_store_bad": "yes",
+            "other_store": "no"
+          }
+        },
+        "block_exnDWx": {
+          "type": "block",
+          "settings": {
+            "t-heading": "Adds Wear & Tear to Eye Relief Rubber",
+            "this_store": "no",
+            "other_store_bad": "yes",
+            "other_store": "no"
+          }
+        },
+        "block_HdxrtB": {
+          "type": "block",
+          "settings": {
+            "t-heading": "Magnets on Optic Attract Debris",
+            "this_store": "no",
+            "other_store_bad": "yes",
+            "other_store": "no"
+          }
+        },
+        "block_xrJHQ4": {
+          "type": "block",
+          "settings": {
+            "t-heading": "military grade aluminum parts",
+            "this_store": "yes",
+            "other_store_bad": "no",
+            "other_store": "no"
+          }
+        },
+        "block_cTHJCa": {
+          "type": "block",
+          "settings": {
+            "t-heading": "factory original eyecup integration",
+            "this_store": "yes",
+            "other_store_bad": "no",
+            "other_store": "no"
+          }
+        },
+        "block_ATwcq9": {
+          "type": "block",
+          "settings": {
+            "t-heading": "Under $30 to add additional optics",
+            "this_store": "yes",
+            "other_store_bad": "no",
+            "other_store": "no"
+          }
+        }
+      },
+      "block_order": [
+        "block_hVmLUt",
+        "block_yx9cPC",
+        "block_pnxGNL",
+        "block_CVabdm",
+        "block_hz3zyU",
+        "block_qkNjMc",
+        "block_B3UniJ",
+        "block_xQB9kP",
+        "block_exnDWx",
+        "block_HdxrtB",
+        "block_xrJHQ4",
+        "block_cTHJCa",
+        "block_ATwcq9"
+      ],
+      "settings": {
+        "page_width": 1200,
+        "overlay_opacity": 10,
+        "ov_color": "#000000",
+        "bg_color": "#f0f0f0",
+        "enable_section_devider": false,
+        "color_section_devider": "#1a1a1a",
+        "title": "How Do We Stack Up",
+        "title_position": "center",
+        "heading_size": 52,
+        "heading_size_mobile": 32,
+        "text_color": "#1a1a1a",
+        "use_main_heading_font": true,
+        "main_heading_font": "barlow_n7",
+        "description_color": "#1a1a1a",
+        "use_sub_heading_font": true,
+        "sub_heading_font": "barlow_n5",
+        "description": "<p>We say it is the best but don't just take our word for it.  See for yourself below.</p>",
+        "table_bg": "#ffffff",
+        "table_border": "#e8e8e8",
+        "logo": "shopify://shop_images/Logo_02_Blue.png",
+        "other": "Ollin®",
+        "checkmark_color": "#268f01",
+        "checkmarkbad_color": "#b53737",
+        "checkmark_middle_color": "#ffffff",
+        "crossmark_color": "#ebebeb",
+        "crossmark_middle_color": "#bfbfbf",
+        "button_label": "Build Your Knekt Kit",
+        "button_url": "shopify://collections",
+        "enable_custom_btn": false,
+        "button_bg": "#ffffff",
+        "button_text_color": "#000000",
+        "button_border": "#000000",
+        "btn_radious": 50,
+        "btn_thickness": 2,
+        "font_weight": "400",
+        "button_bg_hover": "#000000",
+        "button_text_color_hover": "#ffffff",
+        "button_border_hover": "#000000",
+        "padding_desktop": 50,
+        "padding_mobile": 15,
+        "padding_top": 40,
+        "padding_bottom": 52,
+        "margin_top": 20,
+        "margin_bottom": 0
+      }
+    },
+    "rich_text_9CJPbL": {
+      "type": "rich-text",
+      "blocks": {
+        "button_4iKUig": {
+          "type": "button",
+          "settings": {
+            "style": "fill",
+            "size": "xl",
+            "text": "Button text",
+            "url": "shopify://pages/knekt-system-builder",
+            "background": "",
+            "text_color": ""
+          }
+        },
+        "subheading_LTaKc3": {
+          "type": "subheading",
+          "settings": {
+            "text": "Subheading"
+          }
+        },
+        "heading_xBeVQd": {
+          "type": "heading",
+          "settings": {
+            "text": "Heading",
+            "heading_tag": "h1",
+            "text_color": "",
+            "gradient": ""
+          }
+        },
+        "richtext_G3QT9a": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "button_4iKUig",
+        "subheading_LTaKc3",
+        "heading_xBeVQd",
+        "richtext_G3QT9a"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "full_width": true,
+        "content_width": "small",
+        "text_position": "center",
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    }
+  },
+  "order": [
+    "video_yfhjN4",
+    "slideshow",
+    "impact-text",
+    "image-link-blocks",
+    "hot-spots",
+    "press",
+    "media-grid",
+    "before_after_image_LyM8bc",
+    "press_bMxw8q",
+    "video_tRQNeN",
+    "image_with_text_overlay_crEyLw",
+    "media_with_text_cLhPGM",
+    "comparison_table_3_devluxx_nNXVwH",
+    "rich_text_9CJPbL"
+  ]
+}
