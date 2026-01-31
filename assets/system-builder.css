@@ -510,6 +510,18 @@
   cursor: not-allowed;
 }
 
+div.header__cart-count {
+  font-size: 10px;
+background: black;
+width: 15px;
+height: 15px;
+justify-content: center;
+display: flex;
+align-items: center;
+border-radius: 100px;
+
+}
+
 /* Responsive adjustments */
 @media (max-width: 480px) {
   .system-builder__step {
