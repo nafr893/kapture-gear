@@ -50,6 +50,12 @@ class SystemBuilder extends HTMLElement {
       this.data.opticModels = opticModelsEl ? JSON.parse(opticModelsEl.textContent) : [];
       this.data.phoneBrands = phoneBrandsEl ? JSON.parse(phoneBrandsEl.textContent) : [];
       this.data.phoneModels = phoneModelsEl ? JSON.parse(phoneModelsEl.textContent) : [];
+
+      // Debug: Log loaded data to help identify field mapping issues
+      console.log('System Builder: Loaded optic brands:', this.data.opticBrands);
+      console.log('System Builder: Loaded optic models:', this.data.opticModels);
+      console.log('System Builder: Loaded phone brands:', this.data.phoneBrands);
+      console.log('System Builder: Loaded phone models:', this.data.phoneModels);
     } catch (e) {
       console.error('System Builder: Error parsing data', e);
     }
@@ -148,10 +154,20 @@ class SystemBuilder extends HTMLElement {
 
     if (!modelField || !modelChipsContainer) return;
 
+    // Debug: Log filtering info
+    console.log('System Builder: Filtering models for brand:', this.state.opticBrand);
+    console.log('System Builder: Available models:', this.data.opticModels.map(m => ({
+      name: m.name,
+      handle: m.handle,
+      brandHandle: m.brandHandle
+    })));
+
     // Filter models by selected brand
     const filteredModels = this.data.opticModels.filter(
       model => model.brandHandle === this.state.opticBrand
     );
+
+    console.log('System Builder: Filtered models:', filteredModels);
 
     // Clear and populate model chips
     modelChipsContainer.innerHTML = '';
@@ -200,10 +216,20 @@ class SystemBuilder extends HTMLElement {
 
     if (!modelField || !modelChipsContainer) return;
 
+    // Debug: Log filtering info
+    console.log('System Builder: Filtering phone models for brand:', this.state.phoneBrand);
+    console.log('System Builder: Available phone models:', this.data.phoneModels.map(m => ({
+      name: m.name,
+      handle: m.handle,
+      brandHandle: m.brandHandle
+    })));
+
     // Filter models by selected brand
     const filteredModels = this.data.phoneModels.filter(
       model => model.brandHandle === this.state.phoneBrand
     );
+
+    console.log('System Builder: Filtered phone models:', filteredModels);
 
     // Clear and populate model chips
     modelChipsContainer.innerHTML = '';
