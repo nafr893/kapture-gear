@@ -24,15 +24,16 @@
         "optic_step_title": "1. Select Your Optic",
         "manufacturer_label": "Manufacturer",
         "model_label": "Model",
-        "mount_type_label": "Mount Type",
+        "ring_mount_step_title": "2. Your Ring Mount",
         "mag_ring_step_title": "2. Your Mag Ring",
         "adapter_step_title": "3. Your Adapter",
+        "adapter_product": "",
         "phone_step_title": "4. Select Your Phone Case",
         "phone_brand_label": "Phone Brand",
         "phone_model_label": "Phone Model",
         "summary_title": "Your Selection",
         "total_label": "Total",
-        "add_to_cart_text": "Add All to Cart"
+        "add_to_cart_text": "Add to Cart"
       }
     }
   },
