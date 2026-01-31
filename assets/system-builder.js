@@ -19,6 +19,14 @@ class SystemBuilder extends HTMLElement {
       phoneCase: null
     };
 
+    // Track which products are selected for cart (user clicks to select)
+    this.selectedProducts = {
+      ringMount: false,
+      magRing: false,
+      adapter: false,
+      phoneCase: false
+    };
+
     // Data storage
     this.data = {
       opticBrands: [],
@@ -77,11 +85,56 @@ class SystemBuilder extends HTMLElement {
         this.handleChipClick(chip);
       }
 
+      const productCard = e.target.closest('[data-product-card]');
+      if (productCard) {
+        this.handleProductCardClick(productCard);
+      }
+
       const addToCartBtn = e.target.closest('[data-add-to-cart]');
       if (addToCartBtn) {
         this.handleAddToCart(addToCartBtn);
       }
     });
+
+    // Keyboard support for product cards
+    this.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const productCard = e.target.closest('[data-product-card]');
+        if (productCard) {
+          e.preventDefault();
+          this.handleProductCardClick(productCard);
+        }
+      }
+    });
+  }
+
+  /**
+   * Handle product card click for selection toggle
+   */
+  handleProductCardClick(card) {
+    const productType = card.dataset.productType;
+    if (!productType) return;
+
+    // Map data attribute to state key
+    const stateKeyMap = {
+      'ring-mount': 'ringMount',
+      'mag-ring': 'magRing',
+      'adapter': 'adapter',
+      'phone-case': 'phoneCase'
+    };
+
+    const stateKey = stateKeyMap[productType];
+    if (!stateKey) return;
+
+    // Toggle selection
+    this.selectedProducts[stateKey] = !this.selectedProducts[stateKey];
+
+    // Update visual state
+    card.classList.toggle('system-builder__product-card--selected', this.selectedProducts[stateKey]);
+    card.setAttribute('aria-pressed', this.selectedProducts[stateKey]);
+
+    // Update summary
+    this.updateSummary();
   }
 
   /**
@@ -262,8 +315,27 @@ class SystemBuilder extends HTMLElement {
           : variantData.productTitle)
       : variantData.title || 'Product';
 
+    // Map product type to state key for checking selection
+    const stateKeyMap = {
+      'ring-mount': 'ringMount',
+      'mag-ring': 'magRing',
+      'adapter': 'adapter',
+      'phone-case': 'phoneCase'
+    };
+    const stateKey = stateKeyMap[productType];
+    const isSelected = stateKey ? this.selectedProducts[stateKey] : false;
+
     container.innerHTML = `
-      <div class="system-builder__product-card" data-product-card data-product-type="${productType}">
+      <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}"
+           data-product-card
+           data-product-type="${productType}"
+           role="button"
+           tabindex="0"
+           aria-pressed="${isSelected}"
+           aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}">
+        <div class="system-builder__product-select-indicator">
+          <span class="system-builder__checkmark"></span>
+        </div>
         <div class="system-builder__product-image">
           ${imageUrl
             ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
@@ -274,6 +346,7 @@ class SystemBuilder extends HTMLElement {
           <h4 class="system-builder__product-title">${displayTitle}</h4>
           <p class="system-builder__product-price">${price}</p>
         </div>
+        <p class="system-builder__product-hint">Click to select</p>
         <input type="hidden" name="variant_id" value="${variantData.id}" data-variant-id>
       </div>
     `;
@@ -318,11 +391,13 @@ class SystemBuilder extends HTMLElement {
     // Show the model field
     modelField.hidden = false;
 
-    // Hide phone case until model is selected
+    // Hide phone case until model is selected and reset selection
     const phoneCaseDisplay = this.querySelector('[data-product="phone-case"]');
     if (phoneCaseDisplay) {
       phoneCaseDisplay.hidden = true;
     }
+    this.state.phoneCase = null;
+    this.selectedProducts.phoneCase = false;
   }
 
   /**
@@ -361,6 +436,10 @@ class SystemBuilder extends HTMLElement {
     this.state.ringMount = null;
     this.state.ringMountVariantId = null;
     this.state.magRing = null;
+
+    // Reset selection state for optic products
+    this.selectedProducts.ringMount = false;
+    this.selectedProducts.magRing = false;
   }
 
   /**
@@ -411,8 +490,27 @@ class SystemBuilder extends HTMLElement {
     const price = this.formatMoney(productData.price);
     const variantId = productData.variants?.[0]?.id || productData.id;
 
+    // Map product type to state key for checking selection
+    const stateKeyMap = {
+      'ring-mount': 'ringMount',
+      'mag-ring': 'magRing',
+      'adapter': 'adapter',
+      'phone-case': 'phoneCase'
+    };
+    const stateKey = stateKeyMap[productType];
+    const isSelected = stateKey ? this.selectedProducts[stateKey] : false;
+
     container.innerHTML = `
-      <div class="system-builder__product-card" data-product-card data-product-type="${productType}">
+      <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}"
+           data-product-card
+           data-product-type="${productType}"
+           role="button"
+           tabindex="0"
+           aria-pressed="${isSelected}"
+           aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${productData.title}">
+        <div class="system-builder__product-select-indicator">
+          <span class="system-builder__checkmark"></span>
+        </div>
         <div class="system-builder__product-image">
           ${imageUrl
             ? `<img src="${imageUrl}" alt="${productData.title}" class="system-builder__product-img" loading="lazy">`
@@ -423,6 +521,7 @@ class SystemBuilder extends HTMLElement {
           <h4 class="system-builder__product-title">${productData.title}</h4>
           <p class="system-builder__product-price">${price}</p>
         </div>
+        <p class="system-builder__product-hint">Click to select</p>
         <input type="hidden" name="variant_id" value="${variantId}" data-variant-id>
       </div>
     `;
@@ -458,28 +557,33 @@ class SystemBuilder extends HTMLElement {
     const summary = this.querySelector('[data-summary]');
     if (!summary) return;
 
-    const hasProducts = this.state.ringMount || this.state.magRing || this.state.adapter || this.state.phoneCase;
+    // Check if any products are SELECTED (not just available)
+    const hasSelectedProducts =
+      (this.selectedProducts.ringMount && this.state.ringMount) ||
+      (this.selectedProducts.magRing && this.state.magRing) ||
+      (this.selectedProducts.adapter && this.state.adapter) ||
+      (this.selectedProducts.phoneCase && this.state.phoneCase);
 
-    if (!hasProducts) {
+    if (!hasSelectedProducts) {
       summary.hidden = true;
       return;
     }
 
     summary.hidden = false;
 
-    // Update individual items (variants have productTitle, products have title)
-    this.updateSummaryItemVariant('ring-mount', this.state.ringMount);
-    this.updateSummaryItemVariant('mag-ring', this.state.magRing);
-    this.updateSummaryItem('adapter', this.state.adapter); // Adapter is still a product
-    this.updateSummaryItemVariant('phone-case', this.state.phoneCase);
+    // Update individual items - only show if SELECTED
+    this.updateSummaryItemVariant('ring-mount', this.selectedProducts.ringMount ? this.state.ringMount : null);
+    this.updateSummaryItemVariant('mag-ring', this.selectedProducts.magRing ? this.state.magRing : null);
+    this.updateSummaryItem('adapter', this.selectedProducts.adapter ? this.state.adapter : null);
+    this.updateSummaryItemVariant('phone-case', this.selectedProducts.phoneCase ? this.state.phoneCase : null);
 
-    // Calculate and display total
+    // Calculate and display total - only count SELECTED items
     let total = 0;
 
-    if (this.state.ringMount?.price) total += this.state.ringMount.price;
-    if (this.state.magRing?.price) total += this.state.magRing.price;
-    if (this.state.adapter?.price) total += this.state.adapter.price;
-    if (this.state.phoneCase?.price) total += this.state.phoneCase.price;
+    if (this.selectedProducts.ringMount && this.state.ringMount?.price) total += this.state.ringMount.price;
+    if (this.selectedProducts.magRing && this.state.magRing?.price) total += this.state.magRing.price;
+    if (this.selectedProducts.adapter && this.state.adapter?.price) total += this.state.adapter.price;
+    if (this.selectedProducts.phoneCase && this.state.phoneCase?.price) total += this.state.phoneCase.price;
 
     const totalEl = summary.querySelector('[data-total-price]');
     if (totalEl) {
@@ -536,35 +640,41 @@ class SystemBuilder extends HTMLElement {
   async handleAddToCart(button) {
     const items = [];
 
-    // Collect all selected products (variants have .id directly)
-    if (this.state.ringMount?.id) {
+    // Only add products that are SELECTED by the user
+    if (this.selectedProducts.ringMount && this.state.ringMount?.id) {
       items.push({ id: this.state.ringMount.id, quantity: 1 });
     }
 
-    if (this.state.magRing?.id) {
+    if (this.selectedProducts.magRing && this.state.magRing?.id) {
       items.push({ id: this.state.magRing.id, quantity: 1 });
     }
 
     // Adapter is still a product, so get first variant
-    if (this.state.adapter) {
+    if (this.selectedProducts.adapter && this.state.adapter) {
       const variantId = this.state.adapter.variants?.[0]?.id || this.state.adapter.id;
       if (variantId) {
         items.push({ id: variantId, quantity: 1 });
       }
     }
 
-    if (this.state.phoneCase?.id) {
+    if (this.selectedProducts.phoneCase && this.state.phoneCase?.id) {
       items.push({ id: this.state.phoneCase.id, quantity: 1 });
     }
 
     if (items.length === 0) {
       console.warn('System Builder: No products selected');
+      // Show a brief message to user
+      button.textContent = 'Select products first';
+      setTimeout(() => {
+        button.textContent = button.dataset.originalText || 'Add All to Cart';
+      }, 2000);
       return;
     }
 
     // Disable button and show loading state
     button.disabled = true;
     const originalText = button.textContent;
+    button.dataset.originalText = originalText;
     button.textContent = 'Adding...';
 
     try {

@@ -171,8 +171,90 @@
   gap: var(--spacing-4, 16px);
   padding: var(--spacing-4, 16px);
   background: var(--color-background, #fff);
-  border: 1px solid var(--color-border, #e5e5e5);
+  border: 2px solid var(--color-border, #e5e5e5);
   border-radius: var(--border-radius, 8px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.system-builder__product-card:hover {
+  border-color: var(--color-primary, #333);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.system-builder__product-card:focus {
+  outline: 2px solid var(--color-primary, #333);
+  outline-offset: 2px;
+}
+
+.system-builder__product-card--selected {
+  border-color: var(--color-primary, #333);
+  background: var(--color-background-selected, #f0f7f0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.system-builder__product-card--selected .system-builder__product-hint {
+  display: none;
+}
+
+/* Selection indicator */
+.system-builder__product-select-indicator {
+  position: absolute;
+  top: var(--spacing-2, 8px);
+  right: var(--spacing-2, 8px);
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--color-border, #e5e5e5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: var(--color-background, #fff);
+}
+
+.system-builder__product-card:hover .system-builder__product-select-indicator {
+  border-color: var(--color-primary, #333);
+}
+
+.system-builder__product-card--selected .system-builder__product-select-indicator {
+  background: var(--color-primary, #333);
+  border-color: var(--color-primary, #333);
+}
+
+.system-builder__checkmark {
+  display: none;
+}
+
+.system-builder__product-card--selected .system-builder__checkmark {
+  display: block;
+  width: 12px;
+  height: 12px;
+  position: relative;
+}
+
+.system-builder__product-card--selected .system-builder__checkmark::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 0;
+  width: 5px;
+  height: 10px;
+  border: solid var(--color-primary-contrast, #fff);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Hint text */
+.system-builder__product-hint {
+  position: absolute;
+  bottom: var(--spacing-2, 8px);
+  right: var(--spacing-3, 12px);
+  font-size: 0.75rem;
+  color: var(--text-color-secondary, #666);
+  font-style: italic;
+  margin: 0;
 }
 
 .system-builder__product-image {
