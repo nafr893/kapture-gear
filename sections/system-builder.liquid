@@ -35,8 +35,9 @@
   <script type="application/json" data-optic-models>
     [
       {%- for model in optic_models -%}
-        {%- assign ring_mount_variant = model.ring_mount.value -%}
-        {%- assign mag_ring_variant = model.mag_ring.value -%}
+        {%- comment -%} For list-type variant references, get the first item {%- endcomment -%}
+        {%- assign ring_mount_variant = model.ring_mount.value | first -%}
+        {%- assign mag_ring_variant = model.mag_ring.value | first -%}
         {
           "id": {{ model.id | json }},
           "handle": {{ model.system.handle | json }},
@@ -87,7 +88,8 @@
   <script type="application/json" data-phone-models>
     [
       {%- for model in phone_models -%}
-        {%- assign phone_case_variant = model.phone_case.value -%}
+        {%- comment -%} For list-type variant references, get the first item {%- endcomment -%}
+        {%- assign phone_case_variant = model.phone_case.value | first -%}
         {
           "id": {{ model.id | json }},
           "handle": {{ model.system.handle | json }},
