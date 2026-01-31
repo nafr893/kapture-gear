@@ -10,7 +10,8 @@ class SystemBuilder extends HTMLElement {
     this.state = {
       opticBrand: null,
       opticModel: null,
-      mountType: null,
+      ringMount: null,
+      ringMountVariantId: null,
       magRing: null,
       adapter: null,
       phoneBrand: null,
@@ -23,7 +24,8 @@ class SystemBuilder extends HTMLElement {
       opticBrands: [],
       opticModels: [],
       phoneBrands: [],
-      phoneModels: []
+      phoneModels: [],
+      adapterProduct: null
     };
 
     // Money formatter
@@ -44,18 +46,21 @@ class SystemBuilder extends HTMLElement {
     const opticModelsEl = this.querySelector('[data-optic-models]');
     const phoneBrandsEl = this.querySelector('[data-phone-brands]');
     const phoneModelsEl = this.querySelector('[data-phone-models]');
+    const adapterProductEl = this.querySelector('[data-adapter-product]');
 
     try {
       this.data.opticBrands = opticBrandsEl ? JSON.parse(opticBrandsEl.textContent) : [];
       this.data.opticModels = opticModelsEl ? JSON.parse(opticModelsEl.textContent) : [];
       this.data.phoneBrands = phoneBrandsEl ? JSON.parse(phoneBrandsEl.textContent) : [];
       this.data.phoneModels = phoneModelsEl ? JSON.parse(phoneModelsEl.textContent) : [];
+      this.data.adapterProduct = adapterProductEl ? JSON.parse(adapterProductEl.textContent) : null;
 
       // Debug: Log loaded data to help identify field mapping issues
       console.log('System Builder: Loaded optic brands:', this.data.opticBrands);
       console.log('System Builder: Loaded optic models:', this.data.opticModels);
       console.log('System Builder: Loaded phone brands:', this.data.phoneBrands);
       console.log('System Builder: Loaded phone models:', this.data.phoneModels);
+      console.log('System Builder: Loaded adapter product:', this.data.adapterProduct);
     } catch (e) {
       console.error('System Builder: Error parsing data', e);
     }
@@ -90,6 +95,12 @@ class SystemBuilder extends HTMLElement {
     if (this.data.phoneBrands.length === 0) {
       console.warn('System Builder: No phone brands found. Please add entries to the phone_brand metaobject.');
     }
+
+    // Display adapter product if configured (it's always visible)
+    if (this.data.adapterProduct) {
+      this.state.adapter = this.data.adapterProduct;
+      this.displayProduct('adapter', this.data.adapterProduct);
+    }
   }
 
   /**
@@ -115,19 +126,13 @@ class SystemBuilder extends HTMLElement {
       case 'optic-brand':
         this.state.opticBrand = value;
         this.state.opticModel = null;
-        this.state.mountType = null;
         this.updateOpticModels();
-        this.clearProducts();
+        this.clearOpticProducts();
         break;
 
       case 'optic-model':
         this.state.opticModel = value;
-        this.showMountTypeField();
-        break;
-
-      case 'mount-type':
-        this.state.mountType = value;
-        this.updateSelectedProducts();
+        this.updateOpticProducts();
         break;
 
       case 'phone-brand':
@@ -183,28 +188,61 @@ class SystemBuilder extends HTMLElement {
 
     // Show the model field
     modelField.hidden = false;
-
-    // Hide mount type until model is selected
-    const mountTypeField = this.querySelector('[data-field="mount-type"]');
-    if (mountTypeField) {
-      mountTypeField.hidden = true;
-    }
   }
 
   /**
-   * Show mount type field after model selection
+   * Update Ring Mount and Mag Ring based on optic model selection
    */
-  showMountTypeField() {
-    const mountTypeField = this.querySelector('[data-field="mount-type"]');
-    if (mountTypeField) {
-      mountTypeField.hidden = false;
+  updateOpticProducts() {
+    if (!this.state.opticModel) return;
 
-      // Clear previous selection
-      mountTypeField.querySelectorAll('[data-chip]').forEach(c => {
-        c.classList.remove('system-builder__chip--selected');
-        c.setAttribute('aria-pressed', 'false');
-      });
+    // Find the selected optic model data
+    const modelData = this.data.opticModels.find(
+      model => model.handle === this.state.opticModel
+    );
+
+    console.log('System Builder: Selected model data:', modelData);
+
+    if (!modelData) return;
+
+    // Get Ring Mount product and find the correct variant
+    const ringMountProduct = modelData.ringMount;
+    const ringMountVariantTitle = modelData.ringMountVariant;
+
+    if (ringMountProduct) {
+      // Find the correct variant based on the variant title
+      let selectedVariant = null;
+      if (ringMountVariantTitle && ringMountProduct.variants) {
+        selectedVariant = ringMountProduct.variants.find(
+          v => v.title === ringMountVariantTitle || v.option1 === ringMountVariantTitle
+        );
+      }
+      // Fallback to first variant if no match
+      if (!selectedVariant && ringMountProduct.variants?.length > 0) {
+        selectedVariant = ringMountProduct.variants[0];
+      }
+
+      this.state.ringMount = ringMountProduct;
+      this.state.ringMountVariantId = selectedVariant?.id || ringMountProduct.variants?.[0]?.id;
+
+      // Display with variant info
+      this.displayProductWithVariant('ring-mount', ringMountProduct, selectedVariant);
+    } else {
+      this.state.ringMount = null;
+      this.state.ringMountVariantId = null;
+      this.displayProduct('ring-mount', null);
     }
+
+    // Get Mag Ring product
+    const magRingProduct = modelData.magRing;
+    this.state.magRing = magRingProduct;
+    this.displayProduct('mag-ring', magRingProduct);
+
+    // Show the step containers
+    const ringMountStep = this.querySelector('[data-step="ring-mount"]');
+    const magRingStep = this.querySelector('[data-step="mag-ring"]');
+    if (ringMountStep) ringMountStep.hidden = false;
+    if (magRingStep) magRingStep.hidden = false;
   }
 
   /**
@@ -269,34 +307,73 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
-   * Update mag ring and adapter based on optic model and mount type
+   * Clear optic-related product displays
    */
-  updateSelectedProducts() {
-    if (!this.state.opticModel || !this.state.mountType) return;
+  clearOpticProducts() {
+    const productTypes = ['ring-mount', 'mag-ring'];
 
-    // Find the selected optic model data
-    const modelData = this.data.opticModels.find(
-      model => model.handle === this.state.opticModel
-    );
+    productTypes.forEach(type => {
+      const container = this.querySelector(`[data-product="${type}"]`);
+      const stepContainer = this.querySelector(`[data-step="${type}"]`);
 
-    if (!modelData) return;
+      if (container) {
+        container.innerHTML = '<p class="system-builder__placeholder">Select your optic to see compatible products.</p>';
+      }
+      if (stepContainer) {
+        stepContainer.hidden = true;
+      }
+    });
 
-    // Get the appropriate products based on mount type
-    const magRingProduct = this.state.mountType === 'integrated'
-      ? modelData.magRingIntegrated
-      : modelData.magRingEyecup;
+    this.state.ringMount = null;
+    this.state.ringMountVariantId = null;
+    this.state.magRing = null;
+  }
 
-    const adapterProduct = this.state.mountType === 'integrated'
-      ? modelData.adapterIntegrated
-      : modelData.adapterEyecup;
+  /**
+   * Display a product with specific variant selected
+   */
+  displayProductWithVariant(productType, productData, variant) {
+    const container = this.querySelector(`[data-product="${productType}"]`);
+    const stepContainer = this.querySelector(`[data-step="${productType}"]`);
 
-    // Update state
-    this.state.magRing = magRingProduct;
-    this.state.adapter = adapterProduct;
+    if (!container) return;
 
-    // Display products
-    this.displayProduct('mag-ring', magRingProduct);
-    this.displayProduct('adapter', adapterProduct);
+    // Show the step container
+    if (stepContainer) {
+      stepContainer.hidden = false;
+    }
+    container.hidden = false;
+
+    if (!productData) {
+      container.innerHTML = '<p class="system-builder__empty-message">No compatible product found.</p>';
+      return;
+    }
+
+    // Create product card HTML with variant info
+    const imageUrl = productData.featured_image
+      ? this.getImageUrl(productData.featured_image, 200)
+      : '';
+
+    const price = variant?.price ? this.formatMoney(variant.price) : this.formatMoney(productData.price);
+    const variantId = variant?.id || productData.variants?.[0]?.id || productData.id;
+    const variantTitle = variant?.title || '';
+    const displayTitle = variantTitle ? `${productData.title} - ${variantTitle}` : productData.title;
+
+    container.innerHTML = `
+      <div class="system-builder__product-card" data-product-card data-product-type="${productType}">
+        <div class="system-builder__product-image">
+          ${imageUrl
+            ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
+            : '<div class="system-builder__product-placeholder-image"></div>'
+          }
+        </div>
+        <div class="system-builder__product-info">
+          <h4 class="system-builder__product-title">${displayTitle}</h4>
+          <p class="system-builder__product-price">${price}</p>
+        </div>
+        <input type="hidden" name="variant_id" value="${variantId}" data-variant-id>
+      </div>
+    `;
   }
 
   /**
@@ -365,10 +442,10 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
-   * Clear product displays
+   * Clear all product displays (used for full reset)
    */
   clearProducts() {
-    const productContainers = ['mag-ring', 'adapter', 'phone-case'];
+    const productContainers = ['ring-mount', 'mag-ring', 'phone-case'];
 
     productContainers.forEach(type => {
       const container = this.querySelector(`[data-product="${type}"]`);
@@ -382,8 +459,9 @@ class SystemBuilder extends HTMLElement {
       }
     });
 
+    this.state.ringMount = null;
+    this.state.ringMountVariantId = null;
     this.state.magRing = null;
-    this.state.adapter = null;
   }
 
   /**
@@ -393,7 +471,7 @@ class SystemBuilder extends HTMLElement {
     const summary = this.querySelector('[data-summary]');
     if (!summary) return;
 
-    const hasProducts = this.state.magRing || this.state.adapter || this.state.phoneCase;
+    const hasProducts = this.state.ringMount || this.state.magRing || this.state.adapter || this.state.phoneCase;
 
     if (!hasProducts) {
       summary.hidden = true;
@@ -403,12 +481,24 @@ class SystemBuilder extends HTMLElement {
     summary.hidden = false;
 
     // Update individual items
+    this.updateSummaryItem('ring-mount', this.state.ringMount);
     this.updateSummaryItem('mag-ring', this.state.magRing);
     this.updateSummaryItem('adapter', this.state.adapter);
     this.updateSummaryItem('phone-case', this.state.phoneCase);
 
     // Calculate and display total
     let total = 0;
+
+    // For ring mount, use the selected variant price if available
+    if (this.state.ringMount) {
+      if (this.state.ringMountVariantId) {
+        const variant = this.state.ringMount.variants?.find(v => v.id === this.state.ringMountVariantId);
+        total += variant?.price || this.state.ringMount.price || 0;
+      } else {
+        total += this.state.ringMount.price || 0;
+      }
+    }
+
     if (this.state.magRing?.price) total += this.state.magRing.price;
     if (this.state.adapter?.price) total += this.state.adapter.price;
     if (this.state.phoneCase?.price) total += this.state.phoneCase.price;
@@ -445,6 +535,10 @@ class SystemBuilder extends HTMLElement {
     const items = [];
 
     // Collect all selected products
+    if (this.state.ringMount && this.state.ringMountVariantId) {
+      items.push({ id: this.state.ringMountVariantId, quantity: 1 });
+    }
+
     if (this.state.magRing) {
       const variantId = this.state.magRing.variants?.[0]?.id || this.state.magRing.id;
       if (variantId) {

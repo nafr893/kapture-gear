@@ -42,13 +42,21 @@
           "name": {{ model.optic_model.value | json }},
           "brandHandle": {{ model.brand.value.system.handle | default: '' | json }},
           "image": {{ model.image | json }},
-          "magRingIntegrated": {%- if model.mag_ring_integrated.value -%}{{ model.mag_ring_integrated.value | json }}{%- else -%}null{%- endif -%},
-          "magRingEyecup": {%- if model.mag_ring_eyecup.value -%}{{ model.mag_ring_eyecup.value | json }}{%- else -%}null{%- endif -%},
-          "adapterIntegrated": {%- if model.adapter_integrated.value -%}{{ model.adapter_integrated.value | json }}{%- else -%}null{%- endif -%},
-          "adapterEyecup": {%- if model.adapter_eyecup.value -%}{{ model.adapter_eyecup.value | json }}{%- else -%}null{%- endif -%}
+          "ringMount": {%- if model.ring_mount.value -%}{{ model.ring_mount.value | json }}{%- else -%}null{%- endif -%},
+          "ringMountVariant": {{ model.ring_mount_variant.value | default: '' | json }},
+          "magRing": {%- if model.mag_ring.value -%}{{ model.mag_ring.value | json }}{%- else -%}null{%- endif -%}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
     ]
+  </script>
+
+  {%- comment -%} Adapter product data (universal) {%- endcomment -%}
+  <script type="application/json" data-adapter-product>
+    {%- if section.settings.adapter_product -%}
+      {{ section.settings.adapter_product | json }}
+    {%- else -%}
+      null
+    {%- endif -%}
   </script>
 
   <script type="application/json" data-phone-brands>
@@ -121,28 +129,20 @@
               {%- comment -%} Populated by JavaScript based on brand selection {%- endcomment -%}
             </div>
           </div>
-
-          {%- comment -%} Mount Type Selection {%- endcomment -%}
-          <div class="system-builder__field" data-field="mount-type" hidden>
-            <label class="system-builder__label">{{ section.settings.mount_type_label | default: 'Mount Type' }}</label>
-            <div class="system-builder__chips" data-chips="mount-type">
-              {%- render 'system-builder-option-chip',
-                value: 'integrated',
-                label: 'Integrated Ring Mount',
-                field: 'mount-type'
-              -%}
-              {%- render 'system-builder-option-chip',
-                value: 'eyecup',
-                label: 'Eyecup',
-                field: 'mount-type'
-              -%}
-            </div>
-          </div>
         </div>
       </div>
     </div>
 
-    {%- comment -%} Step 2: Mag Ring (Auto-selected) {%- endcomment -%}
+    {%- comment -%} Step 2: Ring Mount (User selectable based on optic model) {%- endcomment -%}
+    <div class="system-builder__step system-builder__step--product" data-step="ring-mount" hidden>
+      <h3 class="system-builder__step-title h4">{{ section.settings.ring_mount_step_title }}</h3>
+      <div class="system-builder__product-display" data-product="ring-mount">
+        {%- comment -%} Product card populated by JavaScript {%- endcomment -%}
+        <p class="system-builder__placeholder">Select your optic to see the compatible ring mount.</p>
+      </div>
+    </div>
+
+    {%- comment -%} Step 3: Mag Ring (Auto-selected based on optic model) {%- endcomment -%}
     <div class="system-builder__step system-builder__step--product" data-step="mag-ring" hidden>
       <h3 class="system-builder__step-title h4">{{ section.settings.mag_ring_step_title }}</h3>
       <div class="system-builder__product-display" data-product="mag-ring">
@@ -151,12 +151,12 @@
       </div>
     </div>
 
-    {%- comment -%} Step 3: Adapter (Auto-selected) {%- endcomment -%}
-    <div class="system-builder__step system-builder__step--product" data-step="adapter" hidden>
+    {%- comment -%} Step 4: Adapter (Universal product) {%- endcomment -%}
+    <div class="system-builder__step system-builder__step--product" data-step="adapter">
       <h3 class="system-builder__step-title h4">{{ section.settings.adapter_step_title }}</h3>
       <div class="system-builder__product-display" data-product="adapter">
-        {%- comment -%} Product card populated by JavaScript {%- endcomment -%}
-        <p class="system-builder__placeholder">Select your optic to see the compatible adapter.</p>
+        {%- comment -%} Product card populated by JavaScript from section settings {%- endcomment -%}
+        <p class="system-builder__placeholder">Adapter will be shown here.</p>
       </div>
     </div>
 
@@ -199,15 +199,19 @@
       <h3 class="system-builder__summary-title h4">{{ section.settings.summary_title | default: 'Your Selection' }}</h3>
 
       <div class="system-builder__summary-items">
-        <div class="system-builder__summary-item" data-summary-item="mag-ring">
+        <div class="system-builder__summary-item" data-summary-item="ring-mount" hidden>
           <span class="system-builder__summary-name" data-summary-name></span>
           <span class="system-builder__summary-price" data-summary-price></span>
         </div>
-        <div class="system-builder__summary-item" data-summary-item="adapter">
+        <div class="system-builder__summary-item" data-summary-item="mag-ring" hidden>
           <span class="system-builder__summary-name" data-summary-name></span>
           <span class="system-builder__summary-price" data-summary-price></span>
         </div>
-        <div class="system-builder__summary-item" data-summary-item="phone-case">
+        <div class="system-builder__summary-item" data-summary-item="adapter" hidden>
+          <span class="system-builder__summary-name" data-summary-name></span>
+          <span class="system-builder__summary-price" data-summary-price></span>
+        </div>
+        <div class="system-builder__summary-item" data-summary-item="phone-case" hidden>
           <span class="system-builder__summary-name" data-summary-name></span>
           <span class="system-builder__summary-price" data-summary-price></span>
         </div>
@@ -276,10 +280,14 @@
       "default": "Model"
     },
     {
+      "type": "header",
+      "content": "Ring Mount"
+    },
+    {
       "type": "text",
-      "id": "mount_type_label",
-      "label": "Mount Type Label",
-      "default": "Mount Type"
+      "id": "ring_mount_step_title",
+      "label": "Step Title",
+      "default": "2. Your Ring Mount"
     },
     {
       "type": "header",
@@ -289,7 +297,7 @@
       "type": "text",
       "id": "mag_ring_step_title",
       "label": "Step Title",
-      "default": "2. Your Mag Ring"
+      "default": "3. Your Mag Ring"
     },
     {
       "type": "header",
@@ -299,7 +307,13 @@
       "type": "text",
       "id": "adapter_step_title",
       "label": "Step Title",
-      "default": "3. Your Adapter"
+      "default": "4. Adapter"
+    },
+    {
+      "type": "product",
+      "id": "adapter_product",
+      "label": "Adapter Product",
+      "info": "Select the universal adapter product"
     },
     {
       "type": "header",
@@ -309,7 +323,7 @@
       "type": "text",
       "id": "phone_step_title",
       "label": "Step Title",
-      "default": "4. Select Your Phone Case"
+      "default": "5. Select Your Phone Case"
     },
     {
       "type": "text",
