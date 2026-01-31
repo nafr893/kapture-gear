@@ -26,7 +26,7 @@
         {
           "id": {{ brand.id | json }},
           "handle": {{ brand.system.handle | json }},
-          "name": {{ brand.optic_brand.value | json }},
+          "name": {{ brand.optic_brand | json }},
           "logo": {{ brand.logo | json }}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
@@ -36,15 +36,28 @@
   <script type="application/json" data-optic-models>
     [
       {%- for model in optic_models -%}
+        {%- assign ring_mount_variant = model.ring_mount.value -%}
+        {%- assign mag_ring_variant = model.mag_ring.value -%}
         {
           "id": {{ model.id | json }},
           "handle": {{ model.system.handle | json }},
-          "name": {{ model.optic_model.value | json }},
+          "name": {{ model.optic_model | json }},
           "brandHandle": {{ model.brand.value.system.handle | default: '' | json }},
           "image": {{ model.image | json }},
-          "ringMount": {%- if model.ring_mount.value -%}{{ model.ring_mount.value | json }}{%- else -%}null{%- endif -%},
-          "ringMountVariant": {{ model.ring_mount_variant.value | default: '' | json }},
-          "magRing": {%- if model.mag_ring.value -%}{{ model.mag_ring.value | json }}{%- else -%}null{%- endif -%}
+          "ringMount": {%- if ring_mount_variant -%}{
+            "id": {{ ring_mount_variant.id | json }},
+            "title": {{ ring_mount_variant.title | json }},
+            "price": {{ ring_mount_variant.price | json }},
+            "productTitle": {{ ring_mount_variant.product.title | json }},
+            "image": {{ ring_mount_variant.image.src | default: ring_mount_variant.product.featured_image | json }}
+          }{%- else -%}null{%- endif -%},
+          "magRing": {%- if mag_ring_variant -%}{
+            "id": {{ mag_ring_variant.id | json }},
+            "title": {{ mag_ring_variant.title | json }},
+            "price": {{ mag_ring_variant.price | json }},
+            "productTitle": {{ mag_ring_variant.product.title | json }},
+            "image": {{ mag_ring_variant.image.src | default: mag_ring_variant.product.featured_image | json }}
+          }{%- else -%}null{%- endif -%}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
     ]
@@ -65,7 +78,7 @@
         {
           "id": {{ brand.id | json }},
           "handle": {{ brand.system.handle | json }},
-          "name": {{ brand.phone_brand.value | json }},
+          "name": {{ brand.phone_brand | json }},
           "logo": {{ brand.logo | json }}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
@@ -75,12 +88,19 @@
   <script type="application/json" data-phone-models>
     [
       {%- for model in phone_models -%}
+        {%- assign phone_case_variant = model.phone_case.value -%}
         {
           "id": {{ model.id | json }},
           "handle": {{ model.system.handle | json }},
-          "name": {{ model.phone_model.value | json }},
+          "name": {{ model.phone_model | json }},
           "brandHandle": {{ model.brand.value.system.handle | default: '' | json }},
-          "phoneCase": {%- if model.phone_case.value -%}{{ model.phone_case.value | json }}{%- else -%}null{%- endif -%}
+          "phoneCase": {%- if phone_case_variant -%}{
+            "id": {{ phone_case_variant.id | json }},
+            "title": {{ phone_case_variant.title | json }},
+            "price": {{ phone_case_variant.price | json }},
+            "productTitle": {{ phone_case_variant.product.title | json }},
+            "image": {{ phone_case_variant.image.src | default: phone_case_variant.product.featured_image | json }}
+          }{%- else -%}null{%- endif -%}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
     ]

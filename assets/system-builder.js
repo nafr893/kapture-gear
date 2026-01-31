@@ -205,44 +205,78 @@ class SystemBuilder extends HTMLElement {
 
     if (!modelData) return;
 
-    // Get Ring Mount product and find the correct variant
-    const ringMountProduct = modelData.ringMount;
-    const ringMountVariantTitle = modelData.ringMountVariant;
+    // Get Ring Mount variant (now stored directly as a variant object)
+    const ringMountVariant = modelData.ringMount;
 
-    if (ringMountProduct) {
-      // Find the correct variant based on the variant title
-      let selectedVariant = null;
-      if (ringMountVariantTitle && ringMountProduct.variants) {
-        selectedVariant = ringMountProduct.variants.find(
-          v => v.title === ringMountVariantTitle || v.option1 === ringMountVariantTitle
-        );
-      }
-      // Fallback to first variant if no match
-      if (!selectedVariant && ringMountProduct.variants?.length > 0) {
-        selectedVariant = ringMountProduct.variants[0];
-      }
-
-      this.state.ringMount = ringMountProduct;
-      this.state.ringMountVariantId = selectedVariant?.id || ringMountProduct.variants?.[0]?.id;
-
-      // Display with variant info
-      this.displayProductWithVariant('ring-mount', ringMountProduct, selectedVariant);
+    if (ringMountVariant) {
+      this.state.ringMount = ringMountVariant;
+      this.state.ringMountVariantId = ringMountVariant.id;
+      this.displayVariantProduct('ring-mount', ringMountVariant);
     } else {
       this.state.ringMount = null;
       this.state.ringMountVariantId = null;
       this.displayProduct('ring-mount', null);
     }
 
-    // Get Mag Ring product
-    const magRingProduct = modelData.magRing;
-    this.state.magRing = magRingProduct;
-    this.displayProduct('mag-ring', magRingProduct);
+    // Get Mag Ring variant (now stored directly as a variant object)
+    const magRingVariant = modelData.magRing;
+    this.state.magRing = magRingVariant;
+    this.displayVariantProduct('mag-ring', magRingVariant);
 
     // Show the step containers
     const ringMountStep = this.querySelector('[data-step="ring-mount"]');
     const magRingStep = this.querySelector('[data-step="mag-ring"]');
     if (ringMountStep) ringMountStep.hidden = false;
     if (magRingStep) magRingStep.hidden = false;
+  }
+
+  /**
+   * Display a variant product (from variant reference)
+   */
+  displayVariantProduct(productType, variantData) {
+    const container = this.querySelector(`[data-product="${productType}"]`);
+    const stepContainer = this.querySelector(`[data-step="${productType}"]`);
+
+    if (!container) return;
+
+    // Show the step container
+    if (stepContainer) {
+      stepContainer.hidden = false;
+    }
+    container.hidden = false;
+
+    if (!variantData) {
+      container.innerHTML = '<p class="system-builder__empty-message">No compatible product found.</p>';
+      return;
+    }
+
+    // Create product card HTML using variant data structure
+    const imageUrl = variantData.image
+      ? this.getImageUrl(variantData.image, 200)
+      : '';
+
+    const price = this.formatMoney(variantData.price);
+    const displayTitle = variantData.productTitle
+      ? (variantData.title && variantData.title !== 'Default Title'
+          ? `${variantData.productTitle} - ${variantData.title}`
+          : variantData.productTitle)
+      : variantData.title || 'Product';
+
+    container.innerHTML = `
+      <div class="system-builder__product-card" data-product-card data-product-type="${productType}">
+        <div class="system-builder__product-image">
+          ${imageUrl
+            ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
+            : '<div class="system-builder__product-placeholder-image"></div>'
+          }
+        </div>
+        <div class="system-builder__product-info">
+          <h4 class="system-builder__product-title">${displayTitle}</h4>
+          <p class="system-builder__product-price">${price}</p>
+        </div>
+        <input type="hidden" name="variant_id" value="${variantData.id}" data-variant-id>
+      </div>
+    `;
   }
 
   /**
@@ -330,53 +364,6 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
-   * Display a product with specific variant selected
-   */
-  displayProductWithVariant(productType, productData, variant) {
-    const container = this.querySelector(`[data-product="${productType}"]`);
-    const stepContainer = this.querySelector(`[data-step="${productType}"]`);
-
-    if (!container) return;
-
-    // Show the step container
-    if (stepContainer) {
-      stepContainer.hidden = false;
-    }
-    container.hidden = false;
-
-    if (!productData) {
-      container.innerHTML = '<p class="system-builder__empty-message">No compatible product found.</p>';
-      return;
-    }
-
-    // Create product card HTML with variant info
-    const imageUrl = productData.featured_image
-      ? this.getImageUrl(productData.featured_image, 200)
-      : '';
-
-    const price = variant?.price ? this.formatMoney(variant.price) : this.formatMoney(productData.price);
-    const variantId = variant?.id || productData.variants?.[0]?.id || productData.id;
-    const variantTitle = variant?.title || '';
-    const displayTitle = variantTitle ? `${productData.title} - ${variantTitle}` : productData.title;
-
-    container.innerHTML = `
-      <div class="system-builder__product-card" data-product-card data-product-type="${productType}">
-        <div class="system-builder__product-image">
-          ${imageUrl
-            ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
-            : '<div class="system-builder__product-placeholder-image"></div>'
-          }
-        </div>
-        <div class="system-builder__product-info">
-          <h4 class="system-builder__product-title">${displayTitle}</h4>
-          <p class="system-builder__product-price">${price}</p>
-        </div>
-        <input type="hidden" name="variant_id" value="${variantId}" data-variant-id>
-      </div>
-    `;
-  }
-
-  /**
    * Update phone case based on phone model selection
    */
   updatePhoneCase() {
@@ -389,11 +376,11 @@ class SystemBuilder extends HTMLElement {
 
     if (!modelData) return;
 
-    // Update state
+    // Update state (now a variant object)
     this.state.phoneCase = modelData.phoneCase;
 
-    // Display product
-    this.displayProduct('phone-case', modelData.phoneCase);
+    // Display variant product
+    this.displayVariantProduct('phone-case', modelData.phoneCase);
   }
 
   /**
@@ -480,25 +467,16 @@ class SystemBuilder extends HTMLElement {
 
     summary.hidden = false;
 
-    // Update individual items
-    this.updateSummaryItem('ring-mount', this.state.ringMount);
-    this.updateSummaryItem('mag-ring', this.state.magRing);
-    this.updateSummaryItem('adapter', this.state.adapter);
-    this.updateSummaryItem('phone-case', this.state.phoneCase);
+    // Update individual items (variants have productTitle, products have title)
+    this.updateSummaryItemVariant('ring-mount', this.state.ringMount);
+    this.updateSummaryItemVariant('mag-ring', this.state.magRing);
+    this.updateSummaryItem('adapter', this.state.adapter); // Adapter is still a product
+    this.updateSummaryItemVariant('phone-case', this.state.phoneCase);
 
     // Calculate and display total
     let total = 0;
 
-    // For ring mount, use the selected variant price if available
-    if (this.state.ringMount) {
-      if (this.state.ringMountVariantId) {
-        const variant = this.state.ringMount.variants?.find(v => v.id === this.state.ringMountVariantId);
-        total += variant?.price || this.state.ringMount.price || 0;
-      } else {
-        total += this.state.ringMount.price || 0;
-      }
-    }
-
+    if (this.state.ringMount?.price) total += this.state.ringMount.price;
     if (this.state.magRing?.price) total += this.state.magRing.price;
     if (this.state.adapter?.price) total += this.state.adapter.price;
     if (this.state.phoneCase?.price) total += this.state.phoneCase.price;
@@ -506,6 +484,30 @@ class SystemBuilder extends HTMLElement {
     const totalEl = summary.querySelector('[data-total-price]');
     if (totalEl) {
       totalEl.textContent = this.formatMoney(total);
+    }
+  }
+
+  /**
+   * Update a summary item for variant data
+   */
+  updateSummaryItemVariant(type, variantData) {
+    const item = this.querySelector(`[data-summary-item="${type}"]`);
+    if (!item) return;
+
+    const nameEl = item.querySelector('[data-summary-name]');
+    const priceEl = item.querySelector('[data-summary-price]');
+
+    if (variantData) {
+      item.hidden = false;
+      const displayTitle = variantData.productTitle
+        ? (variantData.title && variantData.title !== 'Default Title'
+            ? `${variantData.productTitle} - ${variantData.title}`
+            : variantData.productTitle)
+        : variantData.title || 'Product';
+      if (nameEl) nameEl.textContent = displayTitle;
+      if (priceEl) priceEl.textContent = this.formatMoney(variantData.price);
+    } else {
+      item.hidden = true;
     }
   }
 
@@ -534,18 +536,16 @@ class SystemBuilder extends HTMLElement {
   async handleAddToCart(button) {
     const items = [];
 
-    // Collect all selected products
-    if (this.state.ringMount && this.state.ringMountVariantId) {
-      items.push({ id: this.state.ringMountVariantId, quantity: 1 });
+    // Collect all selected products (variants have .id directly)
+    if (this.state.ringMount?.id) {
+      items.push({ id: this.state.ringMount.id, quantity: 1 });
     }
 
-    if (this.state.magRing) {
-      const variantId = this.state.magRing.variants?.[0]?.id || this.state.magRing.id;
-      if (variantId) {
-        items.push({ id: variantId, quantity: 1 });
-      }
+    if (this.state.magRing?.id) {
+      items.push({ id: this.state.magRing.id, quantity: 1 });
     }
 
+    // Adapter is still a product, so get first variant
     if (this.state.adapter) {
       const variantId = this.state.adapter.variants?.[0]?.id || this.state.adapter.id;
       if (variantId) {
@@ -553,11 +553,8 @@ class SystemBuilder extends HTMLElement {
       }
     }
 
-    if (this.state.phoneCase) {
-      const variantId = this.state.phoneCase.variants?.[0]?.id || this.state.phoneCase.id;
-      if (variantId) {
-        items.push({ id: variantId, quantity: 1 });
-      }
+    if (this.state.phoneCase?.id) {
+      items.push({ id: this.state.phoneCase.id, quantity: 1 });
     }
 
     if (items.length === 0) {
