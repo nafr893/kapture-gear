@@ -63,10 +63,18 @@
     ]
   </script>
 
-  {%- comment -%} Adapter product data (universal) {%- endcomment -%}
+  {%- comment -%} Adapter product data (universal) - formatted like variant data for consistency {%- endcomment -%}
   <script type="application/json" data-adapter-product>
     {%- if section.settings.adapter_product -%}
-      {{ section.settings.adapter_product | json }}
+      {%- assign adapter = section.settings.adapter_product -%}
+      {%- assign adapter_variant = adapter.selected_or_first_available_variant -%}
+      {
+        "id": {{ adapter_variant.id | json }},
+        "title": {{ adapter_variant.title | json }},
+        "price": {{ adapter_variant.price | json }},
+        "productTitle": {{ adapter.title | json }},
+        "image": {{ adapter_variant.image.src | default: adapter.featured_image | json }}
+      }
     {%- else -%}
       null
     {%- endif -%}

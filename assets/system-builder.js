@@ -185,7 +185,7 @@ class SystemBuilder extends HTMLElement {
     // Display adapter product if configured (it's always visible)
     if (this.data.adapterProduct) {
       this.state.adapter = this.data.adapterProduct;
-      this.displayProduct('adapter', this.data.adapterProduct);
+      this.displayVariantProduct('adapter', this.data.adapterProduct);
     }
 
     // Initialize summary (shows empty state)
@@ -610,7 +610,7 @@ class SystemBuilder extends HTMLElement {
     // Update individual items - only show if SELECTED
     this.updateSummaryItemVariant('ring-mount', this.selectedProducts.ringMount ? this.state.ringMount : null);
     this.updateSummaryItemVariant('mag-ring', this.selectedProducts.magRing ? this.state.magRing : null);
-    this.updateSummaryItem('adapter', this.selectedProducts.adapter ? this.state.adapter : null);
+    this.updateSummaryItemVariant('adapter', this.selectedProducts.adapter ? this.state.adapter : null);
     this.updateSummaryItemVariant('phone-case', this.selectedProducts.phoneCase ? this.state.phoneCase : null);
 
     // Calculate and display total - only count SELECTED items
@@ -730,12 +730,9 @@ class SystemBuilder extends HTMLElement {
       items.push({ id: this.state.magRing.id, quantity: 1 });
     }
 
-    // Adapter is still a product, so get first variant
-    if (this.selectedProducts.adapter && this.state.adapter) {
-      const variantId = this.state.adapter.variants?.[0]?.id || this.state.adapter.id;
-      if (variantId) {
-        items.push({ id: variantId, quantity: 1 });
-      }
+    // Adapter now uses the same variant structure
+    if (this.selectedProducts.adapter && this.state.adapter?.id) {
+      items.push({ id: this.state.adapter.id, quantity: 1 });
     }
 
     if (this.selectedProducts.phoneCase && this.state.phoneCase?.id) {
