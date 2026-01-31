@@ -116,8 +116,11 @@
       <div class="system-builder__subheading rte">{{ section.settings.subheading }}</div>
     {%- endif -%}
 
-    {%- comment -%} Step 1: Optic Selection {%- endcomment -%}
-    <div class="system-builder__step" data-step="optic">
+    <div class="system-builder__layout">
+      {%- comment -%} Left Column: Steps {%- endcomment -%}
+      <div class="system-builder__steps">
+        {%- comment -%} Step 1: Optic Selection {%- endcomment -%}
+        <div class="system-builder__step" data-step="optic">
       <div class="system-builder__step-header">
         {%- if section.settings.optic_image != blank -%}
           <div class="system-builder__step-image">
@@ -209,45 +212,71 @@
         </div>
       </div>
 
-      {%- comment -%} Phone Case (Auto-selected) {%- endcomment -%}
-      <div class="system-builder__product-display" data-product="phone-case" hidden>
-        {%- comment -%} Product card populated by JavaScript {%- endcomment -%}
-      </div>
-    </div>
-
-    {%- comment -%} Summary & Add to Cart {%- endcomment -%}
-    <div class="system-builder__summary" data-summary hidden>
-      <h3 class="system-builder__summary-title h4">{{ section.settings.summary_title | default: 'Your Selection' }}</h3>
-
-      <div class="system-builder__summary-items">
-        <div class="system-builder__summary-item" data-summary-item="ring-mount" hidden>
-          <span class="system-builder__summary-name" data-summary-name></span>
-          <span class="system-builder__summary-price" data-summary-price></span>
-        </div>
-        <div class="system-builder__summary-item" data-summary-item="mag-ring" hidden>
-          <span class="system-builder__summary-name" data-summary-name></span>
-          <span class="system-builder__summary-price" data-summary-price></span>
-        </div>
-        <div class="system-builder__summary-item" data-summary-item="adapter" hidden>
-          <span class="system-builder__summary-name" data-summary-name></span>
-          <span class="system-builder__summary-price" data-summary-price></span>
-        </div>
-        <div class="system-builder__summary-item" data-summary-item="phone-case" hidden>
-          <span class="system-builder__summary-name" data-summary-name></span>
-          <span class="system-builder__summary-price" data-summary-price></span>
+        {%- comment -%} Phone Case (Auto-selected) {%- endcomment -%}
+        <div class="system-builder__product-display" data-product="phone-case" hidden>
+          {%- comment -%} Product card populated by JavaScript {%- endcomment -%}
         </div>
       </div>
+    </div>{%- comment -%} End .system-builder__steps {%- endcomment -%}
 
-      <div class="system-builder__summary-total">
-        <span class="system-builder__summary-total-label">{{ section.settings.total_label | default: 'Total' }}</span>
-        <span class="system-builder__summary-total-price" data-total-price></span>
+    {%- comment -%} Right Column: Summary Sidebar {%- endcomment -%}
+    <div class="system-builder__sidebar">
+      <div class="system-builder__summary" data-summary>
+        <h3 class="system-builder__summary-title h4">{{ section.settings.summary_title | default: 'Your Selection' }}</h3>
+
+        <div class="system-builder__summary-items">
+          <div class="system-builder__summary-item" data-summary-item="ring-mount" hidden>
+            <div class="system-builder__summary-item-image" data-summary-image></div>
+            <div class="system-builder__summary-item-details">
+              <span class="system-builder__summary-name" data-summary-name></span>
+              <span class="system-builder__summary-price" data-summary-price></span>
+            </div>
+            <button type="button" class="system-builder__summary-remove" data-summary-remove="ringMount" aria-label="Remove item">&times;</button>
+          </div>
+          <div class="system-builder__summary-item" data-summary-item="mag-ring" hidden>
+            <div class="system-builder__summary-item-image" data-summary-image></div>
+            <div class="system-builder__summary-item-details">
+              <span class="system-builder__summary-name" data-summary-name></span>
+              <span class="system-builder__summary-price" data-summary-price></span>
+            </div>
+            <button type="button" class="system-builder__summary-remove" data-summary-remove="magRing" aria-label="Remove item">&times;</button>
+          </div>
+          <div class="system-builder__summary-item" data-summary-item="adapter" hidden>
+            <div class="system-builder__summary-item-image" data-summary-image></div>
+            <div class="system-builder__summary-item-details">
+              <span class="system-builder__summary-name" data-summary-name></span>
+              <span class="system-builder__summary-price" data-summary-price></span>
+            </div>
+            <button type="button" class="system-builder__summary-remove" data-summary-remove="adapter" aria-label="Remove item">&times;</button>
+          </div>
+          <div class="system-builder__summary-item" data-summary-item="phone-case" hidden>
+            <div class="system-builder__summary-item-image" data-summary-image></div>
+            <div class="system-builder__summary-item-details">
+              <span class="system-builder__summary-name" data-summary-name></span>
+              <span class="system-builder__summary-price" data-summary-price></span>
+            </div>
+            <button type="button" class="system-builder__summary-remove" data-summary-remove="phoneCase" aria-label="Remove item">&times;</button>
+          </div>
+        </div>
+
+        <div class="system-builder__summary-empty" data-summary-empty>
+          <p>Select products to add to your system.</p>
+        </div>
+
+        <div class="system-builder__summary-footer" data-summary-footer hidden>
+          <div class="system-builder__summary-total">
+            <span class="system-builder__summary-total-label">{{ section.settings.total_label | default: 'Total' }}</span>
+            <span class="system-builder__summary-total-price" data-total-price></span>
+          </div>
+
+          <button type="button" class="system-builder__add-to-cart button button--primary" data-add-to-cart>
+            {{ section.settings.add_to_cart_text | default: 'Add All to Cart' }}
+          </button>
+        </div>
       </div>
-
-      <button type="button" class="system-builder__add-to-cart button button--primary" data-add-to-cart>
-        {{ section.settings.add_to_cart_text | default: 'Add All to Cart' }}
-      </button>
-    </div>
-  </div>
+    </div>{%- comment -%} End .system-builder__sidebar {%- endcomment -%}
+  </div>{%- comment -%} End .system-builder__layout {%- endcomment -%}
+</div>
 </system-builder>
 
 <script src="{{ 'system-builder.js' | asset_url }}" defer></script>

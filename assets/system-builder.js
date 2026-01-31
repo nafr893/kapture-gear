@@ -94,6 +94,11 @@ class SystemBuilder extends HTMLElement {
       if (addToCartBtn) {
         this.handleAddToCart(addToCartBtn);
       }
+
+      const removeBtn = e.target.closest('[data-summary-remove]');
+      if (removeBtn) {
+        this.handleRemoveFromSummary(removeBtn);
+      }
     });
 
     // Keyboard support for product cards
@@ -106,6 +111,34 @@ class SystemBuilder extends HTMLElement {
         }
       }
     });
+  }
+
+  /**
+   * Handle remove button click in summary
+   */
+  handleRemoveFromSummary(button) {
+    const stateKey = button.dataset.summaryRemove;
+    if (!stateKey || !this.selectedProducts.hasOwnProperty(stateKey)) return;
+
+    // Deselect the product
+    this.selectedProducts[stateKey] = false;
+
+    // Update the product card visual state
+    const productTypeMap = {
+      'ringMount': 'ring-mount',
+      'magRing': 'mag-ring',
+      'adapter': 'adapter',
+      'phoneCase': 'phone-case'
+    };
+    const productType = productTypeMap[stateKey];
+    const card = this.querySelector(`[data-product-card][data-product-type="${productType}"]`);
+    if (card) {
+      card.classList.remove('system-builder__product-card--selected');
+      card.setAttribute('aria-pressed', 'false');
+    }
+
+    // Update summary
+    this.updateSummary();
   }
 
   /**
@@ -154,6 +187,9 @@ class SystemBuilder extends HTMLElement {
       this.state.adapter = this.data.adapterProduct;
       this.displayProduct('adapter', this.data.adapterProduct);
     }
+
+    // Initialize summary (shows empty state)
+    this.updateSummary();
   }
 
   /**
@@ -557,6 +593,9 @@ class SystemBuilder extends HTMLElement {
     const summary = this.querySelector('[data-summary]');
     if (!summary) return;
 
+    const emptyState = summary.querySelector('[data-summary-empty]');
+    const footer = summary.querySelector('[data-summary-footer]');
+
     // Check if any products are SELECTED (not just available)
     const hasSelectedProducts =
       (this.selectedProducts.ringMount && this.state.ringMount) ||
@@ -564,12 +603,9 @@ class SystemBuilder extends HTMLElement {
       (this.selectedProducts.adapter && this.state.adapter) ||
       (this.selectedProducts.phoneCase && this.state.phoneCase);
 
-    if (!hasSelectedProducts) {
-      summary.hidden = true;
-      return;
-    }
-
-    summary.hidden = false;
+    // Show/hide empty state and footer
+    if (emptyState) emptyState.hidden = hasSelectedProducts;
+    if (footer) footer.hidden = !hasSelectedProducts;
 
     // Update individual items - only show if SELECTED
     this.updateSummaryItemVariant('ring-mount', this.selectedProducts.ringMount ? this.state.ringMount : null);
@@ -579,15 +615,38 @@ class SystemBuilder extends HTMLElement {
 
     // Calculate and display total - only count SELECTED items
     let total = 0;
+    let itemCount = 0;
 
-    if (this.selectedProducts.ringMount && this.state.ringMount?.price) total += this.state.ringMount.price;
-    if (this.selectedProducts.magRing && this.state.magRing?.price) total += this.state.magRing.price;
-    if (this.selectedProducts.adapter && this.state.adapter?.price) total += this.state.adapter.price;
-    if (this.selectedProducts.phoneCase && this.state.phoneCase?.price) total += this.state.phoneCase.price;
+    if (this.selectedProducts.ringMount && this.state.ringMount?.price) {
+      total += this.state.ringMount.price;
+      itemCount++;
+    }
+    if (this.selectedProducts.magRing && this.state.magRing?.price) {
+      total += this.state.magRing.price;
+      itemCount++;
+    }
+    if (this.selectedProducts.adapter && this.state.adapter?.price) {
+      total += this.state.adapter.price;
+      itemCount++;
+    }
+    if (this.selectedProducts.phoneCase && this.state.phoneCase?.price) {
+      total += this.state.phoneCase.price;
+      itemCount++;
+    }
 
     const totalEl = summary.querySelector('[data-total-price]');
     if (totalEl) {
       totalEl.textContent = this.formatMoney(total);
+    }
+
+    // Update add to cart button text with item count
+    const addToCartBtn = summary.querySelector('[data-add-to-cart]');
+    if (addToCartBtn && itemCount > 0) {
+      const baseText = addToCartBtn.dataset.originalText || addToCartBtn.textContent;
+      if (!addToCartBtn.dataset.originalText) {
+        addToCartBtn.dataset.originalText = baseText;
+      }
+      addToCartBtn.textContent = `Add to Cart (${itemCount} item${itemCount > 1 ? 's' : ''})`;
     }
   }
 
@@ -598,6 +657,7 @@ class SystemBuilder extends HTMLElement {
     const item = this.querySelector(`[data-summary-item="${type}"]`);
     if (!item) return;
 
+    const imageEl = item.querySelector('[data-summary-image]');
     const nameEl = item.querySelector('[data-summary-name]');
     const priceEl = item.querySelector('[data-summary-price]');
 
@@ -610,6 +670,16 @@ class SystemBuilder extends HTMLElement {
         : variantData.title || 'Product';
       if (nameEl) nameEl.textContent = displayTitle;
       if (priceEl) priceEl.textContent = this.formatMoney(variantData.price);
+
+      // Update image
+      if (imageEl) {
+        const imageUrl = variantData.image ? this.getImageUrl(variantData.image, 120) : '';
+        if (imageUrl) {
+          imageEl.innerHTML = `<img src="${imageUrl}" alt="${displayTitle}" loading="lazy">`;
+        } else {
+          imageEl.innerHTML = '';
+        }
+      }
     } else {
       item.hidden = true;
     }
@@ -622,6 +692,7 @@ class SystemBuilder extends HTMLElement {
     const item = this.querySelector(`[data-summary-item="${type}"]`);
     if (!item) return;
 
+    const imageEl = item.querySelector('[data-summary-image]');
     const nameEl = item.querySelector('[data-summary-name]');
     const priceEl = item.querySelector('[data-summary-price]');
 
@@ -629,6 +700,16 @@ class SystemBuilder extends HTMLElement {
       item.hidden = false;
       if (nameEl) nameEl.textContent = product.title;
       if (priceEl) priceEl.textContent = this.formatMoney(product.price);
+
+      // Update image
+      if (imageEl) {
+        const imageUrl = product.featured_image ? this.getImageUrl(product.featured_image, 120) : '';
+        if (imageUrl) {
+          imageEl.innerHTML = `<img src="${imageUrl}" alt="${product.title}" loading="lazy">`;
+        } else {
+          imageEl.innerHTML = '';
+        }
+      }
     } else {
       item.hidden = true;
     }
@@ -691,13 +772,30 @@ class SystemBuilder extends HTMLElement {
         throw new Error('Failed to add to cart');
       }
 
-      const result = await response.json();
+      await response.json();
 
-      // Success - dispatch cart change event for theme integration
+      // Fetch the updated cart to get correct count
+      const cartResponse = await fetch('/cart.js', {
+        headers: { 'Accept': 'application/json' }
+      });
+      const cart = await cartResponse.json();
+
+      // Update cart count in header (try multiple common selectors)
+      this.updateCartCount(cart.item_count);
+
+      // Dispatch cart change events for theme integration
       document.documentElement.dispatchEvent(
         new CustomEvent('cart:change', {
           bubbles: true,
-          detail: { cart: result }
+          detail: { cart: cart }
+        })
+      );
+
+      // Also try dispatching on document for themes that listen there
+      document.dispatchEvent(
+        new CustomEvent('cart:refresh', {
+          bubbles: true,
+          detail: { cart: cart }
         })
       );
 
@@ -718,6 +816,53 @@ class SystemBuilder extends HTMLElement {
         button.disabled = false;
       }, 2000);
     }
+  }
+
+  /**
+   * Update cart count in header
+   */
+  updateCartCount(count) {
+    // Try multiple common selectors used by different Shopify themes
+    const selectors = [
+      '.cart-count',
+      '.cart-count-bubble',
+      '[data-cart-count]',
+      '.cart__count',
+      '.header__cart-count',
+      '#cart-icon-bubble',
+      '.cart-icon__count',
+      '.js-cart-count',
+      '[data-cart-item-count]',
+      '.site-header__cart-count'
+    ];
+
+    selectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(el => {
+        // Handle elements that show count as text content
+        if (el.tagName !== 'SPAN' || !el.querySelector('span')) {
+          el.textContent = count;
+        }
+        // Handle bubble/badge visibility
+        if (count > 0) {
+          el.removeAttribute('hidden');
+          el.style.display = '';
+        }
+      });
+    });
+
+    // Also try to find cart count in common attribute patterns
+    const cartBubbles = document.querySelectorAll('[class*="cart"] [class*="count"], [class*="cart"] [class*="bubble"]');
+    cartBubbles.forEach(el => {
+      if (el.children.length === 0 || (el.children.length === 1 && el.firstElementChild.tagName === 'SPAN')) {
+        const textNode = el.childNodes[0];
+        if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+          textNode.textContent = count;
+        } else if (el.children.length === 0) {
+          el.textContent = count;
+        }
+      }
+    });
   }
 
   /**
