@@ -2,7 +2,6 @@
   System Builder Section
   A multi-step product configurator for optic adapters and phone cases.
 
-  Data is loaded from metaobjects:
   - optic_brand: Optic manufacturers
   - optic_model: Specific optic models with product references
   - phone_brand: Phone manufacturers
@@ -133,7 +132,7 @@
               {%- for brand in optic_brands -%}
                 {%- render 'system-builder-option-chip',
                   value: brand.system.handle,
-                  label: brand.name,
+                  label: brand.optic_brand,
                   field: 'optic-brand'
                 -%}
               {%- else -%}
@@ -191,7 +190,7 @@
           {%- for brand in phone_brands -%}
             {%- render 'system-builder-option-chip',
               value: brand.system.handle,
-              label: brand.name,
+              label: brand.phone_brand,
               field: 'phone-brand'
             -%}
           {%- else -%}
