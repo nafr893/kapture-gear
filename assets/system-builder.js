@@ -382,7 +382,7 @@ class SystemBuilder extends HTMLElement {
           <h4 class="system-builder__product-title">${displayTitle}</h4>
           <p class="system-builder__product-price">${price}</p>
         </div>
-        <p class="system-builder__product-hint">Click to select</p>
+       
         <input type="hidden" name="variant_id" value="${variantData.id}" data-variant-id>
       </div>
     `;
