@@ -19,7 +19,7 @@
       "type": "system-builder",
       "name": "System Builder",
       "settings": {
-        "heading": "Build Your System",
+        "heading": "",
         "subheading": "",
         "optic_step_title": "1. Select Your Optic",
         "manufacturer_label": "Manufacturer",
