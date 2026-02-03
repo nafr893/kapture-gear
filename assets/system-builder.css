@@ -597,6 +597,37 @@
   font-style: italic;
 }
 
+/* Model Preview */
+.system-builder__model-preview {
+  margin-top: var(--spacing-5, 20px);
+  padding-top: var(--spacing-5, 20px);
+  border-top: 1px solid var(--color-border, #e5e5e5);
+  text-align: center;
+}
+
+.system-builder__model-preview[hidden] {
+  display: none;
+}
+
+.system-builder__model-preview-image {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.system-builder__model-preview-img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius, 8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.system-builder__model-preview-label {
+  margin: var(--spacing-3, 12px) 0 0 0;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--text-color, #333);
+}
+
 div.header__cart-count {
   font-size: 10px;
 background: black;
