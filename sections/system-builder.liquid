@@ -115,6 +115,26 @@
     ]
   </script>
 
+  {%- comment -%} Accessories products data (from blocks) {%- endcomment -%}
+  <script type="application/json" data-accessories>
+    [
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'accessory' and block.settings.product -%}
+          {%- assign accessory = block.settings.product -%}
+          {%- assign accessory_variant = accessory.selected_or_first_available_variant -%}
+          {
+            "id": {{ accessory_variant.id | json }},
+            "blockId": {{ block.id | json }},
+            "title": {{ accessory_variant.title | json }},
+            "price": {{ accessory_variant.price | json }},
+            "productTitle": {{ accessory.title | json }},
+            "image": {{ accessory_variant.image.src | default: accessory.featured_image | json }}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+    ]
+  </script>
+
   <div class="system-builder__container container">
     {%- if section.settings.heading != blank -%}
       <h2 class="system-builder__heading h2">{{ section.settings.heading }}</h2>
@@ -225,6 +245,16 @@
           {%- comment -%} Product card populated by JavaScript {%- endcomment -%}
         </div>
       </div>
+
+    {%- comment -%} Step 6: Accessories (from blocks) {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="system-builder__step system-builder__step--accessories" data-step="accessories">
+        <h3 class="system-builder__step-title h4">{{ section.settings.accessories_step_title }}</h3>
+        <div class="system-builder__accessories-grid" data-accessories-grid>
+          {%- comment -%} Product cards populated by JavaScript {%- endcomment -%}
+        </div>
+      </div>
+    {%- endif -%}
     </div>{%- comment -%} End .system-builder__steps {%- endcomment -%}
 
     {%- comment -%} Right Column: Summary Sidebar {%- endcomment -%}
@@ -264,6 +294,9 @@
               <span class="system-builder__summary-price" data-summary-price></span>
             </div>
             <button type="button" class="system-builder__summary-remove" data-summary-remove="phoneCase" aria-label="Remove item">&times;</button>
+          </div>
+          {%- comment -%} Accessories summary items (populated by JavaScript) {%- endcomment -%}
+          <div class="system-builder__summary-accessories" data-summary-accessories>
           </div>
         </div>
 
@@ -397,6 +430,16 @@
     },
     {
       "type": "header",
+      "content": "Accessories"
+    },
+    {
+      "type": "text",
+      "id": "accessories_step_title",
+      "label": "Step Title",
+      "default": "6. Accessories"
+    },
+    {
+      "type": "header",
       "content": "Summary"
     },
     {
@@ -416,6 +459,19 @@
       "id": "add_to_cart_text",
       "label": "Add to Cart Button Text",
       "default": "Add All to Cart"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accessory",
+      "name": "Accessory",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Accessory Product"
+        }
+      ]
     }
   ],
   "presets": [
