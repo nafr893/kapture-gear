@@ -559,6 +559,89 @@
   border-top: 1px solid var(--color-border, #e5e5e5);
 }
 
+/* Out of Stock Styles */
+.system-builder__product-card--out-of-stock {
+  opacity: 0.7;
+  border-color: var(--color-border, #e5e5e5);
+  background: var(--color-background-secondary, #f9f9f9);
+}
+
+.system-builder__product-card--out-of-stock:hover {
+  border-color: var(--color-border, #e5e5e5);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.system-builder__product-card--out-of-stock .system-builder__product-select-indicator {
+  display: none;
+}
+
+.system-builder__out-of-stock-badge {
+  position: absolute;
+  top: var(--spacing-2, 8px);
+  right: var(--spacing-2, 8px);
+  background: var(--color-error, #dc3545);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm, 4px);
+}
+
+.system-builder__stock-status {
+  margin: var(--spacing-2, 8px) 0 0 0;
+  font-size: 0.8125rem;
+  color: var(--color-error, #dc3545);
+  font-style: italic;
+}
+
+/* Out of stock tooltip */
+.system-builder__oos-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-error, #dc3545);
+  color: #fff;
+  font-size: 0.8125rem;
+  padding: 8px 12px;
+  border-radius: var(--border-radius-sm, 4px);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  margin-bottom: 8px;
+  z-index: 10;
+}
+
+.system-builder__oos-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-error, #dc3545);
+}
+
+.system-builder__oos-tooltip--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Shake animation for out of stock feedback */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.system-builder__product-card--shake {
+  animation: shake 0.5s ease-in-out;
+}
+
 div.header__cart-count {
   font-size: 10px;
 background: black;

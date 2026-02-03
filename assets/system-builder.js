@@ -181,10 +181,19 @@ class SystemBuilder extends HTMLElement {
     const productType = card.dataset.productType;
     if (!productType) return;
 
+    // Check if item is available
+    const isAvailable = card.dataset.available !== 'false';
+
     // Handle accessories separately
     if (productType === 'accessory') {
       const blockId = card.dataset.accessoryBlockId;
       if (!blockId) return;
+
+      // If out of stock and trying to select, show message
+      if (!isAvailable && !this.selectedAccessories[blockId]) {
+        this.showOutOfStockMessage(card);
+        return;
+      }
 
       // Toggle selection
       this.selectedAccessories[blockId] = !this.selectedAccessories[blockId];
@@ -209,6 +218,12 @@ class SystemBuilder extends HTMLElement {
     const stateKey = stateKeyMap[productType];
     if (!stateKey) return;
 
+    // If out of stock and trying to select, show message
+    if (!isAvailable && !this.selectedProducts[stateKey]) {
+      this.showOutOfStockMessage(card);
+      return;
+    }
+
     // Toggle selection
     this.selectedProducts[stateKey] = !this.selectedProducts[stateKey];
 
@@ -218,6 +233,30 @@ class SystemBuilder extends HTMLElement {
 
     // Update summary
     this.updateSummary();
+  }
+
+  /**
+   * Show out of stock message on card
+   */
+  showOutOfStockMessage(card) {
+    // Add a temporary visual feedback
+    card.classList.add('system-builder__product-card--shake');
+
+    // Show tooltip message
+    let tooltip = card.querySelector('.system-builder__oos-tooltip');
+    if (!tooltip) {
+      tooltip = document.createElement('div');
+      tooltip.className = 'system-builder__oos-tooltip';
+      tooltip.textContent = 'This item is out of stock and cannot be added';
+      card.appendChild(tooltip);
+    }
+    tooltip.classList.add('system-builder__oos-tooltip--visible');
+
+    // Remove after delay
+    setTimeout(() => {
+      card.classList.remove('system-builder__product-card--shake');
+      tooltip.classList.remove('system-builder__oos-tooltip--visible');
+    }, 2500);
   }
 
   /**
@@ -415,18 +454,22 @@ class SystemBuilder extends HTMLElement {
     };
     const stateKey = stateKeyMap[productType];
     const isSelected = stateKey ? this.selectedProducts[stateKey] : false;
+    const isAvailable = variantData.available !== false;
+    const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
 
     container.innerHTML = `
-      <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}"
+      <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${outOfStockClass}"
            data-product-card
            data-product-type="${productType}"
+           data-available="${isAvailable}"
            role="button"
            tabindex="0"
            aria-pressed="${isSelected}"
-           aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}">
+           aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}${!isAvailable ? ' (Out of Stock)' : ''}">
         <div class="system-builder__product-select-indicator">
           <span class="system-builder__checkmark"></span>
         </div>
+        ${!isAvailable ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
         <div class="system-builder__product-image">
           ${imageUrl
             ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
@@ -436,8 +479,9 @@ class SystemBuilder extends HTMLElement {
         <div class="system-builder__product-info">
           <h4 class="system-builder__product-title">${displayTitle}</h4>
           <p class="system-builder__product-price">${price}</p>
+          ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
         </div>
-       
+
         <input type="hidden" name="variant_id" value="${variantData.id}" data-variant-id>
       </div>
     `;
@@ -461,19 +505,23 @@ class SystemBuilder extends HTMLElement {
             ? `${accessory.productTitle} - ${accessory.title}`
             : accessory.productTitle)
         : accessory.title || 'Product';
+      const isAvailable = accessory.available !== false;
+      const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
 
       const cardHtml = `
-        <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}"
+        <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${outOfStockClass}"
              data-product-card
              data-product-type="accessory"
              data-accessory-block-id="${accessory.blockId}"
+             data-available="${isAvailable}"
              role="button"
              tabindex="0"
              aria-pressed="${isSelected}"
-             aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}">
+             aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}${!isAvailable ? ' (Out of Stock)' : ''}">
           <div class="system-builder__product-select-indicator">
             <span class="system-builder__checkmark"></span>
           </div>
+          ${!isAvailable ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
           <div class="system-builder__product-image">
             ${imageUrl
               ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
@@ -483,6 +531,7 @@ class SystemBuilder extends HTMLElement {
           <div class="system-builder__product-info">
             <h4 class="system-builder__product-title">${displayTitle}</h4>
             <p class="system-builder__product-price">${price}</p>
+            ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
           </div>
           <input type="hidden" name="variant_id" value="${accessory.id}" data-variant-id>
         </div>
@@ -928,11 +977,18 @@ class SystemBuilder extends HTMLElement {
         body: JSON.stringify({ items })
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to add to cart');
-      }
+      const responseData = await response.json();
 
-      await response.json();
+      if (!response.ok) {
+        // Check for specific error types
+        const errorMessage = responseData.description || responseData.message || '';
+        if (errorMessage.toLowerCase().includes('out of stock') ||
+            errorMessage.toLowerCase().includes('not available') ||
+            errorMessage.toLowerCase().includes('inventory')) {
+          throw new Error('out_of_stock');
+        }
+        throw new Error(errorMessage || 'Failed to add to cart');
+      }
 
       // Fetch the updated cart to get correct count
       const cartResponse = await fetch('/cart.js', {
@@ -969,13 +1025,61 @@ class SystemBuilder extends HTMLElement {
 
     } catch (error) {
       console.error('System Builder: Error adding to cart', error);
-      button.textContent = 'Error - Try Again';
+
+      // Provide specific error message based on error type
+      let errorText = 'Error - Try Again';
+      let errorDuration = 2000;
+
+      if (error.message === 'out_of_stock') {
+        errorText = 'Some items are out of stock';
+        errorDuration = 3000;
+        // Show which items are out of stock
+        this.highlightOutOfStockItems();
+      } else if (error.message) {
+        errorText = error.message.length > 30 ? 'Error - Try Again' : error.message;
+      }
+
+      button.textContent = errorText;
 
       setTimeout(() => {
         button.textContent = originalText;
         button.disabled = false;
-      }, 2000);
+      }, errorDuration);
     }
+  }
+
+  /**
+   * Highlight out of stock items that were selected
+   */
+  highlightOutOfStockItems() {
+    // Check main products
+    const productStates = [
+      { key: 'ringMount', type: 'ring-mount', data: this.state.ringMount },
+      { key: 'magRing', type: 'mag-ring', data: this.state.magRing },
+      { key: 'adapter', type: 'adapter', data: this.state.adapter },
+      { key: 'phoneCase', type: 'phone-case', data: this.state.phoneCase }
+    ];
+
+    productStates.forEach(({ key, type, data }) => {
+      if (this.selectedProducts[key] && data && data.available === false) {
+        const card = this.querySelector(`[data-product-card][data-product-type="${type}"]`);
+        if (card) {
+          card.classList.add('system-builder__product-card--shake');
+          setTimeout(() => card.classList.remove('system-builder__product-card--shake'), 2500);
+        }
+      }
+    });
+
+    // Check accessories
+    this.data.accessories.forEach(accessory => {
+      if (this.selectedAccessories[accessory.blockId] && accessory.available === false) {
+        const card = this.querySelector(`[data-product-card][data-accessory-block-id="${accessory.blockId}"]`);
+        if (card) {
+          card.classList.add('system-builder__product-card--shake');
+          setTimeout(() => card.classList.remove('system-builder__product-card--shake'), 2500);
+        }
+      }
+    });
   }
 
   /**
