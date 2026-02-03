@@ -189,11 +189,8 @@ class SystemBuilder extends HTMLElement {
       const blockId = card.dataset.accessoryBlockId;
       if (!blockId) return;
 
-      // If out of stock and trying to select, show message
-      if (!isAvailable && !this.selectedAccessories[blockId]) {
-        this.showOutOfStockMessage(card);
-        return;
-      }
+      // If out of stock, don't allow selection
+      if (!isAvailable) return;
 
       // Toggle selection
       this.selectedAccessories[blockId] = !this.selectedAccessories[blockId];
@@ -218,11 +215,8 @@ class SystemBuilder extends HTMLElement {
     const stateKey = stateKeyMap[productType];
     if (!stateKey) return;
 
-    // If out of stock and trying to select, show message
-    if (!isAvailable && !this.selectedProducts[stateKey]) {
-      this.showOutOfStockMessage(card);
-      return;
-    }
+    // If out of stock, don't allow selection
+    if (!isAvailable) return;
 
     // Toggle selection
     this.selectedProducts[stateKey] = !this.selectedProducts[stateKey];
@@ -233,30 +227,6 @@ class SystemBuilder extends HTMLElement {
 
     // Update summary
     this.updateSummary();
-  }
-
-  /**
-   * Show out of stock message on card
-   */
-  showOutOfStockMessage(card) {
-    // Add a temporary visual feedback
-    card.classList.add('system-builder__product-card--shake');
-
-    // Show tooltip message
-    let tooltip = card.querySelector('.system-builder__oos-tooltip');
-    if (!tooltip) {
-      tooltip = document.createElement('div');
-      tooltip.className = 'system-builder__oos-tooltip';
-      tooltip.textContent = 'This item is out of stock and cannot be added';
-      card.appendChild(tooltip);
-    }
-    tooltip.classList.add('system-builder__oos-tooltip--visible');
-
-    // Remove after delay
-    setTimeout(() => {
-      card.classList.remove('system-builder__product-card--shake');
-      tooltip.classList.remove('system-builder__oos-tooltip--visible');
-    }, 2500);
   }
 
   /**
@@ -1028,15 +998,11 @@ class SystemBuilder extends HTMLElement {
 
       // Provide specific error message based on error type
       let errorText = 'Error - Try Again';
-      let errorDuration = 2000;
 
       if (error.message === 'out_of_stock') {
         errorText = 'Some items are out of stock';
-        errorDuration = 3000;
-        // Show which items are out of stock
-        this.highlightOutOfStockItems();
-      } else if (error.message) {
-        errorText = error.message.length > 30 ? 'Error - Try Again' : error.message;
+      } else if (error.message && error.message.length <= 30) {
+        errorText = error.message;
       }
 
       button.textContent = errorText;
@@ -1044,42 +1010,8 @@ class SystemBuilder extends HTMLElement {
       setTimeout(() => {
         button.textContent = originalText;
         button.disabled = false;
-      }, errorDuration);
+      }, 2500);
     }
-  }
-
-  /**
-   * Highlight out of stock items that were selected
-   */
-  highlightOutOfStockItems() {
-    // Check main products
-    const productStates = [
-      { key: 'ringMount', type: 'ring-mount', data: this.state.ringMount },
-      { key: 'magRing', type: 'mag-ring', data: this.state.magRing },
-      { key: 'adapter', type: 'adapter', data: this.state.adapter },
-      { key: 'phoneCase', type: 'phone-case', data: this.state.phoneCase }
-    ];
-
-    productStates.forEach(({ key, type, data }) => {
-      if (this.selectedProducts[key] && data && data.available === false) {
-        const card = this.querySelector(`[data-product-card][data-product-type="${type}"]`);
-        if (card) {
-          card.classList.add('system-builder__product-card--shake');
-          setTimeout(() => card.classList.remove('system-builder__product-card--shake'), 2500);
-        }
-      }
-    });
-
-    // Check accessories
-    this.data.accessories.forEach(accessory => {
-      if (this.selectedAccessories[accessory.blockId] && accessory.available === false) {
-        const card = this.querySelector(`[data-product-card][data-accessory-block-id="${accessory.blockId}"]`);
-        if (card) {
-          card.classList.add('system-builder__product-card--shake');
-          setTimeout(() => card.classList.remove('system-builder__product-card--shake'), 2500);
-        }
-      }
-    });
   }
 
   /**

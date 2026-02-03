@@ -597,51 +597,6 @@
   font-style: italic;
 }
 
-/* Out of stock tooltip */
-.system-builder__oos-tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--color-error, #dc3545);
-  color: #fff;
-  font-size: 0.8125rem;
-  padding: 8px 12px;
-  border-radius: var(--border-radius-sm, 4px);
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-  margin-bottom: 8px;
-  z-index: 10;
-}
-
-.system-builder__oos-tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-top-color: var(--color-error, #dc3545);
-}
-
-.system-builder__oos-tooltip--visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Shake animation for out of stock feedback */
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-  20%, 40%, 60%, 80% { transform: translateX(4px); }
-}
-
-.system-builder__product-card--shake {
-  animation: shake 0.5s ease-in-out;
-}
-
 div.header__cart-count {
   font-size: 10px;
 background: black;
