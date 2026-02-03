@@ -17,6 +17,24 @@
     },
     "system_builder_A4gezM": {
       "type": "system-builder",
+      "blocks": {
+        "accessory_bdxjRh": {
+          "type": "accessory",
+          "settings": {
+            "product": "bino-klip"
+          }
+        },
+        "accessory_YqHyK6": {
+          "type": "accessory",
+          "settings": {
+            "product": "full-kit-gift-card"
+          }
+        }
+      },
+      "block_order": [
+        "accessory_bdxjRh",
+        "accessory_YqHyK6"
+      ],
       "name": "System Builder",
       "settings": {
         "heading": "",
@@ -31,41 +49,15 @@
         "phone_step_title": "4. Select Your Phone Case",
         "phone_brand_label": "Phone Brand",
         "phone_model_label": "Phone Model",
+        "accessories_step_title": "6. Accessories",
         "summary_title": "Your Selection",
         "total_label": "Total",
         "add_to_cart_text": "Add to Cart"
-      }
-    },
-    "featured_collection_jVXK3d": {
-      "type": "featured-collection",
-      "name": "Featured collection",
-      "settings": {
-        "collection": "accessories",
-        "products": [],
-        "full_width": true,
-        "stack_products": true,
-        "show_progress_bar": false,
-        "products_count": 6,
-        "products_per_row_mobile": "2",
-        "products_per_row_desktop": 3,
-        "subheading": "",
-        "title": "Accessories",
-        "content": "",
-        "link_url": "",
-        "link_text": "View all",
-        "background": "",
-        "background_gradient": "",
-        "text_color": "",
-        "heading_color": "",
-        "heading_gradient": "",
-        "product_card_background": "",
-        "product_card_text_color": ""
       }
     }
   },
   "order": [
     "main",
-    "system_builder_A4gezM",
-    "featured_collection_jVXK3d"
+    "system_builder_A4gezM"
   ]
 }
