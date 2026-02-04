@@ -358,6 +358,9 @@ class SystemBuilder extends HTMLElement {
 
     if (!modelData) return;
 
+    // Display the model image preview if available
+    this.displayModelPreview(modelData);
+
     // Get Ring Mount variant (now stored directly as a variant object)
     const ringMountVariant = modelData.ringMount;
 
@@ -381,6 +384,40 @@ class SystemBuilder extends HTMLElement {
     const magRingStep = this.querySelector('[data-step="mag-ring"]');
     if (ringMountStep) ringMountStep.hidden = false;
     if (magRingStep) magRingStep.hidden = false;
+  }
+
+  /**
+   * Display the selected model image preview
+   */
+  displayModelPreview(modelData) {
+    const previewContainer = this.querySelector('[data-model-preview]');
+    const imageContainer = this.querySelector('[data-model-preview-image]');
+
+    if (!previewContainer || !imageContainer) return;
+
+    // Check if model has an image
+    if (modelData.modelImage) {
+      imageContainer.innerHTML = `<img src="${modelData.modelImage}" alt="${modelData.name}" class="system-builder__model-preview-img" loading="lazy">`;
+      previewContainer.hidden = false;
+    } else {
+      // No image available, hide the preview
+      previewContainer.hidden = true;
+      imageContainer.innerHTML = '';
+    }
+  }
+
+  /**
+   * Hide the model preview
+   */
+  hideModelPreview() {
+    const previewContainer = this.querySelector('[data-model-preview]');
+    const imageContainer = this.querySelector('[data-model-preview-image]');
+    if (previewContainer) {
+      previewContainer.hidden = true;
+    }
+    if (imageContainer) {
+      imageContainer.innerHTML = '';
+    }
   }
 
   /**
@@ -599,6 +636,9 @@ class SystemBuilder extends HTMLElement {
     // Reset selection state for optic products
     this.selectedProducts.ringMount = false;
     this.selectedProducts.magRing = false;
+
+    // Hide model preview when brand changes
+    this.hideModelPreview();
   }
 
   /**

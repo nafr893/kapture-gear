@@ -44,6 +44,7 @@
           "name": {{ model.optic_model | json }},
           "brandHandle": {{ model.brand.value.system.handle | default: '' | json }},
           "image": {{ model.image | json }},
+          "modelImage": {% if model.model_image %}{{ model.model_image | image_url: width: 400 | json }}{% else %}null{% endif %},
           "ringMount": {%- if ring_mount_variant -%}{
             "id": {{ ring_mount_variant.id | json }},
             "title": {{ ring_mount_variant.title | json }},
@@ -185,6 +186,11 @@
             <div class="system-builder__chips" data-chips="optic-model">
               {%- comment -%} Populated by JavaScript based on brand selection {%- endcomment -%}
             </div>
+          </div>
+
+          {%- comment -%} Selected Model Image Preview {%- endcomment -%}
+          <div class="system-builder__model-preview" data-model-preview hidden>
+            <div class="system-builder__model-preview-image" data-model-preview-image></div>
           </div>
         </div>
       </div>
