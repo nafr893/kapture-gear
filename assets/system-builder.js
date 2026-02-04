@@ -367,31 +367,36 @@ class SystemBuilder extends HTMLElement {
     // Clear and populate model chips
     modelChipsContainer.innerHTML = '';
 
+    // Find the notice link next to the MODEL label
+    const modelNoticeLink = this.querySelector('[data-model-notice-link]');
+
     if (filteredModels.length === 0) {
       modelChipsContainer.innerHTML = '<p class="system-builder__empty-message">No models available for this brand.</p>';
+      // Hide notice link when no models
+      if (modelNoticeLink) {
+        modelNoticeLink.hidden = true;
+      }
     } else {
-      filteredModels.forEach(model => {
-        // Create wrapper for chip and optional notice link
-        const chipWrapper = document.createElement('div');
-        chipWrapper.className = 'system-builder__chip-wrapper';
+      // Check if any filtered model has a product notice
+      const modelsWithNotice = filteredModels.filter(m => m.productNotice);
 
-        const chip = this.createChip(model.handle, model.name, 'optic-model');
-        chipWrapper.appendChild(chip);
-
-        // Add notice link if model has a product notice
-        if (model.productNotice) {
-          const noticeLink = document.createElement('span');
-          noticeLink.className = 'system-builder__notice-link';
-          noticeLink.dataset.noticeLink = '';
-          noticeLink.dataset.noticeText = model.productNotice;
-          noticeLink.textContent = 'Notice';
-          noticeLink.setAttribute('role', 'button');
-          noticeLink.setAttribute('tabindex', '0');
-          noticeLink.setAttribute('aria-label', `View notice for ${model.name}`);
-          chipWrapper.appendChild(noticeLink);
+      if (modelNoticeLink) {
+        if (modelsWithNotice.length > 0) {
+          // Show the notice link and store the notice text(s)
+          // If multiple models have notices, combine them; otherwise use the single notice
+          const noticeTexts = modelsWithNotice.map(m => m.productNotice);
+          modelNoticeLink.dataset.noticeText = noticeTexts.join('\n\n');
+          modelNoticeLink.dataset.noticeLink = '';
+          modelNoticeLink.hidden = false;
+        } else {
+          modelNoticeLink.hidden = true;
         }
+      }
 
-        modelChipsContainer.appendChild(chipWrapper);
+      // Add chips for each model (without individual notice links)
+      filteredModels.forEach(model => {
+        const chip = this.createChip(model.handle, model.name, 'optic-model');
+        modelChipsContainer.appendChild(chip);
       });
     }
 

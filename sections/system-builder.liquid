@@ -183,7 +183,10 @@
 
           {%- comment -%} Model Selection {%- endcomment -%}
           <div class="system-builder__field" data-field="optic-model" hidden>
-            <label class="system-builder__label">{{ section.settings.model_label | default: 'Model' }}</label>
+            <div class="system-builder__label-row">
+              <label class="system-builder__label">{{ section.settings.model_label | default: 'Model' }}</label>
+              <span class="system-builder__notice-link" data-model-notice-link hidden role="button" tabindex="0" aria-label="View product notice">Notice</span>
+            </div>
             <div class="system-builder__chips" data-chips="optic-model">
               {%- comment -%} Populated by JavaScript based on brand selection {%- endcomment -%}
             </div>

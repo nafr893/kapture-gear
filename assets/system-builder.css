@@ -630,15 +630,18 @@ border-radius: 100px;
 
 }
 
-/* Chip Wrapper for Notice Links - keeps chip and notice inline together */
-.system-builder__chip-wrapper {
-  display: inline-flex;
+/* Label Row - for label with notice link */
+.system-builder__label-row {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  margin: 0;
+  gap: 8px;
 }
 
-/* Product Notice Link - styled as underlined text next to chip */
+.system-builder__label-row .system-builder__label {
+  margin-bottom: 0;
+}
+
+/* Product Notice Link - styled as underlined text */
 .system-builder__notice-link {
   display: inline;
   background: transparent;
@@ -656,6 +659,10 @@ border-radius: 100px;
   transition: color 0.2s ease;
   line-height: 1.4;
   white-space: nowrap;
+}
+
+.system-builder__notice-link[hidden] {
+  display: none;
 }
 
 .system-builder__notice-link:hover,
