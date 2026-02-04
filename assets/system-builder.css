@@ -650,7 +650,7 @@ border-radius: 100px;
   padding: 0;
   margin: 0;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 400;
   font-style: italic;
   color: var(--color-text-secondary, #666);
   text-decoration: underline;
