@@ -630,28 +630,38 @@ border-radius: 100px;
 
 }
 
-/* Chip Wrapper for Notice Links */
+/* Chip Wrapper for Notice Links - keeps chip and notice inline together */
 .system-builder__chip-wrapper {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-2, 8px);
+  gap: 6px;
+  margin: 0;
 }
 
-/* Product Notice Link */
+/* Product Notice Link - styled as underlined text next to chip */
 .system-builder__notice-link {
-  background: none;
+  display: inline;
+  background: transparent;
   border: none;
   padding: 0;
+  margin: 0;
   font-size: 0.75rem;
+  font-weight: 400;
   color: var(--color-text-secondary, #666);
   text-decoration: underline;
+  text-transform: none;
+  letter-spacing: normal;
   cursor: pointer;
   font-family: inherit;
   transition: color 0.2s ease;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
-.system-builder__notice-link:hover {
+.system-builder__notice-link:hover,
+.system-builder__notice-link:focus {
   color: var(--color-text, #000);
+  outline: none;
 }
 
 /* Product Notice Overlay */

@@ -127,13 +127,28 @@ class SystemBuilder extends HTMLElement {
       }
     });
 
-    // Keyboard support for product cards
+    // Keyboard support for product cards and notice links
     this.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         const productCard = e.target.closest('[data-product-card]');
         if (productCard) {
           e.preventDefault();
           this.handleProductCardClick(productCard);
+        }
+
+        // Keyboard support for notice link (since it's a span, not a button)
+        const noticeLink = e.target.closest('[data-notice-link]');
+        if (noticeLink) {
+          e.preventDefault();
+          this.showNoticeOverlay(noticeLink.dataset.noticeText);
+        }
+      }
+
+      // Escape to close overlay
+      if (e.key === 'Escape') {
+        const overlay = this.querySelector('[data-notice-overlay]');
+        if (overlay && !overlay.hidden) {
+          this.hideNoticeOverlay();
         }
       }
     });
@@ -365,12 +380,13 @@ class SystemBuilder extends HTMLElement {
 
         // Add notice link if model has a product notice
         if (model.productNotice) {
-          const noticeLink = document.createElement('button');
-          noticeLink.type = 'button';
+          const noticeLink = document.createElement('span');
           noticeLink.className = 'system-builder__notice-link';
           noticeLink.dataset.noticeLink = '';
           noticeLink.dataset.noticeText = model.productNotice;
           noticeLink.textContent = 'Notice';
+          noticeLink.setAttribute('role', 'button');
+          noticeLink.setAttribute('tabindex', '0');
           noticeLink.setAttribute('aria-label', `View notice for ${model.name}`);
           chipWrapper.appendChild(noticeLink);
         }
@@ -465,11 +481,14 @@ class SystemBuilder extends HTMLElement {
    */
   showNoticeOverlay(noticeText) {
     const overlay = this.querySelector('[data-notice-overlay]');
-    const textEl = this.querySelector('[data-notice-text]');
+    if (!overlay) return;
 
-    if (!overlay || !textEl) return;
+    // Find the text element within the overlay
+    const textEl = overlay.querySelector('[data-notice-text]');
+    if (textEl) {
+      textEl.textContent = noticeText;
+    }
 
-    textEl.textContent = noticeText;
     overlay.hidden = false;
 
     // Prevent body scroll when overlay is open
