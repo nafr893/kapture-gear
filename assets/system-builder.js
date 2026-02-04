@@ -19,13 +19,9 @@ class SystemBuilder extends HTMLElement {
       phoneCase: null
     };
 
-    // Track which products are selected for cart (stores product data, not just boolean)
-    this.selectedProducts = {
-      ringMount: null,
-      magRing: null,
-      adapter: null,
-      phoneCase: null
-    };
+    // Track which products are selected for cart (keyed by variant ID for multi-selection support)
+    // Format: { variantId: { id, title, price, image, productTitle, productType, available } }
+    this.selectedProducts = {};
 
     // Track which accessories are selected (keyed by blockId)
     this.selectedAccessories = {};
@@ -129,21 +125,14 @@ class SystemBuilder extends HTMLElement {
    * Handle remove button click in summary
    */
   handleRemoveFromSummary(button) {
-    const stateKey = button.dataset.summaryRemove;
-    if (!stateKey || !this.selectedProducts.hasOwnProperty(stateKey)) return;
+    const variantId = button.dataset.summaryRemove;
+    if (!variantId || !this.selectedProducts[variantId]) return;
 
     // Deselect the product
-    this.selectedProducts[stateKey] = null;
+    delete this.selectedProducts[variantId];
 
-    // Update the product card visual state
-    const productTypeMap = {
-      'ringMount': 'ring-mount',
-      'magRing': 'mag-ring',
-      'adapter': 'adapter',
-      'phoneCase': 'phone-case'
-    };
-    const productType = productTypeMap[stateKey];
-    const card = this.querySelector(`[data-product-card][data-product-type="${productType}"]`);
+    // Update the product card visual state (find card by variant ID)
+    const card = this.querySelector(`[data-product-card][data-variant-id="${variantId}"]`);
     if (card) {
       card.classList.remove('system-builder__product-card--selected');
       card.setAttribute('aria-pressed', 'false');
@@ -184,13 +173,13 @@ class SystemBuilder extends HTMLElement {
     // Check if item is available
     const isAvailable = card.dataset.available !== 'false';
 
-    // Handle accessories separately
+    // If out of stock, don't allow selection
+    if (!isAvailable) return;
+
+    // Handle accessories separately (they use blockId)
     if (productType === 'accessory') {
       const blockId = card.dataset.accessoryBlockId;
       if (!blockId) return;
-
-      // If out of stock, don't allow selection
-      if (!isAvailable) return;
 
       // Toggle selection
       this.selectedAccessories[blockId] = !this.selectedAccessories[blockId];
@@ -204,7 +193,11 @@ class SystemBuilder extends HTMLElement {
       return;
     }
 
-    // Map data attribute to state key
+    // Get the variant ID from the card
+    const variantId = card.dataset.variantId;
+    if (!variantId) return;
+
+    // Map data attribute to state key for getting current product data
     const stateKeyMap = {
       'ring-mount': 'ringMount',
       'mag-ring': 'magRing',
@@ -215,19 +208,22 @@ class SystemBuilder extends HTMLElement {
     const stateKey = stateKeyMap[productType];
     if (!stateKey) return;
 
-    // If out of stock, don't allow selection
-    if (!isAvailable) return;
-
-    // Toggle selection - store product data when selected, null when deselected
-    if (this.selectedProducts[stateKey]) {
+    // Toggle selection by variant ID
+    if (this.selectedProducts[variantId]) {
       // Currently selected, deselect it
-      this.selectedProducts[stateKey] = null;
+      delete this.selectedProducts[variantId];
     } else {
-      // Not selected, select it and store the product data
-      this.selectedProducts[stateKey] = this.state[stateKey];
+      // Not selected, select it and store the product data with type info
+      const productData = this.state[stateKey];
+      if (productData) {
+        this.selectedProducts[variantId] = {
+          ...productData,
+          productType: productType // Store the type for categorization
+        };
+      }
     }
 
-    const isSelected = this.selectedProducts[stateKey] !== null;
+    const isSelected = !!this.selectedProducts[variantId];
 
     // Update visual state
     card.classList.toggle('system-builder__product-card--selected', isSelected);
@@ -460,15 +456,8 @@ class SystemBuilder extends HTMLElement {
           : variantData.productTitle)
       : variantData.title || 'Product';
 
-    // Map product type to state key for checking selection
-    const stateKeyMap = {
-      'ring-mount': 'ringMount',
-      'mag-ring': 'magRing',
-      'adapter': 'adapter',
-      'phone-case': 'phoneCase'
-    };
-    const stateKey = stateKeyMap[productType];
-    const isSelected = stateKey ? this.selectedProducts[stateKey] : false;
+    // Check if THIS specific variant is selected (by variant ID)
+    const isSelected = !!this.selectedProducts[variantData.id];
     const isAvailable = variantData.available !== false;
     const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
 
@@ -476,6 +465,7 @@ class SystemBuilder extends HTMLElement {
       <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${outOfStockClass}"
            data-product-card
            data-product-type="${productType}"
+           data-variant-id="${variantData.id}"
            data-available="${isAvailable}"
            role="button"
            tabindex="0"
@@ -497,7 +487,7 @@ class SystemBuilder extends HTMLElement {
           ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
         </div>
 
-        <input type="hidden" name="variant_id" value="${variantData.id}" data-variant-id>
+        <input type="hidden" name="variant_id" value="${variantData.id}">
       </div>
     `;
   }
@@ -595,13 +585,14 @@ class SystemBuilder extends HTMLElement {
     // Show the model field
     modelField.hidden = false;
 
-    // Hide phone case until model is selected and reset selection
+    // Hide phone case until model is selected
     const phoneCaseDisplay = this.querySelector('[data-product="phone-case"]');
     if (phoneCaseDisplay) {
       phoneCaseDisplay.hidden = true;
     }
     this.state.phoneCase = null;
-    this.selectedProducts.phoneCase = false;
+    // Note: We do NOT clear selectedProducts here - items stay in "Your Selection"
+    // until explicitly removed by the user clicking the X button
   }
 
   /**
@@ -696,20 +687,14 @@ class SystemBuilder extends HTMLElement {
     const price = this.formatMoney(productData.price);
     const variantId = productData.variants?.[0]?.id || productData.id;
 
-    // Map product type to state key for checking selection
-    const stateKeyMap = {
-      'ring-mount': 'ringMount',
-      'mag-ring': 'magRing',
-      'adapter': 'adapter',
-      'phone-case': 'phoneCase'
-    };
-    const stateKey = stateKeyMap[productType];
-    const isSelected = stateKey ? this.selectedProducts[stateKey] : false;
+    // Check if THIS specific variant is selected (by variant ID)
+    const isSelected = !!this.selectedProducts[variantId];
 
     container.innerHTML = `
       <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}"
            data-product-card
            data-product-type="${productType}"
+           data-variant-id="${variantId}"
            role="button"
            tabindex="0"
            aria-pressed="${isSelected}"
@@ -728,7 +713,7 @@ class SystemBuilder extends HTMLElement {
           <p class="system-builder__product-price">${price}</p>
         </div>
         <p class="system-builder__product-hint">Click to select</p>
-        <input type="hidden" name="variant_id" value="${variantId}" data-variant-id>
+        <input type="hidden" name="variant_id" value="${variantId}">
       </div>
     `;
   }
@@ -763,53 +748,88 @@ class SystemBuilder extends HTMLElement {
     const summary = this.querySelector('[data-summary]');
     if (!summary) return;
 
+    const summaryItemsContainer = summary.querySelector('[data-summary-items]');
     const emptyState = summary.querySelector('[data-summary-empty]');
     const footer = summary.querySelector('[data-summary-footer]');
 
     // Check if any accessories are selected
     const hasSelectedAccessories = Object.values(this.selectedAccessories).some(selected => selected);
 
-    // Check if any products are SELECTED (selectedProducts now stores product data, not boolean)
-    const hasSelectedProducts =
-      this.selectedProducts.ringMount ||
-      this.selectedProducts.magRing ||
-      this.selectedProducts.adapter ||
-      this.selectedProducts.phoneCase ||
-      hasSelectedAccessories;
+    // Check if any products are selected (selectedProducts keyed by variant ID)
+    const selectedProductCount = Object.keys(this.selectedProducts).length;
+    const hasSelectedProducts = selectedProductCount > 0 || hasSelectedAccessories;
 
     // Show/hide empty state and footer
     if (emptyState) emptyState.hidden = hasSelectedProducts;
     if (footer) footer.hidden = !hasSelectedProducts;
 
-    // Update individual items - use stored product data directly from selectedProducts
-    this.updateSummaryItemVariant('ring-mount', this.selectedProducts.ringMount);
-    this.updateSummaryItemVariant('mag-ring', this.selectedProducts.magRing);
-    this.updateSummaryItemVariant('adapter', this.selectedProducts.adapter);
-    this.updateSummaryItemVariant('phone-case', this.selectedProducts.phoneCase);
+    // Clear and rebuild summary items
+    if (summaryItemsContainer) {
+      summaryItemsContainer.innerHTML = '';
 
-    // Update accessories summary
-    this.updateAccessoriesSummary();
+      // Add all selected products (grouped by type for organization)
+      const productsByType = {
+        'ring-mount': [],
+        'mag-ring': [],
+        'adapter': [],
+        'phone-case': []
+      };
 
-    // Calculate and display total - use stored product data
+      // Group products by type
+      Object.entries(this.selectedProducts).forEach(([variantId, product]) => {
+        if (product && product.productType && productsByType[product.productType]) {
+          productsByType[product.productType].push({ variantId, ...product });
+        }
+      });
+
+      // Render products in order
+      ['ring-mount', 'mag-ring', 'adapter', 'phone-case'].forEach(type => {
+        productsByType[type].forEach(product => {
+          const itemHtml = this.createSummaryItemHtml(product.variantId, product);
+          summaryItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+        });
+      });
+
+      // Add selected accessories
+      this.data.accessories.forEach(accessory => {
+        if (!this.selectedAccessories[accessory.blockId]) return;
+
+        const displayTitle = accessory.productTitle
+          ? (accessory.title && accessory.title !== 'Default Title'
+              ? `${accessory.productTitle} - ${accessory.title}`
+              : accessory.productTitle)
+          : accessory.title || 'Product';
+
+        const imageUrl = accessory.image ? this.getImageUrl(accessory.image, 120) : '';
+
+        const itemHtml = `
+          <div class="system-builder__summary-item" data-summary-item="accessory-${accessory.blockId}">
+            <div class="system-builder__summary-item-image">
+              ${imageUrl ? `<img src="${imageUrl}" alt="${displayTitle}" loading="lazy">` : ''}
+            </div>
+            <div class="system-builder__summary-item-details">
+              <span class="system-builder__summary-name">${displayTitle}</span>
+              <span class="system-builder__summary-price">${this.formatMoney(accessory.price)}</span>
+            </div>
+            <button type="button" class="system-builder__summary-remove" data-summary-remove-accessory="${accessory.blockId}" aria-label="Remove item">&times;</button>
+          </div>
+        `;
+
+        summaryItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+      });
+    }
+
+    // Calculate total
     let total = 0;
     let itemCount = 0;
 
-    if (this.selectedProducts.ringMount?.price) {
-      total += this.selectedProducts.ringMount.price;
-      itemCount++;
-    }
-    if (this.selectedProducts.magRing?.price) {
-      total += this.selectedProducts.magRing.price;
-      itemCount++;
-    }
-    if (this.selectedProducts.adapter?.price) {
-      total += this.selectedProducts.adapter.price;
-      itemCount++;
-    }
-    if (this.selectedProducts.phoneCase?.price) {
-      total += this.selectedProducts.phoneCase.price;
-      itemCount++;
-    }
+    // Sum all selected products
+    Object.values(this.selectedProducts).forEach(product => {
+      if (product?.price) {
+        total += product.price;
+        itemCount++;
+      }
+    });
 
     // Add selected accessories to total
     this.data.accessories.forEach(accessory => {
@@ -826,54 +846,47 @@ class SystemBuilder extends HTMLElement {
 
     // Update add to cart button text with item count
     const addToCartBtn = summary.querySelector('[data-add-to-cart]');
-    if (addToCartBtn && itemCount > 0) {
+    if (addToCartBtn) {
       const baseText = addToCartBtn.dataset.originalText || addToCartBtn.textContent;
       if (!addToCartBtn.dataset.originalText) {
         addToCartBtn.dataset.originalText = baseText;
       }
-      addToCartBtn.textContent = `Add to Cart (${itemCount} item${itemCount > 1 ? 's' : ''})`;
+      if (itemCount > 0) {
+        addToCartBtn.textContent = `Add to Cart (${itemCount} item${itemCount > 1 ? 's' : ''})`;
+      } else {
+        addToCartBtn.textContent = baseText;
+      }
     }
   }
 
   /**
-   * Update accessories summary items
+   * Create HTML for a summary item
    */
-  updateAccessoriesSummary() {
-    const container = this.querySelector('[data-summary-accessories]');
-    if (!container) return;
+  createSummaryItemHtml(variantId, product) {
+    const displayTitle = product.productTitle
+      ? (product.title && product.title !== 'Default Title'
+          ? `${product.productTitle} - ${product.title}`
+          : product.productTitle)
+      : product.title || 'Product';
 
-    container.innerHTML = '';
+    const imageUrl = product.image ? this.getImageUrl(product.image, 120) : '';
 
-    this.data.accessories.forEach(accessory => {
-      if (!this.selectedAccessories[accessory.blockId]) return;
-
-      const displayTitle = accessory.productTitle
-        ? (accessory.title && accessory.title !== 'Default Title'
-            ? `${accessory.productTitle} - ${accessory.title}`
-            : accessory.productTitle)
-        : accessory.title || 'Product';
-
-      const imageUrl = accessory.image ? this.getImageUrl(accessory.image, 120) : '';
-
-      const itemHtml = `
-        <div class="system-builder__summary-item" data-summary-item="accessory-${accessory.blockId}">
-          <div class="system-builder__summary-item-image" data-summary-image>
-            ${imageUrl ? `<img src="${imageUrl}" alt="${displayTitle}" loading="lazy">` : ''}
-          </div>
-          <div class="system-builder__summary-item-details">
-            <span class="system-builder__summary-name" data-summary-name>${displayTitle}</span>
-            <span class="system-builder__summary-price" data-summary-price>${this.formatMoney(accessory.price)}</span>
-          </div>
-          <button type="button" class="system-builder__summary-remove" data-summary-remove-accessory="${accessory.blockId}" aria-label="Remove item">&times;</button>
+    return `
+      <div class="system-builder__summary-item" data-summary-item="${variantId}">
+        <div class="system-builder__summary-item-image">
+          ${imageUrl ? `<img src="${imageUrl}" alt="${displayTitle}" loading="lazy">` : ''}
         </div>
-      `;
-
-      container.insertAdjacentHTML('beforeend', itemHtml);
-    });
+        <div class="system-builder__summary-item-details">
+          <span class="system-builder__summary-name">${displayTitle}</span>
+          <span class="system-builder__summary-price">${this.formatMoney(product.price)}</span>
+        </div>
+        <button type="button" class="system-builder__summary-remove" data-summary-remove="${variantId}" aria-label="Remove item">&times;</button>
+      </div>
+    `;
   }
 
   /**
-   * Update a summary item for variant data
+   * Update a summary item for variant data (legacy - kept for compatibility)
    */
   updateSummaryItemVariant(type, variantData) {
     const item = this.querySelector(`[data-summary-item="${type}"]`);
@@ -943,23 +956,12 @@ class SystemBuilder extends HTMLElement {
   async handleAddToCart(button) {
     const items = [];
 
-    // Only add products that are SELECTED by the user (selectedProducts stores actual product data)
-    if (this.selectedProducts.ringMount?.id) {
-      items.push({ id: this.selectedProducts.ringMount.id, quantity: 1 });
-    }
-
-    if (this.selectedProducts.magRing?.id) {
-      items.push({ id: this.selectedProducts.magRing.id, quantity: 1 });
-    }
-
-    // Adapter now uses the same variant structure
-    if (this.selectedProducts.adapter?.id) {
-      items.push({ id: this.selectedProducts.adapter.id, quantity: 1 });
-    }
-
-    if (this.selectedProducts.phoneCase?.id) {
-      items.push({ id: this.selectedProducts.phoneCase.id, quantity: 1 });
-    }
+    // Add all selected products (selectedProducts is keyed by variant ID)
+    Object.entries(this.selectedProducts).forEach(([variantId, product]) => {
+      if (product?.id) {
+        items.push({ id: product.id, quantity: 1 });
+      }
+    });
 
     // Add selected accessories
     this.data.accessories.forEach(accessory => {
