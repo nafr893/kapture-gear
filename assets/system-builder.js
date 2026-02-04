@@ -19,12 +19,12 @@ class SystemBuilder extends HTMLElement {
       phoneCase: null
     };
 
-    // Track which products are selected for cart (user clicks to select)
+    // Track which products are selected for cart (stores product data, not just boolean)
     this.selectedProducts = {
-      ringMount: false,
-      magRing: false,
-      adapter: false,
-      phoneCase: false
+      ringMount: null,
+      magRing: null,
+      adapter: null,
+      phoneCase: null
     };
 
     // Track which accessories are selected (keyed by blockId)
@@ -133,7 +133,7 @@ class SystemBuilder extends HTMLElement {
     if (!stateKey || !this.selectedProducts.hasOwnProperty(stateKey)) return;
 
     // Deselect the product
-    this.selectedProducts[stateKey] = false;
+    this.selectedProducts[stateKey] = null;
 
     // Update the product card visual state
     const productTypeMap = {
@@ -218,12 +218,20 @@ class SystemBuilder extends HTMLElement {
     // If out of stock, don't allow selection
     if (!isAvailable) return;
 
-    // Toggle selection
-    this.selectedProducts[stateKey] = !this.selectedProducts[stateKey];
+    // Toggle selection - store product data when selected, null when deselected
+    if (this.selectedProducts[stateKey]) {
+      // Currently selected, deselect it
+      this.selectedProducts[stateKey] = null;
+    } else {
+      // Not selected, select it and store the product data
+      this.selectedProducts[stateKey] = this.state[stateKey];
+    }
+
+    const isSelected = this.selectedProducts[stateKey] !== null;
 
     // Update visual state
-    card.classList.toggle('system-builder__product-card--selected', this.selectedProducts[stateKey]);
-    card.setAttribute('aria-pressed', this.selectedProducts[stateKey]);
+    card.classList.toggle('system-builder__product-card--selected', isSelected);
+    card.setAttribute('aria-pressed', isSelected);
 
     // Update summary
     this.updateSummary();
@@ -633,9 +641,8 @@ class SystemBuilder extends HTMLElement {
     this.state.ringMountVariantId = null;
     this.state.magRing = null;
 
-    // Reset selection state for optic products
-    this.selectedProducts.ringMount = false;
-    this.selectedProducts.magRing = false;
+    // Note: We do NOT clear selectedProducts here - items stay in "Your Selection"
+    // until explicitly removed by the user clicking the X button
 
     // Hide model preview when brand changes
     this.hideModelPreview();
@@ -762,45 +769,45 @@ class SystemBuilder extends HTMLElement {
     // Check if any accessories are selected
     const hasSelectedAccessories = Object.values(this.selectedAccessories).some(selected => selected);
 
-    // Check if any products are SELECTED (not just available)
+    // Check if any products are SELECTED (selectedProducts now stores product data, not boolean)
     const hasSelectedProducts =
-      (this.selectedProducts.ringMount && this.state.ringMount) ||
-      (this.selectedProducts.magRing && this.state.magRing) ||
-      (this.selectedProducts.adapter && this.state.adapter) ||
-      (this.selectedProducts.phoneCase && this.state.phoneCase) ||
+      this.selectedProducts.ringMount ||
+      this.selectedProducts.magRing ||
+      this.selectedProducts.adapter ||
+      this.selectedProducts.phoneCase ||
       hasSelectedAccessories;
 
     // Show/hide empty state and footer
     if (emptyState) emptyState.hidden = hasSelectedProducts;
     if (footer) footer.hidden = !hasSelectedProducts;
 
-    // Update individual items - only show if SELECTED
-    this.updateSummaryItemVariant('ring-mount', this.selectedProducts.ringMount ? this.state.ringMount : null);
-    this.updateSummaryItemVariant('mag-ring', this.selectedProducts.magRing ? this.state.magRing : null);
-    this.updateSummaryItemVariant('adapter', this.selectedProducts.adapter ? this.state.adapter : null);
-    this.updateSummaryItemVariant('phone-case', this.selectedProducts.phoneCase ? this.state.phoneCase : null);
+    // Update individual items - use stored product data directly from selectedProducts
+    this.updateSummaryItemVariant('ring-mount', this.selectedProducts.ringMount);
+    this.updateSummaryItemVariant('mag-ring', this.selectedProducts.magRing);
+    this.updateSummaryItemVariant('adapter', this.selectedProducts.adapter);
+    this.updateSummaryItemVariant('phone-case', this.selectedProducts.phoneCase);
 
     // Update accessories summary
     this.updateAccessoriesSummary();
 
-    // Calculate and display total - only count SELECTED items
+    // Calculate and display total - use stored product data
     let total = 0;
     let itemCount = 0;
 
-    if (this.selectedProducts.ringMount && this.state.ringMount?.price) {
-      total += this.state.ringMount.price;
+    if (this.selectedProducts.ringMount?.price) {
+      total += this.selectedProducts.ringMount.price;
       itemCount++;
     }
-    if (this.selectedProducts.magRing && this.state.magRing?.price) {
-      total += this.state.magRing.price;
+    if (this.selectedProducts.magRing?.price) {
+      total += this.selectedProducts.magRing.price;
       itemCount++;
     }
-    if (this.selectedProducts.adapter && this.state.adapter?.price) {
-      total += this.state.adapter.price;
+    if (this.selectedProducts.adapter?.price) {
+      total += this.selectedProducts.adapter.price;
       itemCount++;
     }
-    if (this.selectedProducts.phoneCase && this.state.phoneCase?.price) {
-      total += this.state.phoneCase.price;
+    if (this.selectedProducts.phoneCase?.price) {
+      total += this.selectedProducts.phoneCase.price;
       itemCount++;
     }
 
@@ -936,22 +943,22 @@ class SystemBuilder extends HTMLElement {
   async handleAddToCart(button) {
     const items = [];
 
-    // Only add products that are SELECTED by the user
-    if (this.selectedProducts.ringMount && this.state.ringMount?.id) {
-      items.push({ id: this.state.ringMount.id, quantity: 1 });
+    // Only add products that are SELECTED by the user (selectedProducts stores actual product data)
+    if (this.selectedProducts.ringMount?.id) {
+      items.push({ id: this.selectedProducts.ringMount.id, quantity: 1 });
     }
 
-    if (this.selectedProducts.magRing && this.state.magRing?.id) {
-      items.push({ id: this.state.magRing.id, quantity: 1 });
+    if (this.selectedProducts.magRing?.id) {
+      items.push({ id: this.selectedProducts.magRing.id, quantity: 1 });
     }
 
     // Adapter now uses the same variant structure
-    if (this.selectedProducts.adapter && this.state.adapter?.id) {
-      items.push({ id: this.state.adapter.id, quantity: 1 });
+    if (this.selectedProducts.adapter?.id) {
+      items.push({ id: this.selectedProducts.adapter.id, quantity: 1 });
     }
 
-    if (this.selectedProducts.phoneCase && this.state.phoneCase?.id) {
-      items.push({ id: this.state.phoneCase.id, quantity: 1 });
+    if (this.selectedProducts.phoneCase?.id) {
+      items.push({ id: this.selectedProducts.phoneCase.id, quantity: 1 });
     }
 
     // Add selected accessories
