@@ -613,7 +613,7 @@
 }
 
 .system-builder__model-preview-img {
-  width: 100%;
+  width: 50%;
   height: auto;
   border-radius: var(--border-radius, 8px);
 }
