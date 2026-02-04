@@ -107,6 +107,24 @@ class SystemBuilder extends HTMLElement {
       if (removeAccessoryBtn) {
         this.handleRemoveAccessoryFromSummary(removeAccessoryBtn);
       }
+
+      // Handle notice link clicks
+      const noticeLink = e.target.closest('[data-notice-link]');
+      if (noticeLink) {
+        this.showNoticeOverlay(noticeLink.dataset.noticeText);
+      }
+
+      // Handle notice overlay close
+      const noticeClose = e.target.closest('[data-notice-close]');
+      if (noticeClose) {
+        this.hideNoticeOverlay();
+      }
+
+      // Close overlay when clicking the backdrop
+      const noticeOverlay = e.target.closest('[data-notice-overlay]');
+      if (noticeOverlay && e.target === noticeOverlay) {
+        this.hideNoticeOverlay();
+      }
     });
 
     // Keyboard support for product cards
@@ -338,8 +356,26 @@ class SystemBuilder extends HTMLElement {
       modelChipsContainer.innerHTML = '<p class="system-builder__empty-message">No models available for this brand.</p>';
     } else {
       filteredModels.forEach(model => {
+        // Create wrapper for chip and optional notice link
+        const chipWrapper = document.createElement('div');
+        chipWrapper.className = 'system-builder__chip-wrapper';
+
         const chip = this.createChip(model.handle, model.name, 'optic-model');
-        modelChipsContainer.appendChild(chip);
+        chipWrapper.appendChild(chip);
+
+        // Add notice link if model has a product notice
+        if (model.productNotice) {
+          const noticeLink = document.createElement('button');
+          noticeLink.type = 'button';
+          noticeLink.className = 'system-builder__notice-link';
+          noticeLink.dataset.noticeLink = '';
+          noticeLink.dataset.noticeText = model.productNotice;
+          noticeLink.textContent = 'Notice';
+          noticeLink.setAttribute('aria-label', `View notice for ${model.name}`);
+          chipWrapper.appendChild(noticeLink);
+        }
+
+        modelChipsContainer.appendChild(chipWrapper);
       });
     }
 
@@ -422,6 +458,36 @@ class SystemBuilder extends HTMLElement {
     if (imageContainer) {
       imageContainer.innerHTML = '';
     }
+  }
+
+  /**
+   * Show the product notice overlay
+   */
+  showNoticeOverlay(noticeText) {
+    const overlay = this.querySelector('[data-notice-overlay]');
+    const textEl = this.querySelector('[data-notice-text]');
+
+    if (!overlay || !textEl) return;
+
+    textEl.textContent = noticeText;
+    overlay.hidden = false;
+
+    // Prevent body scroll when overlay is open
+    document.body.style.overflow = 'hidden';
+  }
+
+  /**
+   * Hide the product notice overlay
+   */
+  hideNoticeOverlay() {
+    const overlay = this.querySelector('[data-notice-overlay]');
+
+    if (!overlay) return;
+
+    overlay.hidden = true;
+
+    // Restore body scroll
+    document.body.style.overflow = '';
   }
 
   /**

@@ -45,6 +45,7 @@
           "brandHandle": {{ model.brand.value.system.handle | default: '' | json }},
           "image": {{ model.image | json }},
           "modelImage": {% if model.model_image %}{{ model.model_image | image_url: width: 400 | json }}{% else %}null{% endif %},
+          "productNotice": {{ model.product_notice | json }},
           "ringMount": {%- if ring_mount_variant -%}{
             "id": {{ ring_mount_variant.id | json }},
             "title": {{ ring_mount_variant.title | json }},
@@ -294,6 +295,14 @@
       </div>
     </div>{%- comment -%} End .system-builder__sidebar {%- endcomment -%}
   </div>{%- comment -%} End .system-builder__layout {%- endcomment -%}
+</div>
+
+{%- comment -%} Product Notice Overlay {%- endcomment -%}
+<div class="system-builder__notice-overlay" data-notice-overlay hidden>
+  <div class="system-builder__notice-modal">
+    <button type="button" class="system-builder__notice-close" data-notice-close aria-label="Close">&times;</button>
+    <p class="system-builder__notice-text" data-notice-text></p>
+  </div>
 </div>
 </system-builder>
 
