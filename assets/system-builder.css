@@ -420,6 +420,49 @@
   color: var(--color-primary, #333);
 }
 
+/* Quantity controls in summary */
+.system-builder__summary-quantity {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1, 4px);
+  flex-shrink: 0;
+}
+
+.system-builder__quantity-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background-secondary, #f9f9f9);
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--border-radius-sm, 4px);
+  color: var(--text-color, #333);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.system-builder__quantity-btn:hover {
+  background: var(--color-border, #e5e5e5);
+  border-color: var(--color-primary, #333);
+}
+
+.system-builder__quantity-btn:focus {
+  outline: 2px solid var(--color-primary, #333);
+  outline-offset: 1px;
+}
+
+.system-builder__quantity-value {
+  min-width: 24px;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
 /* Remove button */
 .system-builder__summary-remove {
   flex-shrink: 0;

@@ -20,7 +20,7 @@ class SystemBuilder extends HTMLElement {
     };
 
     // Track which products are selected for cart (keyed by variant ID for multi-selection support)
-    // Format: { variantId: { id, title, price, image, productTitle, productType, available } }
+    // Format: { variantId: { id, title, price, image, productTitle, productType, available, quantity } }
     this.selectedProducts = {};
 
     // Track which accessories are selected (keyed by blockId)
@@ -106,6 +106,16 @@ class SystemBuilder extends HTMLElement {
       const removeAccessoryBtn = e.target.closest('[data-summary-remove-accessory]');
       if (removeAccessoryBtn) {
         this.handleRemoveAccessoryFromSummary(removeAccessoryBtn);
+      }
+
+      const quantityIncreaseBtn = e.target.closest('[data-quantity-increase]');
+      if (quantityIncreaseBtn) {
+        this.handleQuantityChange(quantityIncreaseBtn.dataset.quantityIncrease, 1);
+      }
+
+      const quantityDecreaseBtn = e.target.closest('[data-quantity-decrease]');
+      if (quantityDecreaseBtn) {
+        this.handleQuantityChange(quantityDecreaseBtn.dataset.quantityDecrease, -1);
       }
 
       // Handle notice link clicks
@@ -197,6 +207,33 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
+   * Handle quantity change (increase/decrease) in summary
+   */
+  handleQuantityChange(variantId, delta) {
+    if (!variantId || !this.selectedProducts[variantId]) return;
+
+    const product = this.selectedProducts[variantId];
+    const newQuantity = (product.quantity || 1) + delta;
+
+    if (newQuantity <= 0) {
+      // Remove the product if quantity goes to 0 or below
+      delete this.selectedProducts[variantId];
+
+      // Update the product card visual state
+      const card = this.querySelector(`[data-product-card][data-variant-id="${variantId}"]`);
+      if (card) {
+        card.classList.remove('system-builder__product-card--selected');
+        card.setAttribute('aria-pressed', 'false');
+      }
+    } else {
+      product.quantity = newQuantity;
+    }
+
+    // Update summary
+    this.updateSummary();
+  }
+
+  /**
    * Handle product card click for selection toggle
    */
   handleProductCardClick(card) {
@@ -241,17 +278,18 @@ class SystemBuilder extends HTMLElement {
     const stateKey = stateKeyMap[productType];
     if (!stateKey) return;
 
-    // Toggle selection by variant ID
+    // Add or increment quantity by variant ID
     if (this.selectedProducts[variantId]) {
-      // Currently selected, deselect it
-      delete this.selectedProducts[variantId];
+      // Currently selected, increment quantity
+      this.selectedProducts[variantId].quantity = (this.selectedProducts[variantId].quantity || 1) + 1;
     } else {
       // Not selected, select it and store the product data with type info
       const productData = this.state[stateKey];
       if (productData) {
         this.selectedProducts[variantId] = {
           ...productData,
-          productType: productType // Store the type for categorization
+          productType: productType, // Store the type for categorization
+          quantity: 1
         };
       }
     }
@@ -913,11 +951,12 @@ class SystemBuilder extends HTMLElement {
     let total = 0;
     let itemCount = 0;
 
-    // Sum all selected products
+    // Sum all selected products (with quantities)
     Object.values(this.selectedProducts).forEach(product => {
       if (product?.price) {
-        total += product.price;
-        itemCount++;
+        const qty = product.quantity || 1;
+        total += product.price * qty;
+        itemCount += qty;
       }
     });
 
@@ -960,6 +999,7 @@ class SystemBuilder extends HTMLElement {
       : product.title || 'Product';
 
     const imageUrl = product.image ? this.getImageUrl(product.image, 120) : '';
+    const quantity = product.quantity || 1;
 
     return `
       <div class="system-builder__summary-item" data-summary-item="${variantId}">
@@ -968,7 +1008,12 @@ class SystemBuilder extends HTMLElement {
         </div>
         <div class="system-builder__summary-item-details">
           <span class="system-builder__summary-name">${displayTitle}</span>
-          <span class="system-builder__summary-price">${this.formatMoney(product.price)}</span>
+          <span class="system-builder__summary-price">${this.formatMoney(product.price * quantity)}</span>
+        </div>
+        <div class="system-builder__summary-quantity">
+          <button type="button" class="system-builder__quantity-btn" data-quantity-decrease="${variantId}" aria-label="Decrease quantity">−</button>
+          <span class="system-builder__quantity-value" data-quantity-display="${variantId}">${quantity}</span>
+          <button type="button" class="system-builder__quantity-btn" data-quantity-increase="${variantId}" aria-label="Increase quantity">+</button>
         </div>
         <button type="button" class="system-builder__summary-remove" data-summary-remove="${variantId}" aria-label="Remove item">&times;</button>
       </div>
@@ -1046,10 +1091,10 @@ class SystemBuilder extends HTMLElement {
   async handleAddToCart(button) {
     const items = [];
 
-    // Add all selected products (selectedProducts is keyed by variant ID)
+    // Add all selected products with their quantities (selectedProducts is keyed by variant ID)
     Object.entries(this.selectedProducts).forEach(([variantId, product]) => {
       if (product?.id) {
-        items.push({ id: product.id, quantity: 1 });
+        items.push({ id: product.id, quantity: product.quantity || 1 });
       }
     });
 
