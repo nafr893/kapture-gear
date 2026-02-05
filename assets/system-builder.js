@@ -118,47 +118,15 @@ class SystemBuilder extends HTMLElement {
         this.handleQuantityChange(quantityDecreaseBtn.dataset.quantityDecrease, -1);
       }
 
-      // Handle notice link clicks
-      const noticeLink = e.target.closest('[data-notice-link]');
-      if (noticeLink) {
-        this.showNoticeOverlay(noticeLink.dataset.noticeText);
-      }
-
-      // Handle notice overlay close
-      const noticeClose = e.target.closest('[data-notice-close]');
-      if (noticeClose) {
-        this.hideNoticeOverlay();
-      }
-
-      // Close overlay when clicking the backdrop
-      const noticeOverlay = e.target.closest('[data-notice-overlay]');
-      if (noticeOverlay && e.target === noticeOverlay) {
-        this.hideNoticeOverlay();
-      }
     });
 
-    // Keyboard support for product cards and notice links
+    // Keyboard support for product cards
     this.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         const productCard = e.target.closest('[data-product-card]');
         if (productCard) {
           e.preventDefault();
           this.handleProductCardClick(productCard);
-        }
-
-        // Keyboard support for notice link (since it's a span, not a button)
-        const noticeLink = e.target.closest('[data-notice-link]');
-        if (noticeLink) {
-          e.preventDefault();
-          this.showNoticeOverlay(noticeLink.dataset.noticeText);
-        }
-      }
-
-      // Escape to close overlay
-      if (e.key === 'Escape') {
-        const overlay = this.querySelector('[data-notice-overlay]');
-        if (overlay && !overlay.hidden) {
-          this.hideNoticeOverlay();
         }
       }
     });
@@ -405,33 +373,32 @@ class SystemBuilder extends HTMLElement {
     // Clear and populate model chips
     modelChipsContainer.innerHTML = '';
 
-    // Find the notice link next to the MODEL label
-    const modelNoticeLink = this.querySelector('[data-model-notice-link]');
+    // Find the inline notice container below the chips
+    const noticeContainer = this.querySelector('[data-model-notice]');
+    const noticeText = this.querySelector('[data-model-notice-text]');
 
     if (filteredModels.length === 0) {
       modelChipsContainer.innerHTML = '<p class="system-builder__empty-message">No models available for this brand.</p>';
-      // Hide notice link when no models
-      if (modelNoticeLink) {
-        modelNoticeLink.hidden = true;
+      // Hide notice when no models
+      if (noticeContainer) {
+        noticeContainer.hidden = true;
       }
     } else {
       // Check if any filtered model has a product notice
       const modelsWithNotice = filteredModels.filter(m => m.productNotice);
 
-      if (modelNoticeLink) {
+      if (noticeContainer && noticeText) {
         if (modelsWithNotice.length > 0) {
-          // Show the notice link and store the notice text(s)
-          // If multiple models have notices, combine them; otherwise use the single notice
+          // Show the notice inline with the text content
           const noticeTexts = modelsWithNotice.map(m => m.productNotice);
-          modelNoticeLink.dataset.noticeText = noticeTexts.join('\n\n');
-          modelNoticeLink.dataset.noticeLink = '';
-          modelNoticeLink.hidden = false;
+          noticeText.textContent = noticeTexts.join(' ');
+          noticeContainer.hidden = false;
         } else {
-          modelNoticeLink.hidden = true;
+          noticeContainer.hidden = true;
         }
       }
 
-      // Add chips for each model (without individual notice links)
+      // Add chips for each model
       filteredModels.forEach(model => {
         const chip = this.createChip(model.handle, model.name, 'optic-model');
         modelChipsContainer.appendChild(chip);
@@ -517,39 +484,6 @@ class SystemBuilder extends HTMLElement {
     if (imageContainer) {
       imageContainer.innerHTML = '';
     }
-  }
-
-  /**
-   * Show the product notice overlay
-   */
-  showNoticeOverlay(noticeText) {
-    const overlay = this.querySelector('[data-notice-overlay]');
-    if (!overlay) return;
-
-    // Find the text element within the overlay
-    const textEl = overlay.querySelector('[data-notice-text]');
-    if (textEl) {
-      textEl.textContent = noticeText;
-    }
-
-    overlay.hidden = false;
-
-    // Prevent body scroll when overlay is open
-    document.body.style.overflow = 'hidden';
-  }
-
-  /**
-   * Hide the product notice overlay
-   */
-  hideNoticeOverlay() {
-    const overlay = this.querySelector('[data-notice-overlay]');
-
-    if (!overlay) return;
-
-    overlay.hidden = true;
-
-    // Restore body scroll
-    document.body.style.overflow = '';
   }
 
   /**

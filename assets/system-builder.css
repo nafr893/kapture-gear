@@ -661,6 +661,26 @@
   border-radius: var(--border-radius, 8px);
 }
 
+/* Inline Product Notice - displayed below model chips */
+.system-builder__notice-inline {
+  margin-top: var(--spacing-3, 12px);
+  padding: var(--spacing-3, 12px) var(--spacing-4, 16px);
+  background: var(--color-background-secondary, #f9f9f9);
+  border-left: 3px solid var(--color-primary, #333);
+  border-radius: var(--border-radius-sm, 4px);
+}
+
+.system-builder__notice-inline[hidden] {
+  display: none;
+}
+
+.system-builder__notice-inline-text {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-color, #333);
+}
+
 div.header__cart-count {
   font-size: 10px;
 background: black;
@@ -671,108 +691,6 @@ display: flex;
 align-items: center;
 border-radius: 100px;
 
-}
-
-/* Label Row - for label with notice link */
-.system-builder__label-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-bottom: 10px;
-}
-
-.system-builder__label-row .system-builder__label {
-  margin-bottom: 0;
-}
-
-/* Product Notice Link - styled as underlined text */
-.system-builder__notice-link {
-  display: inline;
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font-size: 0.75rem;
-  font-weight: 400;
-  font-style: italic;
-  color: var(--color-text-secondary, #666);
-  text-decoration: underline;
-  text-transform: none;
-  letter-spacing: normal;
-  cursor: pointer;
-  font-family: inherit;
-  transition: color 0.2s ease;
-  line-height: 1.4;
-  white-space: nowrap;
-
-}
-
-.system-builder__notice-link[hidden] {
-  display: none;
-}
-
-.system-builder__notice-link:hover,
-.system-builder__notice-link:focus {
-  color: var(--color-text, #000);
-  outline: none;
-}
-
-/* Product Notice Overlay */
-.system-builder__notice-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: var(--spacing-4, 16px);
-}
-
-.system-builder__notice-overlay[hidden] {
-  display: none;
-}
-
-.system-builder__notice-modal {
-  background: var(--color-background, #fff);
-  border-radius: var(--border-radius, 8px);
-  padding: var(--spacing-6, 24px);
-  max-width: 400px;
-  width: 100%;
-  position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-.system-builder__notice-close {
-  position: absolute;
-  top: var(--spacing-3, 12px);
-  right: var(--spacing-3, 12px);
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
-  color: var(--color-text-secondary, #666);
-  padding: 0;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.system-builder__notice-close:hover {
-  color: var(--color-text, #000);
-}
-
-.system-builder__notice-text {
-  margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--color-text, #000);
 }
 
 /* Responsive adjustments */

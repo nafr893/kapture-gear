@@ -183,12 +183,13 @@
 
           {%- comment -%} Model Selection {%- endcomment -%}
           <div class="system-builder__field" data-field="optic-model" hidden>
-            <div class="system-builder__label-row">
-              <label class="system-builder__label">{{ section.settings.model_label | default: 'Model' }}</label>
-              <span class="system-builder__notice-link" data-model-notice-link hidden role="button" tabindex="0" aria-label="View product notice">Product Notice</span>
-            </div>
+            <label class="system-builder__label">{{ section.settings.model_label | default: 'Model' }}</label>
             <div class="system-builder__chips" data-chips="optic-model">
               {%- comment -%} Populated by JavaScript based on brand selection {%- endcomment -%}
+            </div>
+            {%- comment -%} Product notice displayed inline below chips {%- endcomment -%}
+            <div class="system-builder__notice-inline" data-model-notice hidden>
+              <p class="system-builder__notice-inline-text" data-model-notice-text></p>
             </div>
           </div>
 
@@ -300,13 +301,6 @@
   </div>{%- comment -%} End .system-builder__layout {%- endcomment -%}
 </div>
 
-{%- comment -%} Product Notice Overlay {%- endcomment -%}
-<div class="system-builder__notice-overlay" data-notice-overlay hidden>
-  <div class="system-builder__notice-modal">
-    <button type="button" class="system-builder__notice-close" data-notice-close aria-label="Close">&times;</button>
-    <p class="system-builder__notice-text" data-notice-text></p>
-  </div>
-</div>
 </system-builder>
 
 <script src="{{ 'system-builder.js' | asset_url }}" defer></script>
