@@ -38,9 +38,6 @@
     [
       {%- paginate optic_models by 250 -%}
       {%- for model in optic_models -%}
-        {%- comment -%} For list-type variant references, get the first item {%- endcomment -%}
-        {%- assign ring_mount_variant = model.ring_mount.value | first -%}
-        {%- assign mag_ring_variant = model.mag_ring.value | first -%}
         {
           "id": {{ model.id | json }},
           "handle": {{ model.system.handle | json }},
@@ -49,22 +46,30 @@
           "image": {{ model.image | json }},
           "modelImage": {% if model.model_image %}{{ model.model_image | image_url: width: 400 | json }}{% else %}null{% endif %},
           "productNotice": {{ model.product_notice | json }},
-          "ringMount": {%- if ring_mount_variant -%}{
-            "id": {{ ring_mount_variant.id | json }},
-            "title": {{ ring_mount_variant.title | json }},
-            "price": {{ ring_mount_variant.price | json }},
-            "productTitle": {{ ring_mount_variant.product.title | json }},
-            "image": {{ ring_mount_variant.image.src | default: ring_mount_variant.product.featured_image | json }},
-            "available": {{ ring_mount_variant.available | json }}
-          }{%- else -%}null{%- endif -%},
-          "magRing": {%- if mag_ring_variant -%}{
-            "id": {{ mag_ring_variant.id | json }},
-            "title": {{ mag_ring_variant.title | json }},
-            "price": {{ mag_ring_variant.price | json }},
-            "productTitle": {{ mag_ring_variant.product.title | json }},
-            "image": {{ mag_ring_variant.image.src | default: mag_ring_variant.product.featured_image | json }},
-            "available": {{ mag_ring_variant.available | json }}
-          }{%- else -%}null{%- endif -%}
+          "ringMount": [
+            {%- for variant in model.ring_mount.value -%}
+              {
+                "id": {{ variant.id | json }},
+                "title": {{ variant.title | json }},
+                "price": {{ variant.price | json }},
+                "productTitle": {{ variant.product.title | json }},
+                "image": {{ variant.image.src | default: variant.product.featured_image | json }},
+                "available": {{ variant.available | json }}
+              }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ],
+          "magRing": [
+            {%- for variant in model.mag_ring.value -%}
+              {
+                "id": {{ variant.id | json }},
+                "title": {{ variant.title | json }},
+                "price": {{ variant.price | json }},
+                "productTitle": {{ variant.product.title | json }},
+                "image": {{ variant.image.src | default: variant.product.featured_image | json }},
+                "available": {{ variant.available | json }}
+              }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
       {%- endpaginate -%}

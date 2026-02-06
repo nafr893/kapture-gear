@@ -11,7 +11,7 @@ class SystemBuilder extends HTMLElement {
     this.MAX_OPTIC_CONFIGS = 15;
 
     // Optic configurations array - each config has its own state
-    // Format: [{ id, opticBrand, opticModel, ringMount, magRing, collapsed }]
+    // Format: [{ id, opticBrand, opticModel, ringMount: [], magRing: [] }]
     this.opticConfigs = [];
     this.nextOpticConfigId = 1;
 
@@ -150,8 +150,8 @@ class SystemBuilder extends HTMLElement {
       id: '0',
       opticBrand: null,
       opticModel: null,
-      ringMount: null,
-      magRing: null
+      ringMount: [],
+      magRing: []
     });
 
     // Show empty state messages if no data
@@ -201,8 +201,8 @@ class SystemBuilder extends HTMLElement {
       id: configId,
       opticBrand: null,
       opticModel: null,
-      ringMount: null,
-      magRing: null
+      ringMount: [],
+      magRing: []
     };
 
     this.opticConfigs.push(newConfig);
@@ -279,11 +279,11 @@ class SystemBuilder extends HTMLElement {
 
     // Remove any selected products from this config
     const config = this.opticConfigs[configIndex];
-    if (config.ringMount?.id) {
-      delete this.selectedProducts[config.ringMount.id];
+    if (Array.isArray(config.ringMount)) {
+      config.ringMount.forEach(v => { if (v?.id) delete this.selectedProducts[v.id]; });
     }
-    if (config.magRing?.id) {
-      delete this.selectedProducts[config.magRing.id];
+    if (Array.isArray(config.magRing)) {
+      config.magRing.forEach(v => { if (v?.id) delete this.selectedProducts[v.id]; });
     }
 
     // Remove from array
@@ -415,7 +415,13 @@ class SystemBuilder extends HTMLElement {
     if (configId !== null && (productType === 'ring-mount' || productType === 'mag-ring')) {
       const config = this.getOpticConfig(configId);
       if (config) {
-        productData = config[stateKey];
+        const variants = config[stateKey];
+        // Find the matching variant by ID from the array
+        if (Array.isArray(variants)) {
+          productData = variants.find(v => String(v.id) === String(variantId));
+        } else {
+          productData = variants;
+        }
       }
     } else {
       productData = this.state[stateKey];
@@ -569,15 +575,13 @@ class SystemBuilder extends HTMLElement {
     // Display model preview
     this.displayModelPreview(configId, modelData);
 
-    // Update ring mount
-    const ringMountVariant = modelData.ringMount;
-    config.ringMount = ringMountVariant;
-    this.displayVariantProductInConfig(configId, 'ring-mount', ringMountVariant);
+    // Update ring mount (now an array of variants)
+    config.ringMount = modelData.ringMount || [];
+    this.displayVariantProductInConfig(configId, 'ring-mount', config.ringMount);
 
-    // Update mag ring
-    const magRingVariant = modelData.magRing;
-    config.magRing = magRingVariant;
-    this.displayVariantProductInConfig(configId, 'mag-ring', magRingVariant);
+    // Update mag ring (now an array of variants)
+    config.magRing = modelData.magRing || [];
+    this.displayVariantProductInConfig(configId, 'mag-ring', config.magRing);
 
     // Show product containers
     configEl.querySelectorAll('[data-optic-product]').forEach(el => {
@@ -607,9 +611,10 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
-   * Display variant product within a specific optic config
+   * Display variant product(s) within a specific optic config.
+   * Accepts an array of variants and renders a card for each.
    */
-  displayVariantProductInConfig(configId, productType, variantData) {
+  displayVariantProductInConfig(configId, productType, variants) {
     const configEl = this.querySelector(`[data-optic-config="${configId}"]`);
     if (!configEl) return;
 
@@ -620,51 +625,56 @@ class SystemBuilder extends HTMLElement {
 
     productContainer.hidden = false;
 
-    if (!variantData) {
+    // Handle empty or missing variants
+    const variantList = Array.isArray(variants) ? variants : (variants ? [variants] : []);
+
+    if (variantList.length === 0) {
       displayContainer.innerHTML = '<p class="system-builder__empty-message">No compatible product found.</p>';
       return;
     }
 
-    const imageUrl = variantData.image ? this.getImageUrl(variantData.image, 200) : '';
-    const price = this.formatMoney(variantData.price);
-    const displayTitle = variantData.productTitle
-      ? (variantData.title && variantData.title !== 'Default Title'
-          ? `${variantData.productTitle} - ${variantData.title}`
-          : variantData.productTitle)
-      : variantData.title || 'Product';
+    displayContainer.innerHTML = variantList.map(variantData => {
+      const imageUrl = variantData.image ? this.getImageUrl(variantData.image, 200) : '';
+      const price = this.formatMoney(variantData.price);
+      const displayTitle = variantData.productTitle
+        ? (variantData.title && variantData.title !== 'Default Title'
+            ? `${variantData.productTitle} - ${variantData.title}`
+            : variantData.productTitle)
+        : variantData.title || 'Product';
 
-    const isSelected = !!this.selectedProducts[variantData.id];
-    const isAvailable = variantData.available !== false;
-    const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
+      const isSelected = !!this.selectedProducts[variantData.id];
+      const isAvailable = variantData.available !== false;
+      const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
 
-    displayContainer.innerHTML = `
-      <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${outOfStockClass}"
-           data-product-card
-           data-product-type="${productType}"
-           data-variant-id="${variantData.id}"
-           data-available="${isAvailable}"
-           role="button"
-           tabindex="0"
-           aria-pressed="${isSelected}"
-           aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}${!isAvailable ? ' (Out of Stock)' : ''}">
-        <div class="system-builder__product-select-indicator">
-          <span class="system-builder__checkmark"></span>
+      return `
+        <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${outOfStockClass}"
+             data-product-card
+             data-product-type="${productType}"
+             data-variant-id="${variantData.id}"
+             data-available="${isAvailable}"
+             role="button"
+             tabindex="0"
+             aria-pressed="${isSelected}"
+             aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}${!isAvailable ? ' (Out of Stock)' : ''}">
+          <div class="system-builder__product-select-indicator">
+            <span class="system-builder__checkmark"></span>
+          </div>
+          ${!isAvailable ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
+          <div class="system-builder__product-image">
+            ${imageUrl
+              ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
+              : '<div class="system-builder__product-placeholder-image"></div>'
+            }
+          </div>
+          <div class="system-builder__product-info">
+            <h4 class="system-builder__product-title">${displayTitle}</h4>
+            <p class="system-builder__product-price">${price}</p>
+            ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
+          </div>
+          <input type="hidden" name="variant_id" value="${variantData.id}">
         </div>
-        ${!isAvailable ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
-        <div class="system-builder__product-image">
-          ${imageUrl
-            ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
-            : '<div class="system-builder__product-placeholder-image"></div>'
-          }
-        </div>
-        <div class="system-builder__product-info">
-          <h4 class="system-builder__product-title">${displayTitle}</h4>
-          <p class="system-builder__product-price">${price}</p>
-          ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
-        </div>
-        <input type="hidden" name="variant_id" value="${variantData.id}">
-      </div>
-    `;
+      `;
+    }).join('');
   }
 
   /**
@@ -677,9 +687,17 @@ class SystemBuilder extends HTMLElement {
     const configEl = this.querySelector(`[data-optic-config="${configId}"]`);
     if (!configEl) return;
 
+    // Remove selected products for current variants before clearing
+    if (Array.isArray(config.ringMount)) {
+      config.ringMount.forEach(v => { if (v?.id) delete this.selectedProducts[v.id]; });
+    }
+    if (Array.isArray(config.magRing)) {
+      config.magRing.forEach(v => { if (v?.id) delete this.selectedProducts[v.id]; });
+    }
+
     // Reset config state
-    config.ringMount = null;
-    config.magRing = null;
+    config.ringMount = [];
+    config.magRing = [];
 
     // Hide and clear product displays
     configEl.querySelectorAll('[data-optic-product]').forEach(el => {
