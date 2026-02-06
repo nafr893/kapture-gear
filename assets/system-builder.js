@@ -127,12 +127,6 @@ class SystemBuilder extends HTMLElement {
         this.removeOpticConfiguration(configId);
       }
 
-      // Collapse/expand optic configuration
-      const collapseBtn = e.target.closest('[data-collapse-optic]');
-      if (collapseBtn) {
-        const configId = collapseBtn.dataset.collapseOptic;
-        this.toggleOpticCollapse(configId);
-      }
     });
 
     // Keyboard support for product cards
@@ -157,8 +151,7 @@ class SystemBuilder extends HTMLElement {
       opticBrand: null,
       opticModel: null,
       ringMount: null,
-      magRing: null,
-      collapsed: false
+      magRing: null
     });
 
     // Show empty state messages if no data
@@ -209,8 +202,7 @@ class SystemBuilder extends HTMLElement {
       opticBrand: null,
       opticModel: null,
       ringMount: null,
-      magRing: null,
-      collapsed: false
+      magRing: null
     };
 
     this.opticConfigs.push(newConfig);
@@ -225,9 +217,6 @@ class SystemBuilder extends HTMLElement {
     newConfigEl.dataset.opticConfig = configId;
 
     // Update all data attributes in the cloned element
-    newConfigEl.querySelectorAll('[data-collapse-optic]').forEach(el => {
-      el.dataset.collapseOptic = configId;
-    });
     newConfigEl.querySelectorAll('[data-remove-optic]').forEach(el => {
       el.dataset.removeOptic = configId;
       el.hidden = false; // Show remove button for new configs
@@ -272,11 +261,6 @@ class SystemBuilder extends HTMLElement {
     const notice = newConfigEl.querySelector('[data-model-notice]');
     if (notice) notice.hidden = true;
 
-    // Ensure expanded state
-    newConfigEl.classList.remove('system-builder__optic-config--collapsed');
-    const collapseBtn = newConfigEl.querySelector('[data-collapse-optic]');
-    if (collapseBtn) collapseBtn.setAttribute('aria-expanded', 'true');
-
     configsContainer.appendChild(newConfigEl);
 
     // Update add button visibility
@@ -316,25 +300,6 @@ class SystemBuilder extends HTMLElement {
 
     // Update summary
     this.updateSummary();
-  }
-
-  /**
-   * Toggle optic configuration collapse state
-   */
-  toggleOpticCollapse(configId) {
-    const config = this.getOpticConfig(configId);
-    if (!config) return;
-
-    config.collapsed = !config.collapsed;
-
-    const configEl = this.querySelector(`[data-optic-config="${configId}"]`);
-    if (configEl) {
-      configEl.classList.toggle('system-builder__optic-config--collapsed', config.collapsed);
-      const collapseBtn = configEl.querySelector('[data-collapse-optic]');
-      if (collapseBtn) {
-        collapseBtn.setAttribute('aria-expanded', !config.collapsed);
-      }
-    }
   }
 
   /**
