@@ -512,7 +512,6 @@ class SystemBuilder extends HTMLElement {
     const modelField = configEl.querySelector('[data-field="optic-model"]');
     const modelChipsContainer = configEl.querySelector('[data-chips="optic-model"]');
     const noticeContainer = configEl.querySelector('[data-model-notice]');
-    const noticeText = configEl.querySelector('[data-model-notice-text]');
 
     if (!modelField || !modelChipsContainer) return;
 
@@ -523,21 +522,12 @@ class SystemBuilder extends HTMLElement {
 
     modelChipsContainer.innerHTML = '';
 
+    // Always hide the notice when brand changes - it only shows when a model is selected
+    if (noticeContainer) noticeContainer.hidden = true;
+
     if (filteredModels.length === 0) {
       modelChipsContainer.innerHTML = '<p class="system-builder__empty-message">No models available for this brand.</p>';
-      if (noticeContainer) noticeContainer.hidden = true;
     } else {
-      // Check for product notices
-      const modelsWithNotice = filteredModels.filter(m => m.productNotice);
-      if (noticeContainer && noticeText) {
-        if (modelsWithNotice.length > 0) {
-          noticeText.textContent = modelsWithNotice.map(m => m.productNotice).join(' ');
-          noticeContainer.hidden = false;
-        } else {
-          noticeContainer.hidden = true;
-        }
-      }
-
       // Add chips
       filteredModels.forEach(model => {
         const chip = this.createChip(model.handle, model.name, 'optic-model');
@@ -563,6 +553,18 @@ class SystemBuilder extends HTMLElement {
     );
 
     if (!modelData) return;
+
+    // Show product notice if the model has one
+    const noticeContainer = configEl.querySelector('[data-model-notice]');
+    const noticeText = configEl.querySelector('[data-model-notice-text]');
+    if (noticeContainer && noticeText) {
+      if (modelData.productNotice) {
+        noticeText.textContent = modelData.productNotice;
+        noticeContainer.hidden = false;
+      } else {
+        noticeContainer.hidden = true;
+      }
+    }
 
     // Display model preview
     this.displayModelPreview(configId, modelData);
