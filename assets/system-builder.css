@@ -198,13 +198,13 @@
   padding: var(--spacing-4, 16px);
   margin-bottom: var(--spacing-6, 24px);
   background: var(--color-background, #fff);
-  border: 2px dashed var(--color-border, #e5e5e5);
   border-radius: var(--border-radius, 8px);
-  color: var(--text-color-secondary, #666);
+  color: var(--text-color-secondary, #3d3d3d);
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
+  font-weight: bold; 
 }
 
 .system-builder__add-optic-btn:hover {
