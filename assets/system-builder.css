@@ -73,6 +73,150 @@
   display: none;
 }
 
+/* Optic Configurations Container */
+.system-builder__optic-configs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4, 16px);
+}
+
+/* Individual Optic Configuration */
+.system-builder__optic-config {
+  background: var(--color-background, #fff);
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--border-radius, 8px);
+  padding: var(--spacing-5, 20px);
+}
+
+.system-builder__optic-config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-4, 16px);
+}
+
+.system-builder__optic-config-header .system-builder__step-title {
+  margin: 0;
+}
+
+.system-builder__optic-config-actions {
+  display: flex;
+  gap: var(--spacing-2, 8px);
+  align-items: center;
+}
+
+/* Collapse Button */
+.system-builder__collapse-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background-secondary, #f9f9f9);
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--border-radius-sm, 4px);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.system-builder__collapse-btn:hover {
+  background: var(--color-border, #e5e5e5);
+}
+
+.system-builder__collapse-icon {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--text-color, #333);
+  transition: transform 0.2s ease;
+}
+
+.system-builder__optic-config--collapsed .system-builder__collapse-icon {
+  transform: rotate(-90deg);
+}
+
+/* Remove Optic Button */
+.system-builder__remove-optic-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--border-radius-sm, 4px);
+  color: var(--text-color-secondary, #666);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.system-builder__remove-optic-btn:hover {
+  background: var(--color-error, #dc3545);
+  border-color: var(--color-error, #dc3545);
+  color: #fff;
+}
+
+.system-builder__remove-optic-btn[hidden] {
+  display: none;
+}
+
+/* Optic Config Content (collapsible) */
+.system-builder__optic-config-content {
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+  overflow: hidden;
+}
+
+.system-builder__optic-config--collapsed .system-builder__optic-config-content {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+}
+
+/* Optic Product Displays (inside config) */
+.system-builder__optic-product {
+  margin-top: var(--spacing-4, 16px);
+  padding-top: var(--spacing-4, 16px);
+  border-top: 1px solid var(--color-border, #e5e5e5);
+}
+
+.system-builder__optic-product[hidden] {
+  display: none;
+}
+
+.system-builder__optic-product .system-builder__label {
+  margin-bottom: var(--spacing-3, 12px);
+}
+
+/* Add Another Optic Button */
+.system-builder__add-optic-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--spacing-4, 16px);
+  margin-bottom: var(--spacing-6, 24px);
+  background: var(--color-background, #fff);
+  border: 2px dashed var(--color-border, #e5e5e5);
+  border-radius: var(--border-radius, 8px);
+  color: var(--text-color-secondary, #666);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.system-builder__add-optic-btn:hover {
+  border-color: var(--color-primary, #333);
+  color: var(--color-primary, #333);
+  background: var(--color-background-secondary, #f9f9f9);
+}
+
+.system-builder__add-optic-btn[hidden] {
+  display: none;
+}
+
 .system-builder__step-header {
   display: flex;
   gap: var(--spacing-6, 24px);

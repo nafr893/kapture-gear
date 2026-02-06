@@ -154,124 +154,133 @@
     <div class="system-builder__layout">
       {%- comment -%} Left Column: Steps {%- endcomment -%}
       <div class="system-builder__steps">
-        {%- comment -%} Step 1: Optic Selection {%- endcomment -%}
-        <div class="system-builder__step" data-step="optic">
-      <div class="system-builder__step-header">
-        {%- if section.settings.optic_image != blank -%}
-          <div class="system-builder__step-image">
-            {{ section.settings.optic_image | image_url: width: 200 | image_tag: loading: 'lazy' }}
-          </div>
-        {%- endif -%}
-        <div class="system-builder__step-content">
-          <h3 class="system-builder__step-title h4">{{ section.settings.optic_step_title }}</h3>
+        {%- comment -%} Optic Configurations Container {%- endcomment -%}
+        <div class="system-builder__optic-configs" data-optic-configs>
+          {%- comment -%} First Optic Configuration (template for JS to clone) {%- endcomment -%}
+          <div class="system-builder__optic-config" data-optic-config="0">
+            <div class="system-builder__optic-config-header">
+              <h3 class="system-builder__step-title h4">{{ section.settings.optic_step_title }}</h3>
+              <div class="system-builder__optic-config-actions">
+                <button type="button" class="system-builder__collapse-btn" data-collapse-optic="0" aria-label="Collapse optic configuration" aria-expanded="true">
+                  <span class="system-builder__collapse-icon"></span>
+                </button>
+                <button type="button" class="system-builder__remove-optic-btn" data-remove-optic="0" aria-label="Remove optic configuration" hidden>
+                  <span>&times;</span>
+                </button>
+              </div>
+            </div>
 
-          {%- comment -%} Manufacturer Selection {%- endcomment -%}
-          <div class="system-builder__field" data-field="optic-brand">
-            <label class="system-builder__label">{{ section.settings.manufacturer_label | default: 'Manufacturer' }}</label>
-            <div class="system-builder__chips" data-chips="optic-brand">
-              {%- for brand in optic_brands -%}
+            <div class="system-builder__optic-config-content" data-optic-content="0">
+              {%- comment -%} Manufacturer Selection {%- endcomment -%}
+              <div class="system-builder__field" data-field="optic-brand">
+                <label class="system-builder__label">{{ section.settings.manufacturer_label | default: 'Manufacturer' }}</label>
+                <div class="system-builder__chips" data-chips="optic-brand">
+                  {%- for brand in optic_brands -%}
+                    {%- render 'system-builder-option-chip',
+                      value: brand.system.handle,
+                      label: brand.optic_brand,
+                      field: 'optic-brand'
+                    -%}
+                  {%- else -%}
+                    <p class="system-builder__empty-message">No optic brands configured. Add entries to the "optic_brand" metaobject.</p>
+                  {%- endfor -%}
+                </div>
+              </div>
+
+              {%- comment -%} Model Selection {%- endcomment -%}
+              <div class="system-builder__field" data-field="optic-model" hidden>
+                <label class="system-builder__label">{{ section.settings.model_label | default: 'Model' }}</label>
+                <div class="system-builder__chips" data-chips="optic-model">
+                  {%- comment -%} Populated by JavaScript based on brand selection {%- endcomment -%}
+                </div>
+                {%- comment -%} Product notice displayed inline below chips {%- endcomment -%}
+                <div class="system-builder__notice-inline" data-model-notice hidden>
+                  <p class="system-builder__notice-inline-text" data-model-notice-text></p>
+                </div>
+              </div>
+
+              {%- comment -%} Selected Model Image Preview {%- endcomment -%}
+              <div class="system-builder__model-preview" data-model-preview hidden>
+                <div class="system-builder__model-preview-image" data-model-preview-image></div>
+              </div>
+
+              {%- comment -%} Ring Mount (inside optic config) {%- endcomment -%}
+              <div class="system-builder__optic-product" data-optic-product="ring-mount" hidden>
+                <label class="system-builder__label">{{ section.settings.ring_mount_step_title | default: 'Ring Mount' }}</label>
+                <div class="system-builder__product-display" data-product="ring-mount">
+                  <p class="system-builder__placeholder">Select your optic to see the compatible ring mount.</p>
+                </div>
+              </div>
+
+              {%- comment -%} Mag Ring (inside optic config) {%- endcomment -%}
+              <div class="system-builder__optic-product" data-optic-product="mag-ring" hidden>
+                <label class="system-builder__label">{{ section.settings.mag_ring_step_title | default: 'Mag Ring' }}</label>
+                <div class="system-builder__product-display" data-product="mag-ring">
+                  <p class="system-builder__placeholder">Select your optic to see the compatible mag ring.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {%- comment -%} Add Another Optic Button {%- endcomment -%}
+        <button type="button" class="system-builder__add-optic-btn" data-add-optic>
+          + Add Another Optic
+        </button>
+
+        {%- comment -%} Adapter (Universal product) {%- endcomment -%}
+        <div class="system-builder__step system-builder__step--product" data-step="adapter">
+          <h3 class="system-builder__step-title h4">{{ section.settings.adapter_step_title }}</h3>
+          <div class="system-builder__product-display" data-product="adapter">
+            {%- comment -%} Product card populated by JavaScript from section settings {%- endcomment -%}
+            <p class="system-builder__placeholder">Adapter will be shown here.</p>
+          </div>
+        </div>
+
+        {%- comment -%} Phone Case Selection {%- endcomment -%}
+        <div class="system-builder__step" data-step="phone">
+          <h3 class="system-builder__step-title h4">{{ section.settings.phone_step_title }}</h3>
+
+          {%- comment -%} Phone Brand Selection {%- endcomment -%}
+          <div class="system-builder__field" data-field="phone-brand">
+            <label class="system-builder__label">{{ section.settings.phone_brand_label | default: 'Phone Brand' }}</label>
+            <div class="system-builder__chips" data-chips="phone-brand">
+              {%- for brand in phone_brands -%}
                 {%- render 'system-builder-option-chip',
                   value: brand.system.handle,
-                  label: brand.optic_brand,
-                  field: 'optic-brand'
+                  label: brand.phone_brand,
+                  field: 'phone-brand'
                 -%}
               {%- else -%}
-                <p class="system-builder__empty-message">No optic brands configured. Add entries to the "optic_brand" metaobject.</p>
+                <p class="system-builder__empty-message">No phone brands configured. Add entries to the "phone_brand" metaobject.</p>
               {%- endfor -%}
             </div>
           </div>
 
-          {%- comment -%} Model Selection {%- endcomment -%}
-          <div class="system-builder__field" data-field="optic-model" hidden>
-            <label class="system-builder__label">{{ section.settings.model_label | default: 'Model' }}</label>
-            <div class="system-builder__chips" data-chips="optic-model">
+          {%- comment -%} Phone Model Selection {%- endcomment -%}
+          <div class="system-builder__field" data-field="phone-model" hidden>
+            <label class="system-builder__label">{{ section.settings.phone_model_label | default: 'Phone Model' }}</label>
+            <div class="system-builder__chips" data-chips="phone-model">
               {%- comment -%} Populated by JavaScript based on brand selection {%- endcomment -%}
             </div>
-            {%- comment -%} Product notice displayed inline below chips {%- endcomment -%}
-            <div class="system-builder__notice-inline" data-model-notice hidden>
-              <p class="system-builder__notice-inline-text" data-model-notice-text></p>
+          </div>
+
+          {%- comment -%} Phone Case (Auto-selected) {%- endcomment -%}
+          <div class="system-builder__product-display" data-product="phone-case" hidden>
+            {%- comment -%} Product card populated by JavaScript {%- endcomment -%}
+          </div>
+        </div>
+
+        {%- comment -%} Accessories (from blocks) {%- endcomment -%}
+        {%- if section.blocks.size > 0 -%}
+          <div class="system-builder__step system-builder__step--accessories" data-step="accessories">
+            <h3 class="system-builder__step-title h4">{{ section.settings.accessories_step_title }}</h3>
+            <div class="system-builder__accessories-grid" data-accessories-grid>
+              {%- comment -%} Product cards populated by JavaScript {%- endcomment -%}
             </div>
           </div>
-
-          {%- comment -%} Selected Model Image Preview {%- endcomment -%}
-          <div class="system-builder__model-preview" data-model-preview hidden>
-            <div class="system-builder__model-preview-image" data-model-preview-image></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {%- comment -%} Step 2: Ring Mount (User selectable based on optic model) {%- endcomment -%}
-    <div class="system-builder__step system-builder__step--product" data-step="ring-mount" hidden>
-      <h3 class="system-builder__step-title h4">{{ section.settings.ring_mount_step_title }}</h3>
-      <div class="system-builder__product-display" data-product="ring-mount">
-        {%- comment -%} Product card populated by JavaScript {%- endcomment -%}
-        <p class="system-builder__placeholder">Select your optic to see the compatible ring mount.</p>
-      </div>
-    </div>
-
-    {%- comment -%} Step 3: Mag Ring (Auto-selected based on optic model) {%- endcomment -%}
-    <div class="system-builder__step system-builder__step--product" data-step="mag-ring" hidden>
-      <h3 class="system-builder__step-title h4">{{ section.settings.mag_ring_step_title }}</h3>
-      <div class="system-builder__product-display" data-product="mag-ring">
-        {%- comment -%} Product card populated by JavaScript {%- endcomment -%}
-        <p class="system-builder__placeholder">Select your optic to see the compatible mag ring.</p>
-      </div>
-    </div>
-
-    {%- comment -%} Step 4: Adapter (Universal product) {%- endcomment -%}
-    <div class="system-builder__step system-builder__step--product" data-step="adapter">
-      <h3 class="system-builder__step-title h4">{{ section.settings.adapter_step_title }}</h3>
-      <div class="system-builder__product-display" data-product="adapter">
-        {%- comment -%} Product card populated by JavaScript from section settings {%- endcomment -%}
-        <p class="system-builder__placeholder">Adapter will be shown here.</p>
-      </div>
-    </div>
-
-    {%- comment -%} Step 4: Phone Case Selection {%- endcomment -%}
-    <div class="system-builder__step" data-step="phone">
-      <h3 class="system-builder__step-title h4">{{ section.settings.phone_step_title }}</h3>
-
-      {%- comment -%} Phone Brand Selection {%- endcomment -%}
-      <div class="system-builder__field" data-field="phone-brand">
-        <label class="system-builder__label">{{ section.settings.phone_brand_label | default: 'Phone Brand' }}</label>
-        <div class="system-builder__chips" data-chips="phone-brand">
-          {%- for brand in phone_brands -%}
-            {%- render 'system-builder-option-chip',
-              value: brand.system.handle,
-              label: brand.phone_brand,
-              field: 'phone-brand'
-            -%}
-          {%- else -%}
-            <p class="system-builder__empty-message">No phone brands configured. Add entries to the "phone_brand" metaobject.</p>
-          {%- endfor -%}
-        </div>
-      </div>
-
-      {%- comment -%} Phone Model Selection {%- endcomment -%}
-      <div class="system-builder__field" data-field="phone-model" hidden>
-        <label class="system-builder__label">{{ section.settings.phone_model_label | default: 'Phone Model' }}</label>
-        <div class="system-builder__chips" data-chips="phone-model">
-          {%- comment -%} Populated by JavaScript based on brand selection {%- endcomment -%}
-        </div>
-      </div>
-
-        {%- comment -%} Phone Case (Auto-selected) {%- endcomment -%}
-        <div class="system-builder__product-display" data-product="phone-case" hidden>
-          {%- comment -%} Product card populated by JavaScript {%- endcomment -%}
-        </div>
-      </div>
-
-    {%- comment -%} Step 6: Accessories (from blocks) {%- endcomment -%}
-    {%- if section.blocks.size > 0 -%}
-      <div class="system-builder__step system-builder__step--accessories" data-step="accessories">
-        <h3 class="system-builder__step-title h4">{{ section.settings.accessories_step_title }}</h3>
-        <div class="system-builder__accessories-grid" data-accessories-grid>
-          {%- comment -%} Product cards populated by JavaScript {%- endcomment -%}
-        </div>
-      </div>
-    {%- endif -%}
-    </div>{%- comment -%} End .system-builder__steps {%- endcomment -%}
+        {%- endif -%}
+      </div>{%- comment -%} End .system-builder__steps {%- endcomment -%}
 
     {%- comment -%} Right Column: Summary Sidebar {%- endcomment -%}
     <div class="system-builder__sidebar">

@@ -1,18 +1,22 @@
 /**
  * System Builder Web Component
  * A multi-step product configurator for optic adapters and phone cases.
+ * Supports multiple optic configurations.
  */
 class SystemBuilder extends HTMLElement {
   constructor() {
     super();
 
-    // State management
+    // Configuration limits
+    this.MAX_OPTIC_CONFIGS = 15;
+
+    // Optic configurations array - each config has its own state
+    // Format: [{ id, opticBrand, opticModel, ringMount, magRing, collapsed }]
+    this.opticConfigs = [];
+    this.nextOpticConfigId = 1;
+
+    // Global state (non-optic related)
     this.state = {
-      opticBrand: null,
-      opticModel: null,
-      ringMount: null,
-      ringMountVariantId: null,
-      magRing: null,
       adapter: null,
       phoneBrand: null,
       phoneModel: null,
@@ -64,14 +68,6 @@ class SystemBuilder extends HTMLElement {
       this.data.phoneModels = phoneModelsEl ? JSON.parse(phoneModelsEl.textContent) : [];
       this.data.adapterProduct = adapterProductEl ? JSON.parse(adapterProductEl.textContent) : null;
       this.data.accessories = accessoriesEl ? JSON.parse(accessoriesEl.textContent) : [];
-
-      // Debug: Log loaded data to help identify field mapping issues
-      console.log('System Builder: Loaded optic brands:', this.data.opticBrands);
-      console.log('System Builder: Loaded optic models:', this.data.opticModels);
-      console.log('System Builder: Loaded phone brands:', this.data.phoneBrands);
-      console.log('System Builder: Loaded phone models:', this.data.phoneModels);
-      console.log('System Builder: Loaded adapter product:', this.data.adapterProduct);
-      console.log('System Builder: Loaded accessories:', this.data.accessories);
     } catch (e) {
       console.error('System Builder: Error parsing data', e);
     }
@@ -81,7 +77,7 @@ class SystemBuilder extends HTMLElement {
    * Bind event listeners
    */
   bindEvents() {
-    // Delegate chip click events
+    // Delegate click events
     this.addEventListener('click', (e) => {
       const chip = e.target.closest('[data-chip]');
       if (chip) {
@@ -118,6 +114,25 @@ class SystemBuilder extends HTMLElement {
         this.handleQuantityChange(quantityDecreaseBtn.dataset.quantityDecrease, -1);
       }
 
+      // Add optic configuration button
+      const addOpticBtn = e.target.closest('[data-add-optic]');
+      if (addOpticBtn) {
+        this.addOpticConfiguration();
+      }
+
+      // Remove optic configuration button
+      const removeOpticBtn = e.target.closest('[data-remove-optic]');
+      if (removeOpticBtn) {
+        const configId = removeOpticBtn.dataset.removeOptic;
+        this.removeOpticConfiguration(configId);
+      }
+
+      // Collapse/expand optic configuration
+      const collapseBtn = e.target.closest('[data-collapse-optic]');
+      if (collapseBtn) {
+        const configId = collapseBtn.dataset.collapseOptic;
+        this.toggleOpticCollapse(configId);
+      }
     });
 
     // Keyboard support for product cards
@@ -133,158 +148,28 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
-   * Handle remove button click in summary
-   */
-  handleRemoveFromSummary(button) {
-    const variantId = button.dataset.summaryRemove;
-    if (!variantId || !this.selectedProducts[variantId]) return;
-
-    // Deselect the product
-    delete this.selectedProducts[variantId];
-
-    // Update the product card visual state (find card by variant ID)
-    const card = this.querySelector(`[data-product-card][data-variant-id="${variantId}"]`);
-    if (card) {
-      card.classList.remove('system-builder__product-card--selected');
-      card.setAttribute('aria-pressed', 'false');
-    }
-
-    // Update summary
-    this.updateSummary();
-  }
-
-  /**
-   * Handle remove accessory button click in summary
-   */
-  handleRemoveAccessoryFromSummary(button) {
-    const blockId = button.dataset.summaryRemoveAccessory;
-    if (!blockId) return;
-
-    // Deselect the accessory
-    this.selectedAccessories[blockId] = false;
-
-    // Update the product card visual state
-    const card = this.querySelector(`[data-product-card][data-accessory-block-id="${blockId}"]`);
-    if (card) {
-      card.classList.remove('system-builder__product-card--selected');
-      card.setAttribute('aria-pressed', 'false');
-    }
-
-    // Update summary
-    this.updateSummary();
-  }
-
-  /**
-   * Handle quantity change (increase/decrease) in summary
-   */
-  handleQuantityChange(variantId, delta) {
-    if (!variantId || !this.selectedProducts[variantId]) return;
-
-    const product = this.selectedProducts[variantId];
-    const newQuantity = (product.quantity || 1) + delta;
-
-    if (newQuantity <= 0) {
-      // Remove the product if quantity goes to 0 or below
-      delete this.selectedProducts[variantId];
-
-      // Update the product card visual state
-      const card = this.querySelector(`[data-product-card][data-variant-id="${variantId}"]`);
-      if (card) {
-        card.classList.remove('system-builder__product-card--selected');
-        card.setAttribute('aria-pressed', 'false');
-      }
-    } else {
-      product.quantity = newQuantity;
-    }
-
-    // Update summary
-    this.updateSummary();
-  }
-
-  /**
-   * Handle product card click for selection toggle
-   */
-  handleProductCardClick(card) {
-    const productType = card.dataset.productType;
-    if (!productType) return;
-
-    // Check if item is available
-    const isAvailable = card.dataset.available !== 'false';
-
-    // If out of stock, don't allow selection
-    if (!isAvailable) return;
-
-    // Handle accessories separately (they use blockId)
-    if (productType === 'accessory') {
-      const blockId = card.dataset.accessoryBlockId;
-      if (!blockId) return;
-
-      // Toggle selection
-      this.selectedAccessories[blockId] = !this.selectedAccessories[blockId];
-
-      // Update visual state
-      card.classList.toggle('system-builder__product-card--selected', this.selectedAccessories[blockId]);
-      card.setAttribute('aria-pressed', this.selectedAccessories[blockId]);
-
-      // Update summary
-      this.updateSummary();
-      return;
-    }
-
-    // Get the variant ID from the card
-    const variantId = card.dataset.variantId;
-    if (!variantId) return;
-
-    // Map data attribute to state key for getting current product data
-    const stateKeyMap = {
-      'ring-mount': 'ringMount',
-      'mag-ring': 'magRing',
-      'adapter': 'adapter',
-      'phone-case': 'phoneCase'
-    };
-
-    const stateKey = stateKeyMap[productType];
-    if (!stateKey) return;
-
-    // Add or increment quantity by variant ID
-    if (this.selectedProducts[variantId]) {
-      // Currently selected, increment quantity
-      this.selectedProducts[variantId].quantity = (this.selectedProducts[variantId].quantity || 1) + 1;
-    } else {
-      // Not selected, select it and store the product data with type info
-      const productData = this.state[stateKey];
-      if (productData) {
-        this.selectedProducts[variantId] = {
-          ...productData,
-          productType: productType, // Store the type for categorization
-          quantity: 1
-        };
-      }
-    }
-
-    const isSelected = !!this.selectedProducts[variantId];
-
-    // Update visual state
-    card.classList.toggle('system-builder__product-card--selected', isSelected);
-    card.setAttribute('aria-pressed', isSelected);
-
-    // Update summary
-    this.updateSummary();
-  }
-
-  /**
-   * Initialize any default state
+   * Initialize state
    */
   initializeState() {
+    // Initialize first optic configuration (config ID 0 from Liquid template)
+    this.opticConfigs.push({
+      id: '0',
+      opticBrand: null,
+      opticModel: null,
+      ringMount: null,
+      magRing: null,
+      collapsed: false
+    });
+
     // Show empty state messages if no data
     if (this.data.opticBrands.length === 0) {
-      console.warn('System Builder: No optic brands found. Please add entries to the optic_brand metaobject.');
+      console.warn('System Builder: No optic brands found.');
     }
     if (this.data.phoneBrands.length === 0) {
-      console.warn('System Builder: No phone brands found. Please add entries to the phone_brand metaobject.');
+      console.warn('System Builder: No phone brands found.');
     }
 
-    // Display adapter product if configured (it's always visible)
+    // Display adapter product if configured
     if (this.data.adapterProduct) {
       this.state.adapter = this.data.adapterProduct;
       this.displayVariantProduct('adapter', this.data.adapterProduct);
@@ -295,7 +180,297 @@ class SystemBuilder extends HTMLElement {
       this.displayAccessories();
     }
 
-    // Initialize summary (shows empty state)
+    // Update add optic button visibility
+    this.updateAddOpticButtonVisibility();
+
+    // Initialize summary
+    this.updateSummary();
+  }
+
+  /**
+   * Get optic configuration by ID
+   */
+  getOpticConfig(configId) {
+    return this.opticConfigs.find(c => c.id === String(configId));
+  }
+
+  /**
+   * Add a new optic configuration
+   */
+  addOpticConfiguration() {
+    if (this.opticConfigs.length >= this.MAX_OPTIC_CONFIGS) {
+      console.warn('System Builder: Maximum optic configurations reached');
+      return;
+    }
+
+    const configId = String(this.nextOpticConfigId++);
+    const newConfig = {
+      id: configId,
+      opticBrand: null,
+      opticModel: null,
+      ringMount: null,
+      magRing: null,
+      collapsed: false
+    };
+
+    this.opticConfigs.push(newConfig);
+
+    // Create new optic config element by cloning the first one
+    const firstConfig = this.querySelector('[data-optic-config="0"]');
+    const configsContainer = this.querySelector('[data-optic-configs]');
+
+    if (!firstConfig || !configsContainer) return;
+
+    const newConfigEl = firstConfig.cloneNode(true);
+    newConfigEl.dataset.opticConfig = configId;
+
+    // Update all data attributes in the cloned element
+    newConfigEl.querySelectorAll('[data-collapse-optic]').forEach(el => {
+      el.dataset.collapseOptic = configId;
+    });
+    newConfigEl.querySelectorAll('[data-remove-optic]').forEach(el => {
+      el.dataset.removeOptic = configId;
+      el.hidden = false; // Show remove button for new configs
+    });
+    newConfigEl.querySelectorAll('[data-optic-content]').forEach(el => {
+      el.dataset.opticContent = configId;
+    });
+
+    // Reset the cloned config's state
+    // Clear chip selections
+    newConfigEl.querySelectorAll('[data-chip]').forEach(chip => {
+      chip.classList.remove('system-builder__chip--selected');
+      chip.setAttribute('aria-pressed', 'false');
+    });
+
+    // Hide model field and reset chips
+    const modelField = newConfigEl.querySelector('[data-field="optic-model"]');
+    if (modelField) {
+      modelField.hidden = true;
+      const modelChips = modelField.querySelector('[data-chips="optic-model"]');
+      if (modelChips) modelChips.innerHTML = '';
+    }
+
+    // Hide product displays
+    newConfigEl.querySelectorAll('[data-optic-product]').forEach(el => {
+      el.hidden = true;
+      const productDisplay = el.querySelector('[data-product]');
+      if (productDisplay) {
+        productDisplay.innerHTML = '<p class="system-builder__placeholder">Select your optic to see compatible products.</p>';
+      }
+    });
+
+    // Hide model preview
+    const modelPreview = newConfigEl.querySelector('[data-model-preview]');
+    if (modelPreview) {
+      modelPreview.hidden = true;
+      const previewImage = modelPreview.querySelector('[data-model-preview-image]');
+      if (previewImage) previewImage.innerHTML = '';
+    }
+
+    // Hide notice
+    const notice = newConfigEl.querySelector('[data-model-notice]');
+    if (notice) notice.hidden = true;
+
+    // Ensure expanded state
+    newConfigEl.classList.remove('system-builder__optic-config--collapsed');
+    const collapseBtn = newConfigEl.querySelector('[data-collapse-optic]');
+    if (collapseBtn) collapseBtn.setAttribute('aria-expanded', 'true');
+
+    configsContainer.appendChild(newConfigEl);
+
+    // Update add button visibility
+    this.updateAddOpticButtonVisibility();
+  }
+
+  /**
+   * Remove an optic configuration
+   */
+  removeOpticConfiguration(configId) {
+    const configIndex = this.opticConfigs.findIndex(c => c.id === String(configId));
+    if (configIndex === -1) return;
+
+    // Don't allow removing the first configuration
+    if (configId === '0' && this.opticConfigs.length === 1) return;
+
+    // Remove any selected products from this config
+    const config = this.opticConfigs[configIndex];
+    if (config.ringMount?.id) {
+      delete this.selectedProducts[config.ringMount.id];
+    }
+    if (config.magRing?.id) {
+      delete this.selectedProducts[config.magRing.id];
+    }
+
+    // Remove from array
+    this.opticConfigs.splice(configIndex, 1);
+
+    // Remove DOM element
+    const configEl = this.querySelector(`[data-optic-config="${configId}"]`);
+    if (configEl) {
+      configEl.remove();
+    }
+
+    // Update add button visibility
+    this.updateAddOpticButtonVisibility();
+
+    // Update summary
+    this.updateSummary();
+  }
+
+  /**
+   * Toggle optic configuration collapse state
+   */
+  toggleOpticCollapse(configId) {
+    const config = this.getOpticConfig(configId);
+    if (!config) return;
+
+    config.collapsed = !config.collapsed;
+
+    const configEl = this.querySelector(`[data-optic-config="${configId}"]`);
+    if (configEl) {
+      configEl.classList.toggle('system-builder__optic-config--collapsed', config.collapsed);
+      const collapseBtn = configEl.querySelector('[data-collapse-optic]');
+      if (collapseBtn) {
+        collapseBtn.setAttribute('aria-expanded', !config.collapsed);
+      }
+    }
+  }
+
+  /**
+   * Update add optic button visibility based on limit
+   */
+  updateAddOpticButtonVisibility() {
+    const addBtn = this.querySelector('[data-add-optic]');
+    if (addBtn) {
+      addBtn.hidden = this.opticConfigs.length >= this.MAX_OPTIC_CONFIGS;
+    }
+  }
+
+  /**
+   * Handle remove button click in summary
+   */
+  handleRemoveFromSummary(button) {
+    const variantId = button.dataset.summaryRemove;
+    if (!variantId || !this.selectedProducts[variantId]) return;
+
+    delete this.selectedProducts[variantId];
+
+    // Update all product cards with this variant ID
+    this.querySelectorAll(`[data-product-card][data-variant-id="${variantId}"]`).forEach(card => {
+      card.classList.remove('system-builder__product-card--selected');
+      card.setAttribute('aria-pressed', 'false');
+    });
+
+    this.updateSummary();
+  }
+
+  /**
+   * Handle remove accessory button click in summary
+   */
+  handleRemoveAccessoryFromSummary(button) {
+    const blockId = button.dataset.summaryRemoveAccessory;
+    if (!blockId) return;
+
+    this.selectedAccessories[blockId] = false;
+
+    const card = this.querySelector(`[data-product-card][data-accessory-block-id="${blockId}"]`);
+    if (card) {
+      card.classList.remove('system-builder__product-card--selected');
+      card.setAttribute('aria-pressed', 'false');
+    }
+
+    this.updateSummary();
+  }
+
+  /**
+   * Handle quantity change in summary
+   */
+  handleQuantityChange(variantId, delta) {
+    if (!variantId || !this.selectedProducts[variantId]) return;
+
+    const product = this.selectedProducts[variantId];
+    const newQuantity = (product.quantity || 1) + delta;
+
+    if (newQuantity <= 0) {
+      delete this.selectedProducts[variantId];
+
+      this.querySelectorAll(`[data-product-card][data-variant-id="${variantId}"]`).forEach(card => {
+        card.classList.remove('system-builder__product-card--selected');
+        card.setAttribute('aria-pressed', 'false');
+      });
+    } else {
+      product.quantity = newQuantity;
+    }
+
+    this.updateSummary();
+  }
+
+  /**
+   * Handle product card click
+   */
+  handleProductCardClick(card) {
+    const productType = card.dataset.productType;
+    if (!productType) return;
+
+    const isAvailable = card.dataset.available !== 'false';
+    if (!isAvailable) return;
+
+    // Handle accessories separately
+    if (productType === 'accessory') {
+      const blockId = card.dataset.accessoryBlockId;
+      if (!blockId) return;
+
+      this.selectedAccessories[blockId] = !this.selectedAccessories[blockId];
+      card.classList.toggle('system-builder__product-card--selected', this.selectedAccessories[blockId]);
+      card.setAttribute('aria-pressed', this.selectedAccessories[blockId]);
+      this.updateSummary();
+      return;
+    }
+
+    const variantId = card.dataset.variantId;
+    if (!variantId) return;
+
+    // Get the config ID this card belongs to (if it's an optic product)
+    const opticConfig = card.closest('[data-optic-config]');
+    const configId = opticConfig ? opticConfig.dataset.opticConfig : null;
+
+    // Map product type to state key
+    const stateKeyMap = {
+      'ring-mount': 'ringMount',
+      'mag-ring': 'magRing',
+      'adapter': 'adapter',
+      'phone-case': 'phoneCase'
+    };
+    const stateKey = stateKeyMap[productType];
+    if (!stateKey) return;
+
+    // Get product data from the appropriate source
+    let productData = null;
+    if (configId !== null && (productType === 'ring-mount' || productType === 'mag-ring')) {
+      const config = this.getOpticConfig(configId);
+      if (config) {
+        productData = config[stateKey];
+      }
+    } else {
+      productData = this.state[stateKey];
+    }
+
+    // Add or increment quantity
+    if (this.selectedProducts[variantId]) {
+      this.selectedProducts[variantId].quantity = (this.selectedProducts[variantId].quantity || 1) + 1;
+    } else if (productData) {
+      this.selectedProducts[variantId] = {
+        ...productData,
+        productType: productType,
+        quantity: 1
+      };
+    }
+
+    const isSelected = !!this.selectedProducts[variantId];
+    card.classList.toggle('system-builder__product-card--selected', isSelected);
+    card.setAttribute('aria-pressed', isSelected);
+
     this.updateSummary();
   }
 
@@ -306,7 +481,7 @@ class SystemBuilder extends HTMLElement {
     const field = chip.dataset.field;
     const value = chip.dataset.value;
 
-    // Update chip selection state
+    // Update chip selection state within the same container
     const container = chip.closest('[data-chips]');
     if (container) {
       container.querySelectorAll('[data-chip]').forEach(c => {
@@ -317,18 +492,31 @@ class SystemBuilder extends HTMLElement {
       chip.setAttribute('aria-pressed', 'true');
     }
 
-    // Update state and trigger appropriate actions
+    // Determine if this is an optic field and get the config ID
+    const opticConfig = chip.closest('[data-optic-config]');
+    const configId = opticConfig ? opticConfig.dataset.opticConfig : null;
+
     switch (field) {
       case 'optic-brand':
-        this.state.opticBrand = value;
-        this.state.opticModel = null;
-        this.updateOpticModels();
-        this.clearOpticProducts();
+        if (configId !== null) {
+          const config = this.getOpticConfig(configId);
+          if (config) {
+            config.opticBrand = value;
+            config.opticModel = null;
+            this.updateOpticModels(configId);
+            this.clearOpticProducts(configId);
+          }
+        }
         break;
 
       case 'optic-model':
-        this.state.opticModel = value;
-        this.updateOpticProducts();
+        if (configId !== null) {
+          const config = this.getOpticConfig(configId);
+          if (config) {
+            config.opticModel = value;
+            this.updateOpticProducts(configId);
+          }
+        }
         break;
 
       case 'phone-brand':
@@ -347,170 +535,130 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
-   * Update optic model chips based on selected brand
+   * Update optic model chips for a specific config
    */
-  updateOpticModels() {
-    const modelField = this.querySelector('[data-field="optic-model"]');
-    const modelChipsContainer = this.querySelector('[data-chips="optic-model"]');
+  updateOpticModels(configId) {
+    const config = this.getOpticConfig(configId);
+    if (!config) return;
+
+    const configEl = this.querySelector(`[data-optic-config="${configId}"]`);
+    if (!configEl) return;
+
+    const modelField = configEl.querySelector('[data-field="optic-model"]');
+    const modelChipsContainer = configEl.querySelector('[data-chips="optic-model"]');
+    const noticeContainer = configEl.querySelector('[data-model-notice]');
+    const noticeText = configEl.querySelector('[data-model-notice-text]');
 
     if (!modelField || !modelChipsContainer) return;
 
-    // Debug: Log filtering info
-    console.log('System Builder: Filtering models for brand:', this.state.opticBrand);
-    console.log('System Builder: Available models:', this.data.opticModels.map(m => ({
-      name: m.name,
-      handle: m.handle,
-      brandHandle: m.brandHandle
-    })));
-
     // Filter models by selected brand
     const filteredModels = this.data.opticModels.filter(
-      model => model.brandHandle === this.state.opticBrand
+      model => model.brandHandle === config.opticBrand
     );
 
-    console.log('System Builder: Filtered models:', filteredModels);
-
-    // Clear and populate model chips
     modelChipsContainer.innerHTML = '';
-
-    // Find the inline notice container below the chips
-    const noticeContainer = this.querySelector('[data-model-notice]');
-    const noticeText = this.querySelector('[data-model-notice-text]');
 
     if (filteredModels.length === 0) {
       modelChipsContainer.innerHTML = '<p class="system-builder__empty-message">No models available for this brand.</p>';
-      // Hide notice when no models
-      if (noticeContainer) {
-        noticeContainer.hidden = true;
-      }
+      if (noticeContainer) noticeContainer.hidden = true;
     } else {
-      // Check if any filtered model has a product notice
+      // Check for product notices
       const modelsWithNotice = filteredModels.filter(m => m.productNotice);
-
       if (noticeContainer && noticeText) {
         if (modelsWithNotice.length > 0) {
-          // Show the notice inline with the text content
-          const noticeTexts = modelsWithNotice.map(m => m.productNotice);
-          noticeText.textContent = noticeTexts.join(' ');
+          noticeText.textContent = modelsWithNotice.map(m => m.productNotice).join(' ');
           noticeContainer.hidden = false;
         } else {
           noticeContainer.hidden = true;
         }
       }
 
-      // Add chips for each model
+      // Add chips
       filteredModels.forEach(model => {
         const chip = this.createChip(model.handle, model.name, 'optic-model');
         modelChipsContainer.appendChild(chip);
       });
     }
 
-    // Show the model field
     modelField.hidden = false;
   }
 
   /**
-   * Update Ring Mount and Mag Ring based on optic model selection
+   * Update ring mount and mag ring for a specific config
    */
-  updateOpticProducts() {
-    if (!this.state.opticModel) return;
+  updateOpticProducts(configId) {
+    const config = this.getOpticConfig(configId);
+    if (!config || !config.opticModel) return;
 
-    // Find the selected optic model data
+    const configEl = this.querySelector(`[data-optic-config="${configId}"]`);
+    if (!configEl) return;
+
     const modelData = this.data.opticModels.find(
-      model => model.handle === this.state.opticModel
+      model => model.handle === config.opticModel
     );
-
-    console.log('System Builder: Selected model data:', modelData);
 
     if (!modelData) return;
 
-    // Display the model image preview if available
-    this.displayModelPreview(modelData);
+    // Display model preview
+    this.displayModelPreview(configId, modelData);
 
-    // Get Ring Mount variant (now stored directly as a variant object)
+    // Update ring mount
     const ringMountVariant = modelData.ringMount;
+    config.ringMount = ringMountVariant;
+    this.displayVariantProductInConfig(configId, 'ring-mount', ringMountVariant);
 
-    if (ringMountVariant) {
-      this.state.ringMount = ringMountVariant;
-      this.state.ringMountVariantId = ringMountVariant.id;
-      this.displayVariantProduct('ring-mount', ringMountVariant);
-    } else {
-      this.state.ringMount = null;
-      this.state.ringMountVariantId = null;
-      this.displayProduct('ring-mount', null);
-    }
-
-    // Get Mag Ring variant (now stored directly as a variant object)
+    // Update mag ring
     const magRingVariant = modelData.magRing;
-    this.state.magRing = magRingVariant;
-    this.displayVariantProduct('mag-ring', magRingVariant);
+    config.magRing = magRingVariant;
+    this.displayVariantProductInConfig(configId, 'mag-ring', magRingVariant);
 
-    // Show the step containers
-    const ringMountStep = this.querySelector('[data-step="ring-mount"]');
-    const magRingStep = this.querySelector('[data-step="mag-ring"]');
-    if (ringMountStep) ringMountStep.hidden = false;
-    if (magRingStep) magRingStep.hidden = false;
+    // Show product containers
+    configEl.querySelectorAll('[data-optic-product]').forEach(el => {
+      el.hidden = false;
+    });
   }
 
   /**
-   * Display the selected model image preview
+   * Display model preview for a specific config
    */
-  displayModelPreview(modelData) {
-    const previewContainer = this.querySelector('[data-model-preview]');
-    const imageContainer = this.querySelector('[data-model-preview-image]');
+  displayModelPreview(configId, modelData) {
+    const configEl = this.querySelector(`[data-optic-config="${configId}"]`);
+    if (!configEl) return;
+
+    const previewContainer = configEl.querySelector('[data-model-preview]');
+    const imageContainer = configEl.querySelector('[data-model-preview-image]');
 
     if (!previewContainer || !imageContainer) return;
 
-    // Check if model has an image
     if (modelData.modelImage) {
       imageContainer.innerHTML = `<img src="${modelData.modelImage}" alt="${modelData.name}" class="system-builder__model-preview-img" loading="lazy">`;
       previewContainer.hidden = false;
     } else {
-      // No image available, hide the preview
       previewContainer.hidden = true;
       imageContainer.innerHTML = '';
     }
   }
 
   /**
-   * Hide the model preview
+   * Display variant product within a specific optic config
    */
-  hideModelPreview() {
-    const previewContainer = this.querySelector('[data-model-preview]');
-    const imageContainer = this.querySelector('[data-model-preview-image]');
-    if (previewContainer) {
-      previewContainer.hidden = true;
-    }
-    if (imageContainer) {
-      imageContainer.innerHTML = '';
-    }
-  }
+  displayVariantProductInConfig(configId, productType, variantData) {
+    const configEl = this.querySelector(`[data-optic-config="${configId}"]`);
+    if (!configEl) return;
 
-  /**
-   * Display a variant product (from variant reference)
-   */
-  displayVariantProduct(productType, variantData) {
-    const container = this.querySelector(`[data-product="${productType}"]`);
-    const stepContainer = this.querySelector(`[data-step="${productType}"]`);
+    const productContainer = configEl.querySelector(`[data-optic-product="${productType}"]`);
+    const displayContainer = productContainer?.querySelector(`[data-product="${productType}"]`);
 
-    if (!container) return;
+    if (!displayContainer) return;
 
-    // Show the step container
-    if (stepContainer) {
-      stepContainer.hidden = false;
-    }
-    container.hidden = false;
+    productContainer.hidden = false;
 
     if (!variantData) {
-      container.innerHTML = '<p class="system-builder__empty-message">No compatible product found.</p>';
+      displayContainer.innerHTML = '<p class="system-builder__empty-message">No compatible product found.</p>';
       return;
     }
 
-    // Create product card HTML using variant data structure
-    const imageUrl = variantData.image
-      ? this.getImageUrl(variantData.image, 200)
-      : '';
-
+    const imageUrl = variantData.image ? this.getImageUrl(variantData.image, 200) : '';
     const price = this.formatMoney(variantData.price);
     const displayTitle = variantData.productTitle
       ? (variantData.title && variantData.title !== 'Default Title'
@@ -518,7 +666,97 @@ class SystemBuilder extends HTMLElement {
           : variantData.productTitle)
       : variantData.title || 'Product';
 
-    // Check if THIS specific variant is selected (by variant ID)
+    const isSelected = !!this.selectedProducts[variantData.id];
+    const isAvailable = variantData.available !== false;
+    const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
+
+    displayContainer.innerHTML = `
+      <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${outOfStockClass}"
+           data-product-card
+           data-product-type="${productType}"
+           data-variant-id="${variantData.id}"
+           data-available="${isAvailable}"
+           role="button"
+           tabindex="0"
+           aria-pressed="${isSelected}"
+           aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}${!isAvailable ? ' (Out of Stock)' : ''}">
+        <div class="system-builder__product-select-indicator">
+          <span class="system-builder__checkmark"></span>
+        </div>
+        ${!isAvailable ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
+        <div class="system-builder__product-image">
+          ${imageUrl
+            ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
+            : '<div class="system-builder__product-placeholder-image"></div>'
+          }
+        </div>
+        <div class="system-builder__product-info">
+          <h4 class="system-builder__product-title">${displayTitle}</h4>
+          <p class="system-builder__product-price">${price}</p>
+          ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
+        </div>
+        <input type="hidden" name="variant_id" value="${variantData.id}">
+      </div>
+    `;
+  }
+
+  /**
+   * Clear optic products for a specific config
+   */
+  clearOpticProducts(configId) {
+    const config = this.getOpticConfig(configId);
+    if (!config) return;
+
+    const configEl = this.querySelector(`[data-optic-config="${configId}"]`);
+    if (!configEl) return;
+
+    // Reset config state
+    config.ringMount = null;
+    config.magRing = null;
+
+    // Hide and clear product displays
+    configEl.querySelectorAll('[data-optic-product]').forEach(el => {
+      el.hidden = true;
+      const productDisplay = el.querySelector('[data-product]');
+      if (productDisplay) {
+        productDisplay.innerHTML = '<p class="system-builder__placeholder">Select your optic to see compatible products.</p>';
+      }
+    });
+
+    // Hide model preview
+    const previewContainer = configEl.querySelector('[data-model-preview]');
+    if (previewContainer) {
+      previewContainer.hidden = true;
+      const imageContainer = previewContainer.querySelector('[data-model-preview-image]');
+      if (imageContainer) imageContainer.innerHTML = '';
+    }
+  }
+
+  /**
+   * Display a variant product (for non-optic products like adapter)
+   */
+  displayVariantProduct(productType, variantData) {
+    const container = this.querySelector(`[data-product="${productType}"]`);
+    const stepContainer = this.querySelector(`[data-step="${productType}"]`);
+
+    if (!container) return;
+
+    if (stepContainer) stepContainer.hidden = false;
+    container.hidden = false;
+
+    if (!variantData) {
+      container.innerHTML = '<p class="system-builder__empty-message">No compatible product found.</p>';
+      return;
+    }
+
+    const imageUrl = variantData.image ? this.getImageUrl(variantData.image, 200) : '';
+    const price = this.formatMoney(variantData.price);
+    const displayTitle = variantData.productTitle
+      ? (variantData.title && variantData.title !== 'Default Title'
+          ? `${variantData.productTitle} - ${variantData.title}`
+          : variantData.productTitle)
+      : variantData.title || 'Product';
+
     const isSelected = !!this.selectedProducts[variantData.id];
     const isAvailable = variantData.available !== false;
     const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
@@ -548,14 +786,13 @@ class SystemBuilder extends HTMLElement {
           <p class="system-builder__product-price">${price}</p>
           ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
         </div>
-
         <input type="hidden" name="variant_id" value="${variantData.id}">
       </div>
     `;
   }
 
   /**
-   * Display all accessories in the accessories grid
+   * Display accessories
    */
   displayAccessories() {
     const grid = this.querySelector('[data-accessories-grid]');
@@ -609,7 +846,7 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
-   * Update phone model chips based on selected brand
+   * Update phone model chips
    */
   updatePhoneModels() {
     const modelField = this.querySelector('[data-field="phone-model"]');
@@ -617,22 +854,10 @@ class SystemBuilder extends HTMLElement {
 
     if (!modelField || !modelChipsContainer) return;
 
-    // Debug: Log filtering info
-    console.log('System Builder: Filtering phone models for brand:', this.state.phoneBrand);
-    console.log('System Builder: Available phone models:', this.data.phoneModels.map(m => ({
-      name: m.name,
-      handle: m.handle,
-      brandHandle: m.brandHandle
-    })));
-
-    // Filter models by selected brand
     const filteredModels = this.data.phoneModels.filter(
       model => model.brandHandle === this.state.phoneBrand
     );
 
-    console.log('System Builder: Filtered phone models:', filteredModels);
-
-    // Clear and populate model chips
     modelChipsContainer.innerHTML = '';
 
     if (filteredModels.length === 0) {
@@ -644,17 +869,27 @@ class SystemBuilder extends HTMLElement {
       });
     }
 
-    // Show the model field
     modelField.hidden = false;
 
-    // Hide phone case until model is selected
     const phoneCaseDisplay = this.querySelector('[data-product="phone-case"]');
-    if (phoneCaseDisplay) {
-      phoneCaseDisplay.hidden = true;
-    }
+    if (phoneCaseDisplay) phoneCaseDisplay.hidden = true;
     this.state.phoneCase = null;
-    // Note: We do NOT clear selectedProducts here - items stay in "Your Selection"
-    // until explicitly removed by the user clicking the X button
+  }
+
+  /**
+   * Update phone case based on selection
+   */
+  updatePhoneCase() {
+    if (!this.state.phoneModel) return;
+
+    const modelData = this.data.phoneModels.find(
+      model => model.handle === this.state.phoneModel
+    );
+
+    if (!modelData) return;
+
+    this.state.phoneCase = modelData.phoneCase;
+    this.displayVariantProduct('phone-case', modelData.phoneCase);
   }
 
   /**
@@ -673,138 +908,7 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
-   * Clear optic-related product displays
-   */
-  clearOpticProducts() {
-    const productTypes = ['ring-mount', 'mag-ring'];
-
-    productTypes.forEach(type => {
-      const container = this.querySelector(`[data-product="${type}"]`);
-      const stepContainer = this.querySelector(`[data-step="${type}"]`);
-
-      if (container) {
-        container.innerHTML = '<p class="system-builder__placeholder">Select your optic to see compatible products.</p>';
-      }
-      if (stepContainer) {
-        stepContainer.hidden = true;
-      }
-    });
-
-    this.state.ringMount = null;
-    this.state.ringMountVariantId = null;
-    this.state.magRing = null;
-
-    // Note: We do NOT clear selectedProducts here - items stay in "Your Selection"
-    // until explicitly removed by the user clicking the X button
-
-    // Hide model preview when brand changes
-    this.hideModelPreview();
-  }
-
-  /**
-   * Update phone case based on phone model selection
-   */
-  updatePhoneCase() {
-    if (!this.state.phoneModel) return;
-
-    // Find the selected phone model data
-    const modelData = this.data.phoneModels.find(
-      model => model.handle === this.state.phoneModel
-    );
-
-    if (!modelData) return;
-
-    // Update state (now a variant object)
-    this.state.phoneCase = modelData.phoneCase;
-
-    // Display variant product
-    this.displayVariantProduct('phone-case', modelData.phoneCase);
-  }
-
-  /**
-   * Display a product in the appropriate container
-   */
-  displayProduct(productType, productData) {
-    const container = this.querySelector(`[data-product="${productType}"]`);
-    const stepContainer = this.querySelector(`[data-step="${productType}"]`);
-
-    if (!container) return;
-
-    // Show the step container
-    if (stepContainer) {
-      stepContainer.hidden = false;
-    }
-    container.hidden = false;
-
-    if (!productData) {
-      container.innerHTML = '<p class="system-builder__empty-message">No compatible product found.</p>';
-      return;
-    }
-
-    // Create product card HTML
-    const imageUrl = productData.featured_image
-      ? this.getImageUrl(productData.featured_image, 200)
-      : '';
-
-    const price = this.formatMoney(productData.price);
-    const variantId = productData.variants?.[0]?.id || productData.id;
-
-    // Check if THIS specific variant is selected (by variant ID)
-    const isSelected = !!this.selectedProducts[variantId];
-
-    container.innerHTML = `
-      <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}"
-           data-product-card
-           data-product-type="${productType}"
-           data-variant-id="${variantId}"
-           role="button"
-           tabindex="0"
-           aria-pressed="${isSelected}"
-           aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${productData.title}">
-        <div class="system-builder__product-select-indicator">
-          <span class="system-builder__checkmark"></span>
-        </div>
-        <div class="system-builder__product-image">
-          ${imageUrl
-            ? `<img src="${imageUrl}" alt="${productData.title}" class="system-builder__product-img" loading="lazy">`
-            : '<div class="system-builder__product-placeholder-image"></div>'
-          }
-        </div>
-        <div class="system-builder__product-info">
-          <h4 class="system-builder__product-title">${productData.title}</h4>
-          <p class="system-builder__product-price">${price}</p>
-        </div>
-        <p class="system-builder__product-hint">Click to select</p>
-        <input type="hidden" name="variant_id" value="${variantId}">
-      </div>
-    `;
-  }
-
-  /**
-   * Clear all product displays (used for full reset)
-   */
-  clearProducts() {
-    const productContainers = ['ring-mount', 'mag-ring', 'phone-case'];
-
-    productContainers.forEach(type => {
-      const container = this.querySelector(`[data-product="${type}"]`);
-      const stepContainer = this.querySelector(`[data-step="${type}"]`);
-
-      if (container) {
-        container.innerHTML = '<p class="system-builder__placeholder">Select your optic to see compatible products.</p>';
-      }
-      if (stepContainer && type !== 'phone-case') {
-        stepContainer.hidden = true;
-      }
-    });
-
-    this.state.ringMount = null;
-    this.state.ringMountVariantId = null;
-    this.state.magRing = null;
-  }
-
-  /**
-   * Update the summary section
+   * Update summary section
    */
   updateSummary() {
     const summary = this.querySelector('[data-summary]');
@@ -814,22 +918,16 @@ class SystemBuilder extends HTMLElement {
     const emptyState = summary.querySelector('[data-summary-empty]');
     const footer = summary.querySelector('[data-summary-footer]');
 
-    // Check if any accessories are selected
     const hasSelectedAccessories = Object.values(this.selectedAccessories).some(selected => selected);
-
-    // Check if any products are selected (selectedProducts keyed by variant ID)
     const selectedProductCount = Object.keys(this.selectedProducts).length;
     const hasSelectedProducts = selectedProductCount > 0 || hasSelectedAccessories;
 
-    // Show/hide empty state and footer
     if (emptyState) emptyState.hidden = hasSelectedProducts;
     if (footer) footer.hidden = !hasSelectedProducts;
 
-    // Clear and rebuild summary items
     if (summaryItemsContainer) {
       summaryItemsContainer.innerHTML = '';
 
-      // Add all selected products (grouped by type for organization)
       const productsByType = {
         'ring-mount': [],
         'mag-ring': [],
@@ -837,14 +935,12 @@ class SystemBuilder extends HTMLElement {
         'phone-case': []
       };
 
-      // Group products by type
       Object.entries(this.selectedProducts).forEach(([variantId, product]) => {
         if (product && product.productType && productsByType[product.productType]) {
           productsByType[product.productType].push({ variantId, ...product });
         }
       });
 
-      // Render products in order
       ['ring-mount', 'mag-ring', 'adapter', 'phone-case'].forEach(type => {
         productsByType[type].forEach(product => {
           const itemHtml = this.createSummaryItemHtml(product.variantId, product);
@@ -852,7 +948,7 @@ class SystemBuilder extends HTMLElement {
         });
       });
 
-      // Add selected accessories
+      // Add accessories
       this.data.accessories.forEach(accessory => {
         if (!this.selectedAccessories[accessory.blockId]) return;
 
@@ -885,7 +981,6 @@ class SystemBuilder extends HTMLElement {
     let total = 0;
     let itemCount = 0;
 
-    // Sum all selected products (with quantities)
     Object.values(this.selectedProducts).forEach(product => {
       if (product?.price) {
         const qty = product.quantity || 1;
@@ -894,7 +989,6 @@ class SystemBuilder extends HTMLElement {
       }
     });
 
-    // Add selected accessories to total
     this.data.accessories.forEach(accessory => {
       if (this.selectedAccessories[accessory.blockId] && accessory.price) {
         total += accessory.price;
@@ -903,27 +997,20 @@ class SystemBuilder extends HTMLElement {
     });
 
     const totalEl = summary.querySelector('[data-total-price]');
-    if (totalEl) {
-      totalEl.textContent = this.formatMoney(total);
-    }
+    if (totalEl) totalEl.textContent = this.formatMoney(total);
 
-    // Update add to cart button text with item count
     const addToCartBtn = summary.querySelector('[data-add-to-cart]');
     if (addToCartBtn) {
       const baseText = addToCartBtn.dataset.originalText || addToCartBtn.textContent;
-      if (!addToCartBtn.dataset.originalText) {
-        addToCartBtn.dataset.originalText = baseText;
-      }
-      if (itemCount > 0) {
-        addToCartBtn.textContent = `Add to Cart (${itemCount} item${itemCount > 1 ? 's' : ''})`;
-      } else {
-        addToCartBtn.textContent = baseText;
-      }
+      if (!addToCartBtn.dataset.originalText) addToCartBtn.dataset.originalText = baseText;
+      addToCartBtn.textContent = itemCount > 0
+        ? `Add to Cart (${itemCount} item${itemCount > 1 ? 's' : ''})`
+        : baseText;
     }
   }
 
   /**
-   * Create HTML for a summary item
+   * Create summary item HTML
    */
   createSummaryItemHtml(variantId, product) {
     const displayTitle = product.productTitle
@@ -955,84 +1042,17 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
-   * Update a summary item for variant data (legacy - kept for compatibility)
-   */
-  updateSummaryItemVariant(type, variantData) {
-    const item = this.querySelector(`[data-summary-item="${type}"]`);
-    if (!item) return;
-
-    const imageEl = item.querySelector('[data-summary-image]');
-    const nameEl = item.querySelector('[data-summary-name]');
-    const priceEl = item.querySelector('[data-summary-price]');
-
-    if (variantData) {
-      item.hidden = false;
-      const displayTitle = variantData.productTitle
-        ? (variantData.title && variantData.title !== 'Default Title'
-            ? `${variantData.productTitle} - ${variantData.title}`
-            : variantData.productTitle)
-        : variantData.title || 'Product';
-      if (nameEl) nameEl.textContent = displayTitle;
-      if (priceEl) priceEl.textContent = this.formatMoney(variantData.price);
-
-      // Update image
-      if (imageEl) {
-        const imageUrl = variantData.image ? this.getImageUrl(variantData.image, 120) : '';
-        if (imageUrl) {
-          imageEl.innerHTML = `<img src="${imageUrl}" alt="${displayTitle}" loading="lazy">`;
-        } else {
-          imageEl.innerHTML = '';
-        }
-      }
-    } else {
-      item.hidden = true;
-    }
-  }
-
-  /**
-   * Update a summary item
-   */
-  updateSummaryItem(type, product) {
-    const item = this.querySelector(`[data-summary-item="${type}"]`);
-    if (!item) return;
-
-    const imageEl = item.querySelector('[data-summary-image]');
-    const nameEl = item.querySelector('[data-summary-name]');
-    const priceEl = item.querySelector('[data-summary-price]');
-
-    if (product) {
-      item.hidden = false;
-      if (nameEl) nameEl.textContent = product.title;
-      if (priceEl) priceEl.textContent = this.formatMoney(product.price);
-
-      // Update image
-      if (imageEl) {
-        const imageUrl = product.featured_image ? this.getImageUrl(product.featured_image, 120) : '';
-        if (imageUrl) {
-          imageEl.innerHTML = `<img src="${imageUrl}" alt="${product.title}" loading="lazy">`;
-        } else {
-          imageEl.innerHTML = '';
-        }
-      }
-    } else {
-      item.hidden = true;
-    }
-  }
-
-  /**
    * Handle add to cart
    */
   async handleAddToCart(button) {
     const items = [];
 
-    // Add all selected products with their quantities (selectedProducts is keyed by variant ID)
     Object.entries(this.selectedProducts).forEach(([variantId, product]) => {
       if (product?.id) {
         items.push({ id: product.id, quantity: product.quantity || 1 });
       }
     });
 
-    // Add selected accessories
     this.data.accessories.forEach(accessory => {
       if (this.selectedAccessories[accessory.blockId] && accessory.id) {
         items.push({ id: accessory.id, quantity: 1 });
@@ -1040,8 +1060,6 @@ class SystemBuilder extends HTMLElement {
     });
 
     if (items.length === 0) {
-      console.warn('System Builder: No products selected');
-      // Show a brief message to user
       button.textContent = 'Select products first';
       setTimeout(() => {
         button.textContent = button.dataset.originalText || 'Add All to Cart';
@@ -1049,7 +1067,6 @@ class SystemBuilder extends HTMLElement {
       return;
     }
 
-    // Disable button and show loading state
     button.disabled = true;
     const originalText = button.textContent;
     button.dataset.originalText = originalText;
@@ -1068,7 +1085,6 @@ class SystemBuilder extends HTMLElement {
       const responseData = await response.json();
 
       if (!response.ok) {
-        // Check for specific error types
         const errorMessage = responseData.description || responseData.message || '';
         if (errorMessage.toLowerCase().includes('out of stock') ||
             errorMessage.toLowerCase().includes('not available') ||
@@ -1078,34 +1094,21 @@ class SystemBuilder extends HTMLElement {
         throw new Error(errorMessage || 'Failed to add to cart');
       }
 
-      // Fetch the updated cart to get correct count
       const cartResponse = await fetch('/cart.js', {
         headers: { 'Accept': 'application/json' }
       });
       const cart = await cartResponse.json();
 
-      // Update cart count in header (try multiple common selectors)
       this.updateCartCount(cart.item_count);
 
-      // Dispatch cart change events for theme integration
       document.documentElement.dispatchEvent(
-        new CustomEvent('cart:change', {
-          bubbles: true,
-          detail: { cart: cart }
-        })
+        new CustomEvent('cart:change', { bubbles: true, detail: { cart } })
       );
-
-      // Also try dispatching on document for themes that listen there
       document.dispatchEvent(
-        new CustomEvent('cart:refresh', {
-          bubbles: true,
-          detail: { cart: cart }
-        })
+        new CustomEvent('cart:refresh', { bubbles: true, detail: { cart } })
       );
 
-      // Show success state
       button.textContent = 'Added!';
-
       setTimeout(() => {
         button.textContent = originalText;
         button.disabled = false;
@@ -1114,9 +1117,7 @@ class SystemBuilder extends HTMLElement {
     } catch (error) {
       console.error('System Builder: Error adding to cart', error);
 
-      // Provide specific error message based on error type
       let errorText = 'Error - Try Again';
-
       if (error.message === 'out_of_stock') {
         errorText = 'Some items are out of stock';
       } else if (error.message && error.message.length <= 30) {
@@ -1124,7 +1125,6 @@ class SystemBuilder extends HTMLElement {
       }
 
       button.textContent = errorText;
-
       setTimeout(() => {
         button.textContent = originalText;
         button.disabled = false;
@@ -1136,46 +1136,22 @@ class SystemBuilder extends HTMLElement {
    * Update cart count in header
    */
   updateCartCount(count) {
-    // Try multiple common selectors used by different Shopify themes
     const selectors = [
-      '.cart-count',
-      '.cart-count-bubble',
-      '[data-cart-count]',
-      '.cart__count',
-      '.header__cart-count',
-      '#cart-icon-bubble',
-      '.cart-icon__count',
-      '.js-cart-count',
-      '[data-cart-item-count]',
-      '.site-header__cart-count'
+      '.cart-count', '.cart-count-bubble', '[data-cart-count]', '.cart__count',
+      '.header__cart-count', '#cart-icon-bubble', '.cart-icon__count',
+      '.js-cart-count', '[data-cart-item-count]', '.site-header__cart-count'
     ];
 
     selectors.forEach(selector => {
-      const elements = document.querySelectorAll(selector);
-      elements.forEach(el => {
-        // Handle elements that show count as text content
+      document.querySelectorAll(selector).forEach(el => {
         if (el.tagName !== 'SPAN' || !el.querySelector('span')) {
           el.textContent = count;
         }
-        // Handle bubble/badge visibility
         if (count > 0) {
           el.removeAttribute('hidden');
           el.style.display = '';
         }
       });
-    });
-
-    // Also try to find cart count in common attribute patterns
-    const cartBubbles = document.querySelectorAll('[class*="cart"] [class*="count"], [class*="cart"] [class*="bubble"]');
-    cartBubbles.forEach(el => {
-      if (el.children.length === 0 || (el.children.length === 1 && el.firstElementChild.tagName === 'SPAN')) {
-        const textNode = el.childNodes[0];
-        if (textNode && textNode.nodeType === Node.TEXT_NODE) {
-          textNode.textContent = count;
-        } else if (el.children.length === 0) {
-          el.textContent = count;
-        }
-      }
     });
   }
 
@@ -1184,15 +1160,8 @@ class SystemBuilder extends HTMLElement {
    */
   formatMoney(cents) {
     if (typeof cents !== 'number') return '';
-
-    // Use Shopify's money format if available, otherwise basic formatting
-    if (window.Shopify?.formatMoney) {
-      return window.Shopify.formatMoney(cents);
-    }
-
-    // Basic formatting fallback
-    const dollars = (cents / 100).toFixed(2);
-    return `$${dollars}`;
+    if (window.Shopify?.formatMoney) return window.Shopify.formatMoney(cents);
+    return `$${(cents / 100).toFixed(2)}`;
   }
 
   /**
@@ -1200,17 +1169,12 @@ class SystemBuilder extends HTMLElement {
    */
   getImageUrl(image, size) {
     if (!image) return '';
-
-    // If it's already a URL string
     if (typeof image === 'string') {
       return image.replace(/(\.[^.]+)$/, `_${size}x$1`);
     }
-
-    // If it's an image object with src
     if (image.src) {
       return image.src.replace(/(\.[^.]+)$/, `_${size}x$1`);
     }
-
     return '';
   }
 }
