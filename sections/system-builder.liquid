@@ -21,6 +21,7 @@
   {%- comment -%} Data payloads for JavaScript {%- endcomment -%}
   <script type="application/json" data-optic-brands>
     [
+      {%- paginate optic_brands by 250 -%}
       {%- for brand in optic_brands -%}
         {
           "id": {{ brand.id | json }},
@@ -29,11 +30,13 @@
           "logo": {{ brand.logo | json }}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
+      {%- endpaginate -%}
     ]
   </script>
 
   <script type="application/json" data-optic-models>
     [
+      {%- paginate optic_models by 250 -%}
       {%- for model in optic_models -%}
         {%- comment -%} For list-type variant references, get the first item {%- endcomment -%}
         {%- assign ring_mount_variant = model.ring_mount.value | first -%}
@@ -64,6 +67,7 @@
           }{%- else -%}null{%- endif -%}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
+      {%- endpaginate -%}
     ]
   </script>
 
@@ -87,6 +91,7 @@
 
   <script type="application/json" data-phone-brands>
     [
+      {%- paginate phone_brands by 250 -%}
       {%- for brand in phone_brands -%}
         {
           "id": {{ brand.id | json }},
@@ -95,11 +100,13 @@
           "logo": {{ brand.logo | json }}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
+      {%- endpaginate -%}
     ]
   </script>
 
   <script type="application/json" data-phone-models>
     [
+      {%- paginate phone_models by 250 -%}
       {%- for model in phone_models -%}
         {%- comment -%} For list-type variant references, get the first item {%- endcomment -%}
         {%- assign phone_case_variant = model.phone_case.value | first -%}
@@ -118,6 +125,7 @@
           }{%- else -%}null{%- endif -%}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
+      {%- endpaginate -%}
     ]
   </script>
 
@@ -170,6 +178,7 @@
               <div class="system-builder__field" data-field="optic-brand">
                 <label class="system-builder__label">{{ section.settings.manufacturer_label | default: 'Manufacturer' }}</label>
                 <div class="system-builder__chips" data-chips="optic-brand">
+                  {%- paginate optic_brands by 250 -%}
                   {%- for brand in optic_brands -%}
                     {%- render 'system-builder-option-chip',
                       value: brand.system.handle,
@@ -179,6 +188,7 @@
                   {%- else -%}
                     <p class="system-builder__empty-message">No optic brands configured. Add entries to the "optic_brand" metaobject.</p>
                   {%- endfor -%}
+                  {%- endpaginate -%}
                 </div>
               </div>
 
@@ -240,6 +250,7 @@
           <div class="system-builder__field" data-field="phone-brand">
             <label class="system-builder__label">{{ section.settings.phone_brand_label | default: 'Phone Brand' }}</label>
             <div class="system-builder__chips" data-chips="phone-brand">
+              {%- paginate phone_brands by 250 -%}
               {%- for brand in phone_brands -%}
                 {%- render 'system-builder-option-chip',
                   value: brand.system.handle,
@@ -249,6 +260,7 @@
               {%- else -%}
                 <p class="system-builder__empty-message">No phone brands configured. Add entries to the "phone_brand" metaobject.</p>
               {%- endfor -%}
+              {%- endpaginate -%}
             </div>
           </div>
 
