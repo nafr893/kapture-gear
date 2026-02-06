@@ -760,7 +760,7 @@
 .system-builder__notice-inline {
   margin-top: var(--spacing-3, 12px);
   padding: var(--spacing-3, 12px) var(--spacing-4, 16px);
-  background: var(--color-background-secondary, #f9f9f9);
+  background: var(--color-background-secondary, #c0d6ff);
   border-left: 3px solid var(--color-primary, #333);
   border-radius: var(--border-radius-sm, 4px);
 }
