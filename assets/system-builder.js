@@ -1080,13 +1080,30 @@ class SystemBuilder extends HTMLElement {
     button.textContent = 'Adding...';
 
     try {
-      const response = await fetch('/cart/add.js', {
+      // Gather bundled sections (matches theme's ProductForm pattern)
+      const sectionsToBundle = ['variant-added'];
+      document.documentElement.dispatchEvent(
+        new CustomEvent('cart:prepare-bundled-sections', {
+          bubbles: true,
+          detail: { sections: sectionsToBundle }
+        })
+      );
+
+      // Use the first item's variant ID for the section rendering context
+      const firstVariantId = items[0].id;
+      const sectionsUrl = `${window.Shopify?.routes?.root || '/'}variants/${firstVariantId}`;
+
+      const response = await fetch(`${window.Shopify?.routes?.root || '/'}cart/add.js`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({ items, sections: 'variant-added' })
+        body: JSON.stringify({
+          items,
+          sections: sectionsToBundle.join(','),
+          sections_url: sectionsUrl
+        })
       });
 
       const responseData = await response.json();
@@ -1101,7 +1118,7 @@ class SystemBuilder extends HTMLElement {
         throw new Error(errorMessage || 'Failed to add to cart');
       }
 
-      const cartResponse = await fetch('/cart.js', {
+      const cartResponse = await fetch(`${window.Shopify?.routes?.root || '/'}cart.js`, {
         headers: { 'Accept': 'application/json' }
       });
       const cart = await cartResponse.json();
