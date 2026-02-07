@@ -427,9 +427,9 @@ class SystemBuilder extends HTMLElement {
       productData = this.state[stateKey];
     }
 
-    // Add or increment quantity
+    // Toggle selection: click to select, click again to deselect
     if (this.selectedProducts[variantId]) {
-      this.selectedProducts[variantId].quantity = (this.selectedProducts[variantId].quantity || 1) + 1;
+      delete this.selectedProducts[variantId];
     } else if (productData) {
       this.selectedProducts[variantId] = {
         ...productData,
