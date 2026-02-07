@@ -27,9 +27,6 @@ class SystemBuilder extends HTMLElement {
     // Format: { variantId: { id, title, price, image, productTitle, productType, available, quantity } }
     this.selectedProducts = {};
 
-    // Track which accessories are selected (keyed by blockId)
-    this.selectedAccessories = {};
-
     // Data storage
     this.data = {
       opticBrands: [],
@@ -97,11 +94,6 @@ class SystemBuilder extends HTMLElement {
       const removeBtn = e.target.closest('[data-summary-remove]');
       if (removeBtn) {
         this.handleRemoveFromSummary(removeBtn);
-      }
-
-      const removeAccessoryBtn = e.target.closest('[data-summary-remove-accessory]');
-      if (removeAccessoryBtn) {
-        this.handleRemoveAccessoryFromSummary(removeAccessoryBtn);
       }
 
       const quantityIncreaseBtn = e.target.closest('[data-quantity-increase]');
@@ -331,24 +323,6 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
-   * Handle remove accessory button click in summary
-   */
-  handleRemoveAccessoryFromSummary(button) {
-    const blockId = button.dataset.summaryRemoveAccessory;
-    if (!blockId) return;
-
-    this.selectedAccessories[blockId] = false;
-
-    const card = this.querySelector(`[data-product-card][data-accessory-block-id="${blockId}"]`);
-    if (card) {
-      card.classList.remove('system-builder__product-card--selected');
-      card.setAttribute('aria-pressed', 'false');
-    }
-
-    this.updateSummary();
-  }
-
-  /**
    * Handle quantity change in summary
    */
   handleQuantityChange(variantId, delta) {
@@ -381,18 +355,6 @@ class SystemBuilder extends HTMLElement {
     const isAvailable = card.dataset.available !== 'false';
     if (!isAvailable) return;
 
-    // Handle accessories separately
-    if (productType === 'accessory') {
-      const blockId = card.dataset.accessoryBlockId;
-      if (!blockId) return;
-
-      this.selectedAccessories[blockId] = !this.selectedAccessories[blockId];
-      card.classList.toggle('system-builder__product-card--selected', this.selectedAccessories[blockId]);
-      card.setAttribute('aria-pressed', this.selectedAccessories[blockId]);
-      this.updateSummary();
-      return;
-    }
-
     const variantId = card.dataset.variantId;
     if (!variantId) return;
 
@@ -407,24 +369,29 @@ class SystemBuilder extends HTMLElement {
       'adapter': 'adapter',
       'phone-case': 'phoneCase'
     };
-    const stateKey = stateKeyMap[productType];
-    if (!stateKey) return;
 
     // Get product data from the appropriate source
     let productData = null;
-    if (configId !== null && (productType === 'ring-mount' || productType === 'mag-ring')) {
-      const config = this.getOpticConfig(configId);
-      if (config) {
-        const variants = config[stateKey];
-        // Find the matching variant by ID from the array
-        if (Array.isArray(variants)) {
-          productData = variants.find(v => String(v.id) === String(variantId));
-        } else {
-          productData = variants;
-        }
-      }
+    if (productType === 'accessory') {
+      // Find accessory data from loaded accessories
+      productData = this.data.accessories.find(a => String(a.id) === String(variantId));
     } else {
-      productData = this.state[stateKey];
+      const stateKey = stateKeyMap[productType];
+      if (!stateKey) return;
+
+      if (configId !== null && (productType === 'ring-mount' || productType === 'mag-ring')) {
+        const config = this.getOpticConfig(configId);
+        if (config) {
+          const variants = config[stateKey];
+          if (Array.isArray(variants)) {
+            productData = variants.find(v => String(v.id) === String(variantId));
+          } else {
+            productData = variants;
+          }
+        }
+      } else {
+        productData = this.state[stateKey];
+      }
     }
 
     // Toggle selection: click to select, click again to deselect
@@ -786,7 +753,7 @@ class SystemBuilder extends HTMLElement {
     grid.innerHTML = '';
 
     this.data.accessories.forEach(accessory => {
-      const isSelected = this.selectedAccessories[accessory.blockId] || false;
+      const isSelected = !!this.selectedProducts[accessory.id];
       const imageUrl = accessory.image ? this.getImageUrl(accessory.image, 200) : '';
       const price = this.formatMoney(accessory.price);
       const displayTitle = accessory.productTitle
@@ -801,7 +768,7 @@ class SystemBuilder extends HTMLElement {
         <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${outOfStockClass}"
              data-product-card
              data-product-type="accessory"
-             data-accessory-block-id="${accessory.blockId}"
+             data-variant-id="${accessory.id}"
              data-available="${isAvailable}"
              role="button"
              tabindex="0"
@@ -822,7 +789,7 @@ class SystemBuilder extends HTMLElement {
             <p class="system-builder__product-price">${price}</p>
             ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
           </div>
-          <input type="hidden" name="variant_id" value="${accessory.id}" data-variant-id>
+          <input type="hidden" name="variant_id" value="${accessory.id}">
         </div>
       `;
 
@@ -903,9 +870,8 @@ class SystemBuilder extends HTMLElement {
     const emptyState = summary.querySelector('[data-summary-empty]');
     const footer = summary.querySelector('[data-summary-footer]');
 
-    const hasSelectedAccessories = Object.values(this.selectedAccessories).some(selected => selected);
     const selectedProductCount = Object.keys(this.selectedProducts).length;
-    const hasSelectedProducts = selectedProductCount > 0 || hasSelectedAccessories;
+    const hasSelectedProducts = selectedProductCount > 0;
 
     if (emptyState) emptyState.hidden = hasSelectedProducts;
     if (footer) footer.hidden = !hasSelectedProducts;
@@ -917,7 +883,8 @@ class SystemBuilder extends HTMLElement {
         'ring-mount': [],
         'mag-ring': [],
         'adapter': [],
-        'phone-case': []
+        'phone-case': [],
+        'accessory': []
       };
 
       Object.entries(this.selectedProducts).forEach(([variantId, product]) => {
@@ -926,39 +893,11 @@ class SystemBuilder extends HTMLElement {
         }
       });
 
-      ['ring-mount', 'mag-ring', 'adapter', 'phone-case'].forEach(type => {
+      ['ring-mount', 'mag-ring', 'adapter', 'phone-case', 'accessory'].forEach(type => {
         productsByType[type].forEach(product => {
           const itemHtml = this.createSummaryItemHtml(product.variantId, product);
           summaryItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
         });
-      });
-
-      // Add accessories
-      this.data.accessories.forEach(accessory => {
-        if (!this.selectedAccessories[accessory.blockId]) return;
-
-        const displayTitle = accessory.productTitle
-          ? (accessory.title && accessory.title !== 'Default Title'
-              ? `${accessory.productTitle} - ${accessory.title}`
-              : accessory.productTitle)
-          : accessory.title || 'Product';
-
-        const imageUrl = accessory.image ? this.getImageUrl(accessory.image, 120) : '';
-
-        const itemHtml = `
-          <div class="system-builder__summary-item" data-summary-item="accessory-${accessory.blockId}">
-            <div class="system-builder__summary-item-image">
-              ${imageUrl ? `<img src="${imageUrl}" alt="${displayTitle}" loading="lazy">` : ''}
-            </div>
-            <div class="system-builder__summary-item-details">
-              <span class="system-builder__summary-name">${displayTitle}</span>
-              <span class="system-builder__summary-price">${this.formatMoney(accessory.price)}</span>
-            </div>
-            <button type="button" class="system-builder__summary-remove" data-summary-remove-accessory="${accessory.blockId}" aria-label="Remove item">&times;</button>
-          </div>
-        `;
-
-        summaryItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
       });
     }
 
@@ -974,12 +913,6 @@ class SystemBuilder extends HTMLElement {
       }
     });
 
-    this.data.accessories.forEach(accessory => {
-      if (this.selectedAccessories[accessory.blockId] && accessory.price) {
-        total += accessory.price;
-        itemCount++;
-      }
-    });
 
     const totalEl = summary.querySelector('[data-total-price]');
     if (totalEl) totalEl.textContent = this.formatMoney(total);
@@ -1033,11 +966,6 @@ class SystemBuilder extends HTMLElement {
     // Clear selected products
     this.selectedProducts = {};
 
-    // Clear selected accessories
-    Object.keys(this.selectedAccessories).forEach(key => {
-      this.selectedAccessories[key] = false;
-    });
-
     // Deselect all product cards visually
     this.querySelectorAll('[data-product-card]').forEach(card => {
       card.classList.remove('system-builder__product-card--selected');
@@ -1060,11 +988,6 @@ class SystemBuilder extends HTMLElement {
       }
     });
 
-    this.data.accessories.forEach(accessory => {
-      if (this.selectedAccessories[accessory.blockId] && accessory.id) {
-        items.push({ id: accessory.id, quantity: 1 });
-      }
-    });
 
     if (items.length === 0) {
       button.textContent = 'Select products first';
