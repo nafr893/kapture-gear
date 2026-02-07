@@ -309,8 +309,8 @@
 }
 
 .system-builder__product-card:focus {
-  outline: 2px solid var(--color-primary, #333);
-  outline-offset: 2px;
+  outline: none;
+  border-color: var(--color-primary, #333);
 }
 
 .system-builder__product-card--selected {
