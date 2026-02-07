@@ -542,6 +542,14 @@ class SystemBuilder extends HTMLElement {
     // Display model preview
     this.displayModelPreview(configId, modelData);
 
+    // Clear previous selections for this config before switching models
+    if (Array.isArray(config.ringMount)) {
+      config.ringMount.forEach(v => { if (v?.id) delete this.selectedProducts[v.id]; });
+    }
+    if (Array.isArray(config.magRing)) {
+      config.magRing.forEach(v => { if (v?.id) delete this.selectedProducts[v.id]; });
+    }
+
     // Update ring mount (now an array of variants)
     config.ringMount = modelData.ringMount || [];
     this.displayVariantProductInConfig(configId, 'ring-mount', config.ringMount);
