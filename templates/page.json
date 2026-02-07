@@ -54,9 +54,51 @@
         "total_label": "Total",
         "add_to_cart_text": "Add to Cart"
       }
+    },
+    "image_with_text_overlay_ixYKFm": {
+      "type": "image-with-text-overlay",
+      "blocks": {
+        "subheading_HEb9MV": {
+          "type": "subheading",
+          "settings": {
+            "text": "Build Your Knekt Kit"
+          }
+        },
+        "heading_REt3YY": {
+          "type": "heading",
+          "settings": {
+            "text": "4 Parts = 1 Modular System",
+            "heading_tag": "h1"
+          }
+        },
+        "richtext_4xbBT9": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Every Knekt System requires a Mount, Mag Ring, Phone Case, and Adapter. You can build your own system or choose one of our pre-made full systems below. Use your Knekt System with multiple optics by simply adding an additional Mount per our <a href=\"/pages/sizing-chart\" target=\"_blank\" title=\"Sizing Chart\">sizing chart</a> and if needed, the matching size Mag Ring.</p><p>Some optic brands support Integrated Knekt Mount Eyecups which you can find below or in full system builds.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "subheading_HEb9MV",
+        "heading_REt3YY",
+        "richtext_4xbBT9"
+      ],
+      "settings": {
+        "full_width": false,
+        "allow_transparent_header": false,
+        "enable_parallax": false,
+        "image_size": "md",
+        "image": "shopify://shop_images/Mount_Breakdown_5_59b8c790-594e-4258-b429-84596e8363d6.png",
+        "mobile_text_position": "place-self-center text-center",
+        "desktop_text_position": "sm:place-self-center sm:text-center",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 65
+      }
     }
   },
   "order": [
+    "image_with_text_overlay_ixYKFm",
     "main",
     "system_builder_A4gezM"
   ]
