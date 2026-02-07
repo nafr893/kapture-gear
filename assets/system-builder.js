@@ -1086,7 +1086,7 @@ class SystemBuilder extends HTMLElement {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({ items })
+        body: JSON.stringify({ items, sections: 'variant-added' })
       });
 
       const responseData = await response.json();
@@ -1106,9 +1106,12 @@ class SystemBuilder extends HTMLElement {
       });
       const cart = await cartResponse.json();
 
+      // Attach rendered section HTML so the cart notification drawer can display it
+      cart.sections = responseData.sections;
+
       this.updateCartCount(cart.item_count);
 
-      // Dispatch variant:add to open the cart drawer
+      // Dispatch variant:add to open the cart notification drawer
       document.dispatchEvent(
         new CustomEvent('variant:add', {
           bubbles: true,
