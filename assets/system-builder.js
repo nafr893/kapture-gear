@@ -1027,6 +1027,28 @@ class SystemBuilder extends HTMLElement {
   }
 
   /**
+   * Clear all selections and reset the UI
+   */
+  clearAllSelections() {
+    // Clear selected products
+    this.selectedProducts = {};
+
+    // Clear selected accessories
+    Object.keys(this.selectedAccessories).forEach(key => {
+      this.selectedAccessories[key] = false;
+    });
+
+    // Deselect all product cards visually
+    this.querySelectorAll('[data-product-card]').forEach(card => {
+      card.classList.remove('system-builder__product-card--selected');
+      card.setAttribute('aria-pressed', 'false');
+    });
+
+    // Update summary to show empty state
+    this.updateSummary();
+  }
+
+  /**
    * Handle add to cart
    */
   async handleAddToCart(button) {
@@ -1086,18 +1108,29 @@ class SystemBuilder extends HTMLElement {
 
       this.updateCartCount(cart.item_count);
 
+      // Dispatch variant:add to open the cart drawer
+      document.dispatchEvent(
+        new CustomEvent('variant:add', {
+          bubbles: true,
+          detail: {
+            items: responseData.hasOwnProperty('items') ? responseData.items : [responseData],
+            cart: cart
+          }
+        })
+      );
+
       document.documentElement.dispatchEvent(
-        new CustomEvent('cart:change', { bubbles: true, detail: { cart } })
+        new CustomEvent('cart:change', { bubbles: true, detail: { baseEvent: 'variant:add', cart } })
       );
       document.dispatchEvent(
         new CustomEvent('cart:refresh', { bubbles: true, detail: { cart } })
       );
 
-      button.textContent = 'Added!';
-      setTimeout(() => {
-        button.textContent = originalText;
-        button.disabled = false;
-      }, 2000);
+      // Clear all selections after successful add
+      this.clearAllSelections();
+
+      button.textContent = originalText;
+      button.disabled = false;
 
     } catch (error) {
       console.error('System Builder: Error adding to cart', error);
