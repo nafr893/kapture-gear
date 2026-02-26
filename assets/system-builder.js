@@ -394,15 +394,21 @@ class SystemBuilder extends HTMLElement {
       }
     }
 
-    // Toggle selection: click to select, click again to deselect
-    if (this.selectedProducts[variantId]) {
-      delete this.selectedProducts[variantId];
-    } else if (productData) {
-      this.selectedProducts[variantId] = {
-        ...productData,
-        productType: productType,
-        quantity: 1
-      };
+    // Ring mount and mag ring: always add/increment (never deselect via card click)
+    // Deselection is handled by the summary's remove/decrease buttons
+    if (productType === 'ring-mount' || productType === 'mag-ring') {
+      if (this.selectedProducts[variantId]) {
+        this.selectedProducts[variantId].quantity = (this.selectedProducts[variantId].quantity || 1) + 1;
+      } else if (productData) {
+        this.selectedProducts[variantId] = { ...productData, productType, quantity: 1 };
+      }
+    } else {
+      // All other types: toggle (click to select, click again to deselect)
+      if (this.selectedProducts[variantId]) {
+        delete this.selectedProducts[variantId];
+      } else if (productData) {
+        this.selectedProducts[variantId] = { ...productData, productType, quantity: 1 };
+      }
     }
 
     const isSelected = !!this.selectedProducts[variantId];
