@@ -617,20 +617,19 @@ class SystemBuilder extends HTMLElement {
             : variantData.productTitle)
         : variantData.title || 'Product';
 
-      const isSelected = !!this.selectedProducts[variantData.id];
       const isAvailable = variantData.available !== false;
       const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
 
       return `
-        <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${outOfStockClass}"
+        <div class="system-builder__product-card${outOfStockClass}"
              data-product-card
              data-product-type="${productType}"
              data-variant-id="${variantData.id}"
              data-available="${isAvailable}"
              role="button"
              tabindex="0"
-             aria-pressed="${isSelected}"
-             aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}${!isAvailable ? ' (Out of Stock)' : ''}">
+             aria-pressed="false"
+             aria-label="Add to your system: ${displayTitle}${!isAvailable ? ' (Out of Stock)' : ''}">
           <div class="system-builder__product-select-indicator">
             <span class="system-builder__checkmark"></span>
           </div>
