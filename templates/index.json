@@ -873,6 +873,58 @@
         "margin_top": 20,
         "margin_bottom": 0
       }
+    },
+    "rich_text_LQJeXx": {
+      "type": "rich-text",
+      "blocks": {
+        "button_KGqDMP": {
+          "type": "button",
+          "settings": {
+            "style": "fill",
+            "size": "xl",
+            "text": "Button text",
+            "url": "shopify://pages/knekt-system-builder",
+            "background": "",
+            "text_color": ""
+          }
+        },
+        "subheading_cfPBAW": {
+          "type": "subheading",
+          "settings": {
+            "text": "Subheading"
+          }
+        },
+        "heading_gbDRxT": {
+          "type": "heading",
+          "settings": {
+            "text": "Heading",
+            "heading_tag": "h1",
+            "text_color": "",
+            "gradient": ""
+          }
+        },
+        "richtext_dDYV8w": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "button_KGqDMP",
+        "subheading_cfPBAW",
+        "heading_gbDRxT",
+        "richtext_dDYV8w"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "full_width": true,
+        "content_width": "small",
+        "text_position": "center",
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
     }
   },
   "order": [
@@ -888,6 +940,7 @@
     "video_tRQNeN",
     "image_with_text_overlay_crEyLw",
     "media_with_text_cLhPGM",
-    "comparison_table_3_devluxx_nNXVwH"
+    "comparison_table_3_devluxx_nNXVwH",
+    "rich_text_LQJeXx"
   ]
 }
