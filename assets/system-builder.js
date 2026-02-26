@@ -423,7 +423,11 @@ class SystemBuilder extends HTMLElement {
       }
     }
 
-    const isSelected = !!this.selectedProducts[variantId];
+    // For ring/mag ring, each card tracks its own state independently of global quantity
+    // For other types, derive from selectedProducts as normal
+    const isSelected = (productType === 'ring-mount' || productType === 'mag-ring')
+      ? !cardIsSelected
+      : !!this.selectedProducts[variantId];
     card.classList.toggle('system-builder__product-card--selected', isSelected);
     card.setAttribute('aria-pressed', isSelected);
 
