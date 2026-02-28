@@ -955,14 +955,26 @@ class SystemBuilder extends HTMLElement {
     if (backorderNoticesEl) {
       backorderNoticesEl.innerHTML = '';
       Object.values(this.selectedProducts).forEach(product => {
-        if (product?.backorderDate) {
-          const date = new Date(product.backorderDate);
-          const formatted = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-          const displayTitle = product.productTitle || product.title || 'Product';
-          backorderNoticesEl.insertAdjacentHTML('beforeend',
-            `<p class="system-builder__backorder-notice">Your ${displayTitle} is expected to arrive on ${formatted}</p>`
-          );
+        const isBackorder = product?.inventoryPolicy === 'continue' && product?.inventoryQuantity <= 0;
+        if (!isBackorder) return;
+        const displayTitle = product.productTitle || product.title || 'Product';
+        let message;
+        if (product.backorderDate) {
+          // Parse YYYY-MM-DD in local time to avoid UTC offset issues
+          const parts = String(product.backorderDate).split('-').map(Number);
+          const date = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
+          const formatted = date && !isNaN(date)
+            ? date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+            : null;
+          message = formatted
+            ? `Your ${displayTitle} is expected to arrive on ${formatted}`
+            : `Your ${displayTitle} is currently a backorder`;
+        } else {
+          message = `Your ${displayTitle} is currently a backorder`;
         }
+        backorderNoticesEl.insertAdjacentHTML('beforeend',
+          `<p class="system-builder__backorder-notice">${message}</p>`
+        );
       });
     }
 
