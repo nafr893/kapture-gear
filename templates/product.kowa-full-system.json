@@ -50,12 +50,6 @@
           "type": "shopify://apps/smartsize/blocks/app-block/465a43e0-6a1a-4d30-b82e-fe6118568705",
           "settings": {}
         },
-        "sizing_chart_8Pw9LD": {
-          "type": "sizing_chart",
-          "settings": {
-            "button_text": "Sizing Chart"
-          }
-        },
         "description": {
           "type": "description",
           "settings": {
@@ -104,7 +98,6 @@
         "payment_terms",
         "separator",
         "smartsize_app_block_rWMFNe",
-        "sizing_chart_8Pw9LD",
         "description",
         "variant_picker",
         "quantity_selector",
@@ -157,12 +150,7 @@
         "judge_me_reviews_review_widget_FzPcBK": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "disabled": true,
-          "settings": {
-            "review_data": "sample_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
+          "settings": {}
         }
       },
       "block_order": [
