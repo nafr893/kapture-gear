@@ -100,36 +100,69 @@
 /* Panel (models inside a brand) */
 
 .osc__brand-panel {
+  padding: 16px 20px;
   background: var(--color-background, #fff);
-}
-
-.osc__model {
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--color-border, #e0e0e0);
-}
-
-.osc__model:last-child {
-  border-bottom: none;
-}
-
-.osc__model-name {
-  margin: 0 0 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--color-foreground, #111);
-}
-
-.osc__model-sizes {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 16px;
+}
+
+/* Model chips */
+
+.osc__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.osc__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border: 1.5px solid var(--color-border, #e0e0e0);
+  border-radius: 4px;
+  background: var(--color-background, #fff);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  color: var(--color-foreground, #111);
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.osc__chip:hover {
+  border-color: var(--color-foreground, #111);
+}
+
+.osc__chip--selected {
+  border-color: var(--color-foreground, #111);
+  background: var(--color-foreground, #111);
+  color: #fff;
+}
+
+/* Sizes result */
+
+.osc__result {
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.osc__sizes {
+  display: flex;
+  flex-direction: column;
 }
 
 .osc__size-row {
   display: grid;
   grid-template-columns: 120px 1fr;
   gap: 8px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--color-border, #e5e5e5);
   font-size: 0.8125rem;
+}
+
+.osc__size-row:last-child {
+  border-bottom: none;
 }
 
 .osc__size-label {
@@ -144,6 +177,7 @@
 .osc__no-sizes,
 .osc__empty {
   margin: 0;
+  padding: 11px 14px;
   font-size: 0.8125rem;
   color: var(--color-foreground-secondary, #666);
 }
