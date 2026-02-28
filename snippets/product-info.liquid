@@ -72,6 +72,9 @@ Supported variables
         {%- when '@app' -%}
           {%- render block -%}
 
+        {%- when '@theme' -%}
+          {%- render block -%}
+
         {%- when 'vendor' -%}
           {%- if product.vendor != blank -%}
             <div class="product-info__vendor">
