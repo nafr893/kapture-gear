@@ -431,5 +431,75 @@
         "other": "It has received {{ count }} reviews."
       }
     }
+  },
+  "names": {
+    "group": "Group"
+  },
+  "categories": {
+    "layout": "Layout"
+  },
+  "content": {
+    "layout": "Layout",
+    "size": "Size",
+    "appearance": "Appearance",
+    "block_link": "Block link",
+    "padding": "Padding"
+  },
+  "settings": {
+    "direction": "Direction",
+    "vertical_on_mobile": "Stack vertically on mobile",
+    "alignment": "Alignment",
+    "position": "Vertical position",
+    "align_baseline": "Align to baseline",
+    "gap": "Gap",
+    "width": "Width",
+    "custom_width": "Custom width",
+    "width_mobile": "Mobile width",
+    "height": "Height",
+    "custom_height": "Custom height",
+    "inherit_color_scheme": "Use page color scheme",
+    "color_scheme": "Color scheme",
+    "background_media": "Background media",
+    "video": "Video",
+    "video_position": "Video fit",
+    "image": "Image",
+    "image_position": "Image fit",
+    "borders": "Borders",
+    "border_width": "Border width",
+    "border_opacity": "Border opacity",
+    "border_radius": "Corner radius",
+    "background_overlay": "Background overlay",
+    "overlay_color": "Overlay color",
+    "overlay_style": "Overlay style",
+    "gradient_direction": "Gradient direction",
+    "link": "Link",
+    "open_new_tab": "Open in new tab",
+    "top": "Top",
+    "bottom": "Bottom",
+    "left": "Left",
+    "right": "Right"
+  },
+  "options": {
+    "vertical": "Vertical",
+    "horizontal": "Horizontal",
+    "left": "Left",
+    "center": "Center",
+    "right": "Right",
+    "space_between": "Space between",
+    "top": "Top",
+    "bottom": "Bottom",
+    "fit_content": "Fit content",
+    "fill": "Fill",
+    "custom": "Custom",
+    "none": "None",
+    "solid": "Solid",
+    "cover": "Cover",
+    "contain": "Contain",
+    "fit": "Fit",
+    "up": "Up",
+    "down": "Down",
+    "image": "Image",
+    "video": "Video",
+    "gradient": "Gradient"
   }
 }
