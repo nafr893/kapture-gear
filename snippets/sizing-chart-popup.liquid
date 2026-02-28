@@ -47,7 +47,9 @@
 
   <div class="sizing-chart__trigger-wrap">
     <button type="button" class="sizing-chart__trigger" data-sizing-trigger>
-      <img src="{{ 'ruler.svg' | asset_url }}" width="18" height="18" class="sizing-chart__trigger-icon" aria-hidden="true" alt="">
+      <span class="sizing-chart__trigger-icon-wrap" aria-hidden="true">
+        <img src="{{ 'ruler.svg' | asset_url }}" width="20" height="20" class="sizing-chart__trigger-icon" alt="">
+      </span>
       {{- block.settings.button_text | default: 'Sizing Chart' -}}
     </button>
   </div>

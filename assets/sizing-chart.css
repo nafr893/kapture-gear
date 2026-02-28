@@ -10,25 +10,40 @@
 .sizing-chart__trigger {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 12px;
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
   font-size: 0.875rem;
-  color: var(--color-primary, #333);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-foreground, #111);
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-underline-offset: 4px;
 }
 
 .sizing-chart__trigger:hover {
   opacity: 0.75;
 }
 
+.sizing-chart__trigger-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-foreground, #111);
+  flex-shrink: 0;
+}
+
 .sizing-chart__trigger-icon {
   display: block;
-  width: 18px;
+  width: 22px;
   height: auto;
+  filter: invert(1);
 }
 
 /* Dialog / Modal */
