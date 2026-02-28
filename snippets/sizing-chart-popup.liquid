@@ -5,7 +5,7 @@
   assign optic_models = shop.metaobjects.optic_model.values
 -%}
 
-<sizing-chart-popup>
+<sizing-chart-popup{% if block.settings.brand_handle != blank %} data-brand-handle="{{ block.settings.brand_handle }}"{% endif %}>
   <script type="application/json" data-sizing-brands>
     [
       {%- paginate optic_brands by 250 -%}
@@ -62,14 +62,16 @@
       </div>
 
       <div class="sizing-chart__dialog-body">
-        <p class="sizing-chart__instruction">Select your optic to view compatible sizes.</p>
+        <p class="sizing-chart__instruction">Select your optic model to view compatible sizes.</p>
 
+        {%- unless block.settings.brand_handle != blank -%}
         <div class="sizing-chart__section">
           <p class="sizing-chart__section-label">Brand</p>
           <div class="sizing-chart__chips" data-sizing-brand-chips></div>
         </div>
+        {%- endunless -%}
 
-        <div class="sizing-chart__section" data-sizing-model-section hidden>
+        <div class="sizing-chart__section" data-sizing-model-section{% if block.settings.brand_handle == blank %} hidden{% endif %}>
           <p class="sizing-chart__section-label">Model</p>
           <div class="sizing-chart__chips" data-sizing-model-chips></div>
         </div>

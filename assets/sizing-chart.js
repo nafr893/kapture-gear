@@ -4,6 +4,7 @@ class SizingChartPopup extends HTMLElement {
     this.models = JSON.parse(this.querySelector('[data-sizing-models]').textContent);
 
     this.dialog = this.querySelector('[data-sizing-dialog]');
+    this.brandHandle = this.dataset.brandHandle || null;
     this.brandChipsEl = this.querySelector('[data-sizing-brand-chips]');
     this.modelChipsEl = this.querySelector('[data-sizing-model-chips]');
     this.modelSection = this.querySelector('[data-sizing-model-section]');
@@ -16,7 +17,11 @@ class SizingChartPopup extends HTMLElement {
     this.magRingValues = this.querySelector('[data-sizing-mag-ring-values]');
     this.noSizes = this.querySelector('[data-sizing-no-sizes]');
 
-    this._renderBrandChips();
+    if (this.brandHandle) {
+      this._selectBrand(this.brandHandle);
+    } else {
+      this._renderBrandChips();
+    }
     this._bindEvents();
   }
 
@@ -30,11 +35,13 @@ class SizingChartPopup extends HTMLElement {
     });
 
     // Chip delegation
-    this.brandChipsEl.addEventListener('click', (e) => {
-      const chip = e.target.closest('[data-sizing-chip]');
-      if (!chip) return;
-      this._selectBrand(chip.dataset.value);
-    });
+    if (this.brandChipsEl) {
+      this.brandChipsEl.addEventListener('click', (e) => {
+        const chip = e.target.closest('[data-sizing-chip]');
+        if (!chip) return;
+        this._selectBrand(chip.dataset.value);
+      });
+    }
 
     this.modelChipsEl.addEventListener('click', (e) => {
       const chip = e.target.closest('[data-sizing-chip]');
@@ -59,12 +66,14 @@ class SizingChartPopup extends HTMLElement {
   }
 
   _selectBrand(handle) {
-    // Update brand chip states
-    this.brandChipsEl.querySelectorAll('[data-sizing-chip]').forEach((chip) => {
-      const selected = chip.dataset.value === handle;
-      chip.classList.toggle('sizing-chart__chip--selected', selected);
-      chip.setAttribute('aria-pressed', selected);
-    });
+    // Update brand chip states (only if brand chips are rendered)
+    if (this.brandChipsEl) {
+      this.brandChipsEl.querySelectorAll('[data-sizing-chip]').forEach((chip) => {
+        const selected = chip.dataset.value === handle;
+        chip.classList.toggle('sizing-chart__chip--selected', selected);
+        chip.setAttribute('aria-pressed', selected);
+      });
+    }
 
     // Render filtered model chips
     const filteredModels = this.models.filter((m) => m.brandHandle === handle);
