@@ -62,7 +62,8 @@
         "sizing_chart_jg4PGy": {
           "type": "sizing_chart",
           "settings": {
-            "button_text": "Sizing Chart"
+            "button_text": "KNEKT SYSTEM SIZE GUIDE",
+            "brand_handle": "kowa"
           }
         },
         "button_GPjiHJ": {
