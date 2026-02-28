@@ -641,7 +641,7 @@ class SystemBuilder extends HTMLElement {
         : variantData.title || 'Product';
 
       const isAvailable = variantData.available !== false;
-      const isBackorder = !isAvailable && variantData.inventoryPolicy === 'continue';
+      const isBackorder = variantData.inventoryPolicy === 'continue' && variantData.inventoryQuantity <= 0;
       const isOutOfStock = !isAvailable && !isBackorder;
       const cardClass = isBackorder
         ? ' system-builder__product-card--backorder'
