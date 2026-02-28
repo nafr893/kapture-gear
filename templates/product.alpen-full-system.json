@@ -50,6 +50,12 @@
           "type": "shopify://apps/smartsize/blocks/app-block/465a43e0-6a1a-4d30-b82e-fe6118568705",
           "settings": {}
         },
+        "sizing_chart_XrFG8Y": {
+          "type": "sizing_chart",
+          "settings": {
+            "button_text": "Sizing Chart"
+          }
+        },
         "description": {
           "type": "description",
           "settings": {
@@ -98,6 +104,7 @@
         "payment_terms",
         "separator",
         "smartsize_app_block_rWMFNe",
+        "sizing_chart_XrFG8Y",
         "description",
         "variant_picker",
         "quantity_selector",
