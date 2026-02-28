@@ -32,8 +32,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   background: var(--color-foreground, #111);
   flex-shrink: 0;
