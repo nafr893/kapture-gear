@@ -950,6 +950,22 @@ class SystemBuilder extends HTMLElement {
     });
 
 
+    // Render backorder notices above total
+    const backorderNoticesEl = summary.querySelector('[data-backorder-notices]');
+    if (backorderNoticesEl) {
+      backorderNoticesEl.innerHTML = '';
+      Object.values(this.selectedProducts).forEach(product => {
+        if (product?.backorderDate) {
+          const date = new Date(product.backorderDate);
+          const formatted = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+          const displayTitle = product.productTitle || product.title || 'Product';
+          backorderNoticesEl.insertAdjacentHTML('beforeend',
+            `<p class="system-builder__backorder-notice">Your ${displayTitle} is expected to arrive on ${formatted}</p>`
+          );
+        }
+      });
+    }
+
     const totalEl = summary.querySelector('[data-total-price]');
     if (totalEl) totalEl.textContent = this.formatMoney(total);
 
@@ -976,13 +992,6 @@ class SystemBuilder extends HTMLElement {
     const imageUrl = product.image ? this.getImageUrl(product.image, 120) : '';
     const quantity = product.quantity || 1;
 
-    let backorderHtml = '';
-    if (product.backorderDate) {
-      const date = new Date(product.backorderDate);
-      const formatted = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      backorderHtml = `<span class="system-builder__backorder-notice">Your ${product.productTitle || displayTitle} is expected to arrive on ${formatted}</span>`;
-    }
-
     return `
       <div class="system-builder__summary-item" data-summary-item="${variantId}">
         <div class="system-builder__summary-item-image">
@@ -991,7 +1000,6 @@ class SystemBuilder extends HTMLElement {
         <div class="system-builder__summary-item-details">
           <span class="system-builder__summary-name">${displayTitle}</span>
           <span class="system-builder__summary-price">${this.formatMoney(product.price * quantity)}</span>
-          ${backorderHtml}
         </div>
         <div class="system-builder__summary-quantity">
           <button type="button" class="system-builder__quantity-btn" data-quantity-decrease="${variantId}" aria-label="Decrease quantity">−</button>

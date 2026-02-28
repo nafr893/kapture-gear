@@ -753,9 +753,15 @@
   border-radius: var(--border-radius-sm, 4px);
 }
 
+.system-builder__backorder-notices {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
 .system-builder__backorder-notice {
-  display: block;
-  margin-top: 4px;
+  margin: 0;
   font-size: 0.75rem;
   color: #666;
   font-style: italic;
