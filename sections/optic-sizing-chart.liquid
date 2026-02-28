@@ -1,0 +1,89 @@
+{{ 'optic-sizing-chart.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign optic_brands = shop.metaobjects.optic_brand.values
+  assign optic_models = shop.metaobjects.optic_model.values
+-%}
+
+<div class="osc-section" id="shopify-section-{{ section.id }}">
+  <optic-sizing-chart>
+    <script type="application/json" data-osc-brands>
+      [
+        {%- paginate optic_brands by 250 -%}
+        {%- for brand in optic_brands -%}
+          {
+            "handle": {{ brand.system.handle | json }},
+            "name": {{ brand.optic_brand | json }}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+        {%- endpaginate -%}
+      ]
+    </script>
+
+    <script type="application/json" data-osc-models>
+      [
+        {%- paginate optic_models by 250 -%}
+        {%- for model in optic_models -%}
+          {
+            "handle": {{ model.system.handle | json }},
+            "name": {{ model.optic_model | json }},
+            "brandHandle": {{ model.brand.value.system.handle | default: '' | json }},
+            "ringMount": [
+              {%- for variant in model.ring_mount.value -%}
+                {{ variant.title | json }}{%- unless forloop.last -%},{%- endunless -%}
+              {%- endfor -%}
+            ],
+            "magRing": [
+              {%- for variant in model.mag_ring.value -%}
+                {{ variant.title | json }}{%- unless forloop.last -%},{%- endunless -%}
+              {%- endfor -%}
+            ]
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+        {%- endpaginate -%}
+      ]
+    </script>
+
+    <div class="osc__layout">
+      <div class="osc__left">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="osc__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="osc__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+
+      <div class="osc__right">
+        <div class="osc__accordion" data-osc-accordion></div>
+      </div>
+    </div>
+  </optic-sizing-chart>
+</div>
+
+<script src="{{ 'optic-sizing-chart.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Optic Sizing Chart",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Optic Sizing Chart"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Optic Sizing Chart"
+    }
+  ]
+}
+{% endschema %}

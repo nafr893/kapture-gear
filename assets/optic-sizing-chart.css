@@ -1,0 +1,149 @@
+/* ============================================================
+   Optic Sizing Chart Section
+   ============================================================ */
+
+.osc-section {
+  padding: 60px 0;
+}
+
+/* Two-column layout */
+
+.osc__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  max-width: var(--page-width, 1200px);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 1024px) {
+  .osc__layout {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 80px;
+  }
+}
+
+/* Left column */
+
+.osc__heading {
+  margin: 0 0 24px;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-foreground, #111);
+}
+
+.osc__text {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-foreground, #111);
+}
+
+.osc__text > * + * {
+  margin-top: 1em;
+}
+
+.osc__text a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Right column — Accordion */
+
+.osc__accordion {
+  border-top: 1px solid var(--color-border, #e0e0e0);
+}
+
+.osc__brand {
+  border-bottom: 1px solid var(--color-border, #e0e0e0);
+}
+
+.osc__brand-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--color-background-secondary, #f2f2f2);
+  border: none;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-foreground, #111);
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.osc__brand-trigger:hover {
+  background: var(--color-border, #e0e0e0);
+}
+
+.osc__brand--open .osc__brand-trigger {
+  background: var(--color-foreground, #111);
+  color: #fff;
+}
+
+.osc__chevron {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.osc__brand--open .osc__chevron {
+  transform: rotate(180deg);
+}
+
+/* Panel (models inside a brand) */
+
+.osc__brand-panel {
+  background: var(--color-background, #fff);
+}
+
+.osc__model {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--color-border, #e0e0e0);
+}
+
+.osc__model:last-child {
+  border-bottom: none;
+}
+
+.osc__model-name {
+  margin: 0 0 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-foreground, #111);
+}
+
+.osc__model-sizes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.osc__size-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px;
+  font-size: 0.8125rem;
+}
+
+.osc__size-label {
+  color: var(--color-foreground-secondary, #666);
+  font-weight: 500;
+}
+
+.osc__size-values {
+  color: var(--color-foreground, #111);
+}
+
+.osc__no-sizes,
+.osc__empty {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-foreground-secondary, #666);
+}
