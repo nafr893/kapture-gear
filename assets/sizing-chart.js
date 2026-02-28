@@ -17,11 +17,7 @@ class SizingChartPopup extends HTMLElement {
     this.magRingValues = this.querySelector('[data-sizing-mag-ring-values]');
     this.noSizes = this.querySelector('[data-sizing-no-sizes]');
 
-    if (this.brandHandle) {
-      this._selectBrand(this.brandHandle);
-    } else {
-      this._renderBrandChips();
-    }
+    this._ready = false;
     this._bindEvents();
   }
 
@@ -51,6 +47,14 @@ class SizingChartPopup extends HTMLElement {
   }
 
   open() {
+    if (!this._ready) {
+      if (this.brandHandle) {
+        this._selectBrand(this.brandHandle);
+      } else {
+        this._renderBrandChips();
+      }
+      this._ready = true;
+    }
     this.dialog.showModal();
   }
 
