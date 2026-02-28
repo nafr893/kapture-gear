@@ -62,7 +62,8 @@
         "sizing_chart_jg4PGy": {
           "type": "sizing_chart",
           "settings": {
-            "button_text": "Sizing Chart"
+            "button_text": "Sizing Chart",
+            "brand_handle": "athlon"
           }
         },
         "button_GPjiHJ": {
