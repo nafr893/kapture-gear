@@ -1,1 +1,506 @@
-{"sections":{"main":{"type":"main-product","blocks":{"vendor":{"type":"vendor","settings":{}},"title":{"type":"title","settings":{"heading_tag":"h2"}},"badges":{"type":"badges","settings":{}},"price":{"type":"price","disabled":true,"settings":{"show_taxes_notice":false}},"judge_me_reviews_preview_badge_6X3GeR":{"type":"shopify:\/\/apps\/judge-me-reviews\/blocks\/preview_badge\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8","settings":{}},"description":{"type":"description","settings":{"icon":"none","icon_width":20,"collapse_content":false}},"separator_jDtrBc":{"type":"separator","settings":{}},"text_3NtNEf":{"type":"text","settings":{"text":"<h6>*** IMPORTANT ***  Before making your Knekt Ring Mount and Mag Ring selection, confirm the correct size by viewing our Knekt System Sizing Guide below.<\/h6>"}},"smartsize_app_block_gaUgDc":{"type":"shopify:\/\/apps\/smartsize\/blocks\/app-block\/465a43e0-6a1a-4d30-b82e-fe6118568705","settings":{}},"button_GPjiHJ":{"type":"button","disabled":true,"settings":{"link":"shopify:\/\/pages\/sizing-chart","text":"View Optic Sizing Chart","size":"xl","style":"fill","stretch":true,"background":"#f0c417","text_color":"#1a1a1a"}},"biscuits_bundles_biscuits_bundle_form_egcYdD":{"type":"shopify:\/\/apps\/biscuits-bundles\/blocks\/biscuits-bundle-form\/9e9ff1bd-2cba-468f-b59f-a1ff63f6efe9","settings":{"text_color":"#121212","card_color":"#ffffff","input_type":"rectangle","input_text_color":"#121212","input_color":"#f0f0f0","display_shadow":true,"display_selection_count":false,"display_running_totals":false,"enable_product_links":false,"card_padding":10,"grid_gap":10,"border_color":"#e1e1e1","border_radius":10,"highlight_type":"fill","selected_text_color":"#ffffff","selected_color":"#0474bc","border_thickness":1,"divider_color":"#e1e1e1","important_color":"#dd1d1d","padding_top":0,"padding_bottom":0,"custom_css":"#shopify-block-{{block.id}} {\n.biscuits-bundle-step__accordion-footer {\n    min-height: 10px;\n}\n.biscuits-bundle-step__details {\n    margin-bottom: 0rem;\n}\n.biscuits-bundle-step__products:not(.swiper-wrapper) {\n    margin-top: 0rem;\n}\n.biscuits-bundle-totals__row--total .biscuits-bundle-totals__text, .biscuits-bundle-totals__row--total .biscuits-bundle-form__total {\n    font-size: xx-large;\n}\n}","custom_js":"document.addEventListener('DOMContentLoaded', function() { });"}},"buy_buttons":{"type":"buy_buttons","settings":{"show_payment_button":true,"show_gift_card_recipient":true,"atc_button_background":"","atc_button_text_color":"","payment_button_background":"","payment_button_text_color":""}}},"block_order":["vendor","title","badges","price","judge_me_reviews_preview_badge_6X3GeR","description","separator_jDtrBc","text_3NtNEf","smartsize_app_block_gaUgDc","button_GPjiHJ","biscuits_bundles_biscuits_bundle_form_egcYdD","buy_buttons"],"settings":{"full_width":true,"show_fixed_add_to_cart":true,"desktop_media_width":50,"desktop_media_layout":"carousel_thumbnails_bottom","mobile_media_size":"expanded","mobile_carousel_control":"floating_dots","enable_video_autoplay":false,"enable_video_looping":true,"enable_image_zoom":true,"max_image_zoom_level":3,"background":"","background_gradient":"","text_color":"","input_background":"rgba(0,0,0,0)","input_text_color":""}},"multi_column_78WymG":{"type":"multi-column","blocks":{"item_fPRGeR":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Kowa_Spotter_2_Zoom.png","column_size":"4","title":"Knekt Optic Mount","heading_tag":"h4","content":"<p>Weather-proof and installed on the metal flange inside your eyecup eliminating any rubber wear and tear, ready at all times but virtually unnoticed during normal use.<\/p>","link_url":"","link_text":"","link_style":"link"}},"item_jFWGzC":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Mag_Rings_on_Rock_Zoom.png","column_size":"4","title":"Knekt Mag Ring","heading_tag":"h4","content":"<p>High Strength Temperature Resistant Magnets set in aircraft grade aluminum with 90° rotation locks to switch between portrait and landscape modes with ease.<\/p>","link_url":"","link_text":"","link_style":"link"}},"item_zbed9a":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Case_in_Pocket_square.png","column_size":"4","title":"Knekt Phone Case","heading_tag":"h4","content":"<p>A premium, everyday use phone case complete with magnetic charging, metal buttons, soft touch coating, drop cushion protection, and easy pull ridges.<\/p>","link_url":"","link_text":"","link_style":"button"}},"item_BJDGMb":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Knekt_Adapter_2.png","column_size":"4","title":"Knekt Adapter","heading_tag":"h4","content":"<p>Precision milled from aircraft grade aluminum and used to switch between both your regular and telephoto phone lenses with Mag Ring micro adjustment to set and forget.<\/p>","link_url":"","link_text":"","link_style":"link"}}},"block_order":["item_fPRGeR","item_jFWGzC","item_zbed9a","item_BJDGMb"],"settings":{"full_width":true,"stack_on_mobile":true,"gap":"small","text_alignment":"center","subheading":"4 Core Components - 1 Modular System","title":"What Makes The Magic Happen?","content":"","background":"#e8e8e8","background_gradient":"","text_color":""}},"video_grVHXM":{"type":"video","blocks":{"play_HwYQjw":{"type":"play","settings":{}},"heading_af7FR7":{"type":"heading","settings":{"text":"Knekt System Overview","heading_tag":"h1"}}},"block_order":["play_HwYQjw","heading_af7FR7"],"settings":{"full_width":false,"allow_transparent_header":false,"autoplay":false,"video_size":"auto","external_video_url":"https:\/\/www.youtube.com\/watch?v=pc38JTVdmSc","poster":"shopify:\/\/shop_images\/Setup_Pic_Rock.jpg","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":30}},"press_F9dyCK":{"type":"press","blocks":{"quote_XWBAaw":{"type":"quote","source":"{{ shop.metaobjects.reviews[\"trevor-hunt-pine-creek-outfitters\"] }}","settings":{"logo":"{{ shop.metaobjects.reviews[\"trevor-hunt-pine-creek-outfitters\"].logo.value }}","logo_width":100,"author":"{{ shop.metaobjects.reviews[\"trevor-hunt-pine-creek-outfitters\"].author.value }}","content":"{{ shop.metaobjects.reviews[\"trevor-hunt-pine-creek-outfitters\"].quote.value }}","show_rating":true,"rating":5}},"quote_hJGKNd":{"type":"quote","source":"{{ shop.metaobjects.reviews[\"joel-ingram-kapture-user\"] }}","settings":{"logo":"{{ shop.metaobjects.reviews[\"joel-ingram-kapture-user\"].logo.value }}","logo_width":100,"author":"{{ shop.metaobjects.reviews[\"joel-ingram-kapture-user\"].author.value }}","content":"{{ shop.metaobjects.reviews[\"joel-ingram-kapture-user\"].quote.value }}","show_rating":true,"rating":5}},"quote_fm4fTR":{"type":"quote","source":"{{ shop.metaobjects.reviews[\"jace-wyatt-arizona-custom-hunts\"] }}","settings":{"logo":"{{ shop.metaobjects.reviews[\"jace-wyatt-arizona-custom-hunts\"].logo.value }}","logo_width":100,"author":"{{ shop.metaobjects.reviews[\"jace-wyatt-arizona-custom-hunts\"].author.value }}","content":"{{ shop.metaobjects.reviews[\"jace-wyatt-arizona-custom-hunts\"].quote.value }}","show_rating":true,"rating":5}}},"block_order":["quote_XWBAaw","quote_hJGKNd","quote_fm4fTR"],"settings":{"full_width":true,"content_size":"medium","background":"","background_gradient":"","text_color":"","heading_color":"","heading_gradient":"","logo_item_background":"","logo_item_border":""}},"image_with_text_overlay_C3deCb":{"type":"image-with-text-overlay","blocks":{"heading_axET6T":{"type":"heading","settings":{"text":"Installs In 30 Seconds","heading_tag":"h1"}},"richtext_fCxjkM":{"type":"richtext","settings":{"content":"<p>Installation is a breeze and within a short moment, you are ready to Kapture Your Story without thought or preparation.<\/p>"}},"button_43yVR6":{"type":"button","settings":{"style":"outline","size":"lg","text":"View Installation Videos","url":"shopify:\/\/pages\/install","background":"","text_color":"#ffffff"}}},"block_order":["heading_axET6T","richtext_fCxjkM","button_43yVR6"],"settings":{"full_width":true,"allow_transparent_header":false,"enable_parallax":false,"image_size":"sm","image":"shopify:\/\/shop_images\/Blue_Mat.png","mobile_text_position":"place-self-center text-center","desktop_text_position":"sm:place-self-center sm:text-center","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":65}},"17343788917f848a67":{"type":"apps","blocks":{"judge_me_reviews_review_widget_FzPcBK":{"type":"shopify:\/\/apps\/judge-me-reviews\/blocks\/review_widget\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8","settings":{}}},"block_order":["judge_me_reviews_review_widget_FzPcBK"],"settings":{"full_width":true,"remove_vertical_spacing":false,"remove_horizontal_spacing":false,"background":"","background_gradient":"","text_color":""}},"before_after_image_ehA4wa":{"type":"before-after-image","disabled":true,"settings":{"full_width":false,"subheading":"","title":"Regular vs Telephoto Lenses","content":"<p>Deliver unparalleled imagery by unlocking the power of your phone's optical zoom telephoto lens.  Use the slider below to see the difference.<\/p>","before_image":"shopify:\/\/shop_images\/Elk-In-Field-with-Breath-1x.jpg","after_image":"shopify:\/\/shop_images\/Elk-In-Field-with-Breath-5x.jpg","expand_image":false,"text_position":"start","before_after_text_position":"top","before_text":"Regular","after_text":"Telephoto","drag_initial_position":52,"background":"","background_gradient":"","text_color":"","before_text_color":"#ffffff","after_text_color":"#ffffff","drag_cursor_background":"#ffffff","drag_cursor_color":"#000000"}},"image_with_text_overlay_JRJR6E":{"type":"image-with-text-overlay","blocks":{"subheading_GgiwLJ":{"type":"subheading","settings":{"text":"Can I run the Knekt System on multiple optics?"}},"heading_9dTDrV":{"type":"heading","settings":{"text":"Add Another Optic for $30","heading_tag":"h1"}},"richtext_MxrxxR":{"type":"richtext","settings":{"content":"<p>Once you have the Knekt Phone Case and Knekt Adapter, to outfit an additional optic, you only need to buy another Knekt Optic Mount (Ring Mount or Integrated Eyecup) along with the matching Knekt Mag Ring if you don't already have it.  The additional Knekt Optic Ring Mount is just under $30.<\/p>"}},"button_HaKDVB":{"type":"button","settings":{"style":"outline","size":"lg","text":"View Optic Sizing Chart","url":"shopify:\/\/pages\/sizing-chart","background":"#ffffff","text_color":"#ffffff"}}},"block_order":["subheading_GgiwLJ","heading_9dTDrV","richtext_MxrxxR","button_HaKDVB"],"settings":{"full_width":false,"allow_transparent_header":false,"enable_parallax":true,"image_size":"auto","image":"shopify:\/\/shop_images\/Using-Optic-Wide-8O1A8995.jpg","mobile_text_position":"place-self-center text-center","desktop_text_position":"sm:place-self-center sm:text-center","text_color":"#ffffff","overlay_color":"#000000","overlay_opacity":65}},"related-products":{"type":"related-products","settings":{"recommendations_count":5,"products":[],"full_width":true,"stack_products":true,"show_progress_bar":false,"products_per_row_mobile":"2","products_per_row_desktop":5,"subheading":"","title":"You may also like","content":"","background":"","background_gradient":"","text_color":"","heading_color":"","heading_gradient":"","product_card_background":"","product_card_text_color":""}}},"order":["main","multi_column_78WymG","video_grVHXM","press_F9dyCK","image_with_text_overlay_C3deCb","17343788917f848a67","before_after_image_ehA4wa","image_with_text_overlay_JRJR6E","related-products"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "vendor",
+          "settings": {}
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "heading_tag": "h2"
+          }
+        },
+        "badges": {
+          "type": "badges",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "disabled": true,
+          "settings": {
+            "show_taxes_notice": false
+          }
+        },
+        "judge_me_reviews_preview_badge_6X3GeR": {
+          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "icon": "none",
+            "icon_width": 20,
+            "collapse_content": false
+          }
+        },
+        "separator_jDtrBc": {
+          "type": "separator",
+          "settings": {}
+        },
+        "text_3NtNEf": {
+          "type": "text",
+          "settings": {
+            "text": "<h6>*** IMPORTANT ***  Before making your Knekt Ring Mount and Mag Ring selection, confirm the correct size by viewing our Knekt System Sizing Guide below.</h6>"
+          }
+        },
+        "smartsize_app_block_gaUgDc": {
+          "type": "shopify://apps/smartsize/blocks/app-block/465a43e0-6a1a-4d30-b82e-fe6118568705",
+          "settings": {}
+        },
+        "sizing_chart_jg4PGy": {
+          "type": "sizing_chart",
+          "settings": {
+            "button_text": "Sizing Chart"
+          }
+        },
+        "button_GPjiHJ": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "link": "shopify://pages/sizing-chart",
+            "text": "View Optic Sizing Chart",
+            "size": "xl",
+            "style": "fill",
+            "stretch": true,
+            "background": "#f0c417",
+            "text_color": "#1a1a1a"
+          }
+        },
+        "biscuits_bundles_biscuits_bundle_form_egcYdD": {
+          "type": "shopify://apps/biscuits-bundles/blocks/biscuits-bundle-form/9e9ff1bd-2cba-468f-b59f-a1ff63f6efe9",
+          "settings": {
+            "product": "",
+            "show_add_to_cart_button": "no",
+            "text_color": "#121212",
+            "card_color": "#ffffff",
+            "input_type": "rectangle",
+            "input_text_color": "#121212",
+            "input_color": "#f0f0f0",
+            "display_shadow": true,
+            "display_selection_count": false,
+            "display_running_totals": false,
+            "enable_product_links": false,
+            "card_padding": 10,
+            "grid_gap": 10,
+            "border_color": "#e1e1e1",
+            "border_radius": 10,
+            "highlight_type": "fill",
+            "selected_text_color": "#ffffff",
+            "selected_color": "#0474bc",
+            "border_thickness": 1,
+            "divider_color": "#e1e1e1",
+            "important_color": "#dd1d1d",
+            "padding_top": 0,
+            "padding_bottom": 0,
+            "custom_css": "#shopify-block-{{block.id}} {\n.biscuits-bundle-step__accordion-footer {\n    min-height: 10px;\n}\n.biscuits-bundle-step__details {\n    margin-bottom: 0rem;\n}\n.biscuits-bundle-step__products:not(.swiper-wrapper) {\n    margin-top: 0rem;\n}\n.biscuits-bundle-totals__row--total .biscuits-bundle-totals__text, .biscuits-bundle-totals__row--total .biscuits-bundle-form__total {\n    font-size: xx-large;\n}\n}",
+            "custom_js": "document.addEventListener('DOMContentLoaded', function() { });"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_payment_button": true,
+            "show_gift_card_recipient": true,
+            "atc_button_background": "",
+            "atc_button_text_color": "",
+            "payment_button_background": "",
+            "payment_button_text_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "badges",
+        "price",
+        "judge_me_reviews_preview_badge_6X3GeR",
+        "description",
+        "separator_jDtrBc",
+        "text_3NtNEf",
+        "smartsize_app_block_gaUgDc",
+        "sizing_chart_jg4PGy",
+        "button_GPjiHJ",
+        "biscuits_bundles_biscuits_bundle_form_egcYdD",
+        "buy_buttons"
+      ],
+      "settings": {
+        "full_width": true,
+        "show_fixed_add_to_cart": true,
+        "desktop_media_width": 50,
+        "desktop_media_layout": "carousel_thumbnails_bottom",
+        "mobile_media_size": "expanded",
+        "mobile_carousel_control": "floating_dots",
+        "enable_video_autoplay": false,
+        "enable_video_looping": true,
+        "enable_image_zoom": true,
+        "max_image_zoom_level": 3,
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "input_background": "rgba(0,0,0,0)",
+        "input_text_color": ""
+      }
+    },
+    "multi_column_78WymG": {
+      "type": "multi-column",
+      "blocks": {
+        "item_fPRGeR": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Kowa_Spotter_2_Zoom.png",
+            "show_controls": false,
+            "column_size": "4",
+            "title": "Knekt Optic Mount",
+            "heading_tag": "h4",
+            "content": "<p>Weather-proof and installed on the metal flange inside your eyecup eliminating any rubber wear and tear, ready at all times but virtually unnoticed during normal use.</p>",
+            "link_url": "",
+            "link_text": "",
+            "link_style": "link"
+          }
+        },
+        "item_jFWGzC": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Mag_Rings_on_Rock_Zoom.png",
+            "show_controls": false,
+            "column_size": "4",
+            "title": "Knekt Mag Ring",
+            "heading_tag": "h4",
+            "content": "<p>High Strength Temperature Resistant Magnets set in aircraft grade aluminum with 90° rotation locks to switch between portrait and landscape modes with ease.</p>",
+            "link_url": "",
+            "link_text": "",
+            "link_style": "link"
+          }
+        },
+        "item_zbed9a": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Case_in_Pocket_square.png",
+            "show_controls": false,
+            "column_size": "4",
+            "title": "Knekt Phone Case",
+            "heading_tag": "h4",
+            "content": "<p>A premium, everyday use phone case complete with magnetic charging, metal buttons, soft touch coating, drop cushion protection, and easy pull ridges.</p>",
+            "link_url": "",
+            "link_text": "",
+            "link_style": "button"
+          }
+        },
+        "item_BJDGMb": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Knekt_Adapter_2.png",
+            "show_controls": false,
+            "column_size": "4",
+            "title": "Knekt Adapter",
+            "heading_tag": "h4",
+            "content": "<p>Precision milled from aircraft grade aluminum and used to switch between both your regular and telephoto phone lenses with Mag Ring micro adjustment to set and forget.</p>",
+            "link_url": "",
+            "link_text": "",
+            "link_style": "link"
+          }
+        }
+      },
+      "block_order": [
+        "item_fPRGeR",
+        "item_jFWGzC",
+        "item_zbed9a",
+        "item_BJDGMb"
+      ],
+      "settings": {
+        "full_width": true,
+        "stack_on_mobile": true,
+        "gap": "small",
+        "text_alignment": "center",
+        "subheading": "4 Core Components - 1 Modular System",
+        "title": "What Makes The Magic Happen?",
+        "content": "",
+        "background": "#e8e8e8",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "video_grVHXM": {
+      "type": "video",
+      "blocks": {
+        "play_HwYQjw": {
+          "type": "play",
+          "settings": {}
+        },
+        "heading_af7FR7": {
+          "type": "heading",
+          "settings": {
+            "text": "Knekt System Overview",
+            "heading_tag": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "play_HwYQjw",
+        "heading_af7FR7"
+      ],
+      "settings": {
+        "full_width": false,
+        "allow_transparent_header": false,
+        "autoplay": false,
+        "video_size": "auto",
+        "external_video_url": "https://www.youtube.com/watch?v=pc38JTVdmSc",
+        "poster": "shopify://shop_images/Setup_Pic_Rock.jpg",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30
+      }
+    },
+    "press_F9dyCK": {
+      "type": "press",
+      "blocks": {
+        "quote_XWBAaw": {
+          "type": "quote",
+          "source": "{{ shop.metaobjects.reviews[\"trevor-hunt-pine-creek-outfitters\"] }}",
+          "settings": {
+            "logo": "{{ shop.metaobjects.reviews[\"trevor-hunt-pine-creek-outfitters\"].logo.value }}",
+            "logo_width": 100,
+            "author": "{{ shop.metaobjects.reviews[\"trevor-hunt-pine-creek-outfitters\"].author.value }}",
+            "content": "{{ shop.metaobjects.reviews[\"trevor-hunt-pine-creek-outfitters\"].quote.value }}",
+            "show_rating": true,
+            "rating": 5
+          }
+        },
+        "quote_hJGKNd": {
+          "type": "quote",
+          "source": "{{ shop.metaobjects.reviews[\"joel-ingram-kapture-user\"] }}",
+          "settings": {
+            "logo": "{{ shop.metaobjects.reviews[\"joel-ingram-kapture-user\"].logo.value }}",
+            "logo_width": 100,
+            "author": "{{ shop.metaobjects.reviews[\"joel-ingram-kapture-user\"].author.value }}",
+            "content": "{{ shop.metaobjects.reviews[\"joel-ingram-kapture-user\"].quote.value }}",
+            "show_rating": true,
+            "rating": 5
+          }
+        },
+        "quote_fm4fTR": {
+          "type": "quote",
+          "source": "{{ shop.metaobjects.reviews[\"jace-wyatt-arizona-custom-hunts\"] }}",
+          "settings": {
+            "logo": "{{ shop.metaobjects.reviews[\"jace-wyatt-arizona-custom-hunts\"].logo.value }}",
+            "logo_width": 100,
+            "author": "{{ shop.metaobjects.reviews[\"jace-wyatt-arizona-custom-hunts\"].author.value }}",
+            "content": "{{ shop.metaobjects.reviews[\"jace-wyatt-arizona-custom-hunts\"].quote.value }}",
+            "show_rating": true,
+            "rating": 5
+          }
+        }
+      },
+      "block_order": [
+        "quote_XWBAaw",
+        "quote_hJGKNd",
+        "quote_fm4fTR"
+      ],
+      "settings": {
+        "full_width": true,
+        "content_size": "medium",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "logo_item_background": "",
+        "logo_item_border": ""
+      }
+    },
+    "image_with_text_overlay_C3deCb": {
+      "type": "image-with-text-overlay",
+      "blocks": {
+        "heading_axET6T": {
+          "type": "heading",
+          "settings": {
+            "text": "Installs In 30 Seconds",
+            "heading_tag": "h1"
+          }
+        },
+        "richtext_fCxjkM": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Installation is a breeze and within a short moment, you are ready to Kapture Your Story without thought or preparation.</p>"
+          }
+        },
+        "button_43yVR6": {
+          "type": "button",
+          "settings": {
+            "style": "outline",
+            "size": "lg",
+            "text": "View Installation Videos",
+            "url": "shopify://pages/install",
+            "background": "",
+            "text_color": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "heading_axET6T",
+        "richtext_fCxjkM",
+        "button_43yVR6"
+      ],
+      "settings": {
+        "full_width": true,
+        "allow_transparent_header": false,
+        "enable_parallax": false,
+        "image_size": "sm",
+        "image": "shopify://shop_images/Blue_Mat.png",
+        "mobile_text_position": "place-self-center text-center",
+        "desktop_text_position": "sm:place-self-center sm:text-center",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 65
+      }
+    },
+    "17343788917f848a67": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_FzPcBK": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_FzPcBK"
+      ],
+      "settings": {
+        "full_width": true,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false,
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
+    },
+    "before_after_image_ehA4wa": {
+      "type": "before-after-image",
+      "disabled": true,
+      "settings": {
+        "full_width": false,
+        "subheading": "",
+        "title": "Regular vs Telephoto Lenses",
+        "content": "<p>Deliver unparalleled imagery by unlocking the power of your phone's optical zoom telephoto lens.  Use the slider below to see the difference.</p>",
+        "before_image": "shopify://shop_images/Elk-In-Field-with-Breath-1x.jpg",
+        "after_image": "shopify://shop_images/Elk-In-Field-with-Breath-5x.jpg",
+        "expand_image": false,
+        "text_position": "start",
+        "before_after_text_position": "top",
+        "before_text": "Regular",
+        "after_text": "Telephoto",
+        "drag_initial_position": 52,
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "before_text_color": "#ffffff",
+        "after_text_color": "#ffffff",
+        "drag_cursor_background": "#ffffff",
+        "drag_cursor_color": "#000000"
+      }
+    },
+    "image_with_text_overlay_JRJR6E": {
+      "type": "image-with-text-overlay",
+      "blocks": {
+        "subheading_GgiwLJ": {
+          "type": "subheading",
+          "settings": {
+            "text": "Can I run the Knekt System on multiple optics?"
+          }
+        },
+        "heading_9dTDrV": {
+          "type": "heading",
+          "settings": {
+            "text": "Add Another Optic for $30",
+            "heading_tag": "h1"
+          }
+        },
+        "richtext_MxrxxR": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Once you have the Knekt Phone Case and Knekt Adapter, to outfit an additional optic, you only need to buy another Knekt Optic Mount (Ring Mount or Integrated Eyecup) along with the matching Knekt Mag Ring if you don't already have it.  The additional Knekt Optic Ring Mount is just under $30.</p>"
+          }
+        },
+        "button_HaKDVB": {
+          "type": "button",
+          "settings": {
+            "style": "outline",
+            "size": "lg",
+            "text": "View Optic Sizing Chart",
+            "url": "shopify://pages/sizing-chart",
+            "background": "#ffffff",
+            "text_color": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "subheading_GgiwLJ",
+        "heading_9dTDrV",
+        "richtext_MxrxxR",
+        "button_HaKDVB"
+      ],
+      "settings": {
+        "full_width": false,
+        "allow_transparent_header": false,
+        "enable_parallax": true,
+        "image_size": "auto",
+        "image": "shopify://shop_images/Using-Optic-Wide-8O1A8995.jpg",
+        "mobile_text_position": "place-self-center text-center",
+        "desktop_text_position": "sm:place-self-center sm:text-center",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 65
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "recommendations_count": 5,
+        "products": [],
+        "full_width": true,
+        "stack_products": true,
+        "show_progress_bar": false,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 5,
+        "subheading": "",
+        "title": "You may also like",
+        "content": "",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "product_card_background": "",
+        "product_card_text_color": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "multi_column_78WymG",
+    "video_grVHXM",
+    "press_F9dyCK",
+    "image_with_text_overlay_C3deCb",
+    "17343788917f848a67",
+    "before_after_image_ehA4wa",
+    "image_with_text_overlay_JRJR6E",
+    "related-products"
+  ]
+}
