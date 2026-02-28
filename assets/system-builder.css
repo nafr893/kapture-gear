@@ -735,6 +735,32 @@
   font-style: italic;
 }
 
+.system-builder__product-card--backorder .system-builder__product-select-indicator {
+  display: flex;
+}
+
+.system-builder__backorder-badge {
+  position: absolute;
+  top: var(--spacing-2, 8px);
+  right: var(--spacing-2, 8px);
+  background: #b45309;
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm, 4px);
+}
+
+.system-builder__backorder-notice {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #b45309;
+  font-style: italic;
+}
+
 /* Model Image Preview */
 .system-builder__model-preview {
   margin-top: var(--spacing-5, 20px);

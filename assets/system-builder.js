@@ -353,7 +353,8 @@ class SystemBuilder extends HTMLElement {
     if (!productType) return;
 
     const isAvailable = card.dataset.available !== 'false';
-    if (!isAvailable) return;
+    const isBackorder = card.dataset.backorder === 'true';
+    if (!isAvailable && !isBackorder) return;
 
     const variantId = card.dataset.variantId;
     if (!variantId) return;
@@ -640,22 +641,28 @@ class SystemBuilder extends HTMLElement {
         : variantData.title || 'Product';
 
       const isAvailable = variantData.available !== false;
-      const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
+      const isBackorder = !isAvailable && variantData.inventoryPolicy === 'continue';
+      const isOutOfStock = !isAvailable && !isBackorder;
+      const cardClass = isBackorder
+        ? ' system-builder__product-card--backorder'
+        : isOutOfStock ? ' system-builder__product-card--out-of-stock' : '';
 
       return `
-        <div class="system-builder__product-card${outOfStockClass}"
+        <div class="system-builder__product-card${cardClass}"
              data-product-card
              data-product-type="${productType}"
              data-variant-id="${variantData.id}"
              data-available="${isAvailable}"
+             data-backorder="${isBackorder}"
              role="button"
              tabindex="0"
              aria-pressed="false"
-             aria-label="Add to your system: ${displayTitle}${!isAvailable ? ' (Out of Stock)' : ''}">
+             aria-label="Add to your system: ${displayTitle}${isBackorder ? ' (Backorder)' : isOutOfStock ? ' (Out of Stock)' : ''}">
           <div class="system-builder__product-select-indicator">
             <span class="system-builder__checkmark"></span>
           </div>
-          ${!isAvailable ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
+          ${isBackorder ? '<div class="system-builder__backorder-badge">Backorder</div>' : ''}
+          ${isOutOfStock ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
           <div class="system-builder__product-image">
             ${imageUrl
               ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
@@ -665,7 +672,7 @@ class SystemBuilder extends HTMLElement {
           <div class="system-builder__product-info">
             <h4 class="system-builder__product-title">${displayTitle}</h4>
             <p class="system-builder__product-price">${price}</p>
-            ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
+            ${isOutOfStock ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
           </div>
           <input type="hidden" name="variant_id" value="${variantData.id}">
         </div>
@@ -969,6 +976,13 @@ class SystemBuilder extends HTMLElement {
     const imageUrl = product.image ? this.getImageUrl(product.image, 120) : '';
     const quantity = product.quantity || 1;
 
+    let backorderHtml = '';
+    if (product.backorderDate) {
+      const date = new Date(product.backorderDate);
+      const formatted = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      backorderHtml = `<span class="system-builder__backorder-notice">Your ${product.productTitle || displayTitle} is expected to arrive on ${formatted}</span>`;
+    }
+
     return `
       <div class="system-builder__summary-item" data-summary-item="${variantId}">
         <div class="system-builder__summary-item-image">
@@ -977,6 +991,7 @@ class SystemBuilder extends HTMLElement {
         <div class="system-builder__summary-item-details">
           <span class="system-builder__summary-name">${displayTitle}</span>
           <span class="system-builder__summary-price">${this.formatMoney(product.price * quantity)}</span>
+          ${backorderHtml}
         </div>
         <div class="system-builder__summary-quantity">
           <button type="button" class="system-builder__quantity-btn" data-quantity-decrease="${variantId}" aria-label="Decrease quantity">−</button>

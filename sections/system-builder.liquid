@@ -54,7 +54,9 @@
                 "price": {{ variant.price | json }},
                 "productTitle": {{ variant.product.title | json }},
                 "image": {{ variant.image.src | default: variant.product.featured_image | json }},
-                "available": {{ variant.available | json }}
+                "available": {{ variant.available | json }},
+                "inventoryPolicy": {{ variant.inventory_policy | json }},
+                "backorderDate": {{ variant.product.metafields.custom.backorder_date | json }}
               }{%- unless forloop.last -%},{%- endunless -%}
             {%- endfor -%}
           ],
@@ -66,7 +68,9 @@
                 "price": {{ variant.price | json }},
                 "productTitle": {{ variant.product.title | json }},
                 "image": {{ variant.image.src | default: variant.product.featured_image | json }},
-                "available": {{ variant.available | json }}
+                "available": {{ variant.available | json }},
+                "inventoryPolicy": {{ variant.inventory_policy | json }},
+                "backorderDate": {{ variant.product.metafields.custom.backorder_date | json }}
               }{%- unless forloop.last -%},{%- endunless -%}
             {%- endfor -%}
           ]
