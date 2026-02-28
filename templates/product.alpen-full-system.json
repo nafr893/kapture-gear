@@ -59,6 +59,13 @@
           "type": "shopify://apps/smartsize/blocks/app-block/465a43e0-6a1a-4d30-b82e-fe6118568705",
           "settings": {}
         },
+        "sizing_chart_bApFPp": {
+          "type": "sizing_chart",
+          "settings": {
+            "button_text": "Sizing Chart",
+            "brand_handle": "alpen"
+          }
+        },
         "button_GPjiHJ": {
           "type": "button",
           "disabled": true,
@@ -124,6 +131,7 @@
         "separator_jDtrBc",
         "text_3NtNEf",
         "smartsize_app_block_gaUgDc",
+        "sizing_chart_bApFPp",
         "button_GPjiHJ",
         "biscuits_bundles_biscuits_bundle_form_egcYdD",
         "buy_buttons"
