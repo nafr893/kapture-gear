@@ -1,0 +1,99 @@
+{{ 'sizing-chart.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign optic_brands = shop.metaobjects.optic_brand.values
+  assign optic_models = shop.metaobjects.optic_model.values
+-%}
+
+<sizing-chart-popup>
+  <script type="application/json" data-sizing-brands>
+    [
+      {%- paginate optic_brands by 250 -%}
+      {%- for brand in optic_brands -%}
+        {
+          "id": {{ brand.id | json }},
+          "handle": {{ brand.system.handle | json }},
+          "name": {{ brand.optic_brand | json }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+      {%- endpaginate -%}
+    ]
+  </script>
+
+  <script type="application/json" data-sizing-models>
+    [
+      {%- paginate optic_models by 250 -%}
+      {%- for model in optic_models -%}
+        {
+          "handle": {{ model.system.handle | json }},
+          "name": {{ model.optic_model | json }},
+          "brandHandle": {{ model.brand.value.system.handle | default: '' | json }},
+          "modelImage": {% if model.model_image %}{{ model.model_image | image_url: width: 400 | json }}{% else %}null{% endif %},
+          "ringMount": [
+            {%- for variant in model.ring_mount.value -%}
+              {{ variant.title | json }}{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ],
+          "magRing": [
+            {%- for variant in model.mag_ring.value -%}
+              {{ variant.title | json }}{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+      {%- endpaginate -%}
+    ]
+  </script>
+
+  <button type="button" class="sizing-chart__trigger" data-sizing-trigger>
+    {{- block.settings.button_text | default: 'Sizing Chart' -}}
+  </button>
+
+  <dialog class="sizing-chart__dialog" data-sizing-dialog>
+    <div class="sizing-chart__dialog-inner">
+      <div class="sizing-chart__dialog-header">
+        <h2 class="sizing-chart__dialog-title">Sizing Chart</h2>
+        <button type="button" class="sizing-chart__close" data-sizing-close aria-label="Close sizing chart">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="sizing-chart__dialog-body">
+        <p class="sizing-chart__instruction">Select your optic to view compatible sizes.</p>
+
+        <div class="sizing-chart__section">
+          <p class="sizing-chart__section-label">Brand</p>
+          <div class="sizing-chart__chips" data-sizing-brand-chips></div>
+        </div>
+
+        <div class="sizing-chart__section" data-sizing-model-section hidden>
+          <p class="sizing-chart__section-label">Model</p>
+          <div class="sizing-chart__chips" data-sizing-model-chips></div>
+        </div>
+
+        <div class="sizing-chart__result" data-sizing-result hidden>
+          <div class="sizing-chart__model-image-wrap" data-sizing-image-wrap hidden>
+            <img class="sizing-chart__model-image" data-sizing-image src="" alt="" loading="lazy">
+          </div>
+
+          <div class="sizing-chart__sizes">
+            <div class="sizing-chart__size-row" data-sizing-ring-mount-row hidden>
+              <span class="sizing-chart__size-label">Ring Mount</span>
+              <span class="sizing-chart__size-values" data-sizing-ring-mount-values></span>
+            </div>
+            <div class="sizing-chart__size-row" data-sizing-mag-ring-row hidden>
+              <span class="sizing-chart__size-label">Mag Ring</span>
+              <span class="sizing-chart__size-values" data-sizing-mag-ring-values></span>
+            </div>
+            <p class="sizing-chart__no-sizes" data-sizing-no-sizes hidden>No size data available for this model.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</sizing-chart-popup>
+
+<script src="{{ 'sizing-chart.js' | asset_url }}" defer></script>

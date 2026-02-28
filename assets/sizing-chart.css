@@ -1,0 +1,221 @@
+/* ============================================================
+   Sizing Chart Popup
+   ============================================================ */
+
+.sizing-chart__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--color-primary, #333);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sizing-chart__trigger:hover {
+  opacity: 0.75;
+}
+
+/* Dialog / Modal */
+
+.sizing-chart__dialog {
+  border: none;
+  border-radius: 12px;
+  padding: 0;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+}
+
+.sizing-chart__dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.sizing-chart__dialog-inner {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 48px);
+}
+
+.sizing-chart__dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--color-border, #e5e5e5);
+  flex-shrink: 0;
+}
+
+.sizing-chart__dialog-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-foreground, #111);
+}
+
+.sizing-chart__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-foreground, #111);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.sizing-chart__close:hover {
+  background: var(--color-background-secondary, #f5f5f5);
+}
+
+.sizing-chart__dialog-body {
+  padding: 20px 24px 28px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Instruction */
+
+.sizing-chart__instruction {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-foreground-secondary, #666);
+}
+
+/* Sections */
+
+.sizing-chart__section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sizing-chart__section-label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-foreground-secondary, #666);
+}
+
+/* Chips */
+
+.sizing-chart__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sizing-chart__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border: 1.5px solid var(--color-border, #e0e0e0);
+  border-radius: 100px;
+  background: var(--color-background, #fff);
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: var(--color-foreground, #111);
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.sizing-chart__chip:hover {
+  border-color: var(--color-primary, #333);
+}
+
+.sizing-chart__chip--selected {
+  border-color: var(--color-primary, #333);
+  background: var(--color-primary, #333);
+  color: #fff;
+}
+
+/* Result */
+
+.sizing-chart__result {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sizing-chart__model-image-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.sizing-chart__model-image {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+/* Sizes */
+
+.sizing-chart__sizes {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sizing-chart__size-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border, #e5e5e5);
+}
+
+.sizing-chart__size-row:last-child {
+  border-bottom: none;
+}
+
+.sizing-chart__size-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-foreground, #111);
+}
+
+.sizing-chart__size-values {
+  font-size: 0.875rem;
+  color: var(--color-foreground, #111);
+}
+
+.sizing-chart__no-sizes {
+  margin: 0;
+  padding: 14px 16px;
+  font-size: 0.875rem;
+  color: var(--color-foreground-secondary, #666);
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .sizing-chart__dialog {
+    border-radius: 16px 16px 0 0;
+    width: 100%;
+    max-height: 90dvh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+  }
+
+  .sizing-chart__dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
