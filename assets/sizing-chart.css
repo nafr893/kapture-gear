@@ -2,6 +2,11 @@
    Sizing Chart Popup
    ============================================================ */
 
+.sizing-chart__trigger-wrap {
+  display: flex;
+  justify-content: center;
+}
+
 .sizing-chart__trigger {
   display: inline-flex;
   align-items: center;
@@ -18,6 +23,12 @@
 
 .sizing-chart__trigger:hover {
   opacity: 0.75;
+}
+
+.sizing-chart__trigger-icon {
+  display: block;
+  width: 18px;
+  height: auto;
 }
 
 /* Dialog / Modal */

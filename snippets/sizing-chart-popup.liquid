@@ -45,9 +45,12 @@
     ]
   </script>
 
-  <button type="button" class="sizing-chart__trigger" data-sizing-trigger>
-    {{- block.settings.button_text | default: 'Sizing Chart' -}}
-  </button>
+  <div class="sizing-chart__trigger-wrap">
+    <button type="button" class="sizing-chart__trigger" data-sizing-trigger>
+      {{ 'ruler.svg' | asset_url | image_tag: width: 18, height: 18, class: 'sizing-chart__trigger-icon', aria-hidden: 'true' }}
+      {{- block.settings.button_text | default: 'Sizing Chart' -}}
+    </button>
+  </div>
 
   <dialog class="sizing-chart__dialog" data-sizing-dialog>
     <div class="sizing-chart__dialog-inner">
