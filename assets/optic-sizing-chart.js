@@ -92,14 +92,19 @@ class OpticSizingChart extends HTMLElement {
     const integratedEyecups = variants.filter(v => v.title === 'Default Title').map(v => v.productTitle);
 
     sizesEl.innerHTML = `
-      <div class="osc__size-row">
-        <span class="osc__size-label">Ring Mount</span>
-        <span class="osc__size-values">${ringMountSizes.length > 0 ? ringMountSizes.join(' / ') : 'N/A'}</span>
-      </div>
-      <div class="osc__size-row">
-        <span class="osc__size-label">Integrated Eyecup</span>
-        <span class="osc__size-values">${integratedEyecups.length > 0 ? integratedEyecups.join(', ') : 'N/A'}</span>
-      </div>
+      ${ringMountSizes.length > 0 ? `
+        <div class="osc__size-row">
+          <span class="osc__size-label">Ring Mount</span>
+          <span class="osc__size-values">${ringMountSizes.join(' / ')}</span>
+        </div>
+      ` : ''}
+      ${integratedEyecups.length > 0 ? `
+        <div class="osc__size-row">
+          <span class="osc__size-label">Integrated Eyecup</span>
+          <span class="osc__size-values">${integratedEyecups.join(', ')}</span>
+        </div>
+      ` : ''}
+      ${ringMountSizes.length === 0 && integratedEyecups.length === 0 ? '<p class="osc__no-sizes">No size data available.</p>' : ''}
     `;
 
     resultEl.hidden = false;
