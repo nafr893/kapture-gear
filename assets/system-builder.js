@@ -982,7 +982,7 @@ class SystemBuilder extends HTMLElement {
             ? date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
             : null;
           message = formatted
-            ? `Your ${displayTitle} is expected to arrive on ${formatted}`
+            ? `Your ${displayTitle} is expected to arrive ${formatted}`
             : `Your ${displayTitle} is currently a backorder`;
         } else {
           message = `Your ${displayTitle} is currently a backorder`;
