@@ -979,7 +979,7 @@ class SystemBuilder extends HTMLElement {
           const parts = String(product.backorderDate).split('-').map(Number);
           const date = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
           const formatted = date && !isNaN(date)
-            ? date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+            ? date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
             : null;
           message = formatted
             ? `Your ${displayTitle} is expected to arrive ${formatted}`
