@@ -661,7 +661,17 @@ class SystemBuilder extends HTMLElement {
           <div class="system-builder__product-select-indicator">
             <span class="system-builder__checkmark"></span>
           </div>
-          ${isBackorder ? '<div class="system-builder__backorder-badge">Backorder</div>' : ''}
+          ${isBackorder ? (() => {
+            let dateStr = '';
+            if (variantData.backorderDate) {
+              const parts = String(variantData.backorderDate).split('-').map(Number);
+              const date = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
+              if (date && !isNaN(date)) {
+                dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+              }
+            }
+            return `<div class="system-builder__backorder-badge">In Production${dateStr ? `<span class="system-builder__backorder-badge-date">${dateStr}</span>` : ''}</div>`;
+          })() : ''}
           ${isOutOfStock ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
           <div class="system-builder__product-image">
             ${imageUrl
