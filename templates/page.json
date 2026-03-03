@@ -9,52 +9,6 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "main-page",
-      "settings": {
-        "content_width": "80ch"
-      }
-    },
-    "system_builder_A4gezM": {
-      "type": "system-builder",
-      "blocks": {
-        "accessory_bdxjRh": {
-          "type": "accessory",
-          "settings": {
-            "product": "bino-klip"
-          }
-        },
-        "accessory_YqHyK6": {
-          "type": "accessory",
-          "settings": {
-            "product": "full-kit-gift-card"
-          }
-        }
-      },
-      "block_order": [
-        "accessory_bdxjRh",
-        "accessory_YqHyK6"
-      ],
-      "name": "System Builder",
-      "settings": {
-        "heading": "",
-        "subheading": "",
-        "optic_step_title": "1. Select Your Optic",
-        "manufacturer_label": "Manufacturer",
-        "model_label": "Model",
-        "ring_mount_step_title": "2. Ring Mount / Integrated Eyecup",
-        "mag_ring_step_title": "2. Your Mag Ring",
-        "adapter_step_title": "3. Your Adapter",
-        "adapter_product": "universal-adapter-1",
-        "phone_step_title": "4. Select Your Phone Case",
-        "phone_brand_label": "Phone Brand",
-        "phone_model_label": "Phone Model",
-        "accessories_step_title": "6. Accessories",
-        "summary_title": "Your Selection",
-        "total_label": "Total",
-        "add_to_cart_text": "Add to Cart"
-      }
-    },
     "image_with_text_overlay_ixYKFm": {
       "type": "image-with-text-overlay",
       "blocks": {
@@ -94,6 +48,52 @@
         "text_color": "#ffffff",
         "overlay_color": "#000000",
         "overlay_opacity": 65
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "content_width": "80ch"
+      }
+    },
+    "system_builder_A4gezM": {
+      "type": "system-builder",
+      "blocks": {
+        "accessory_bdxjRh": {
+          "type": "accessory",
+          "settings": {
+            "product": "bino-klip"
+          }
+        },
+        "accessory_YqHyK6": {
+          "type": "accessory",
+          "settings": {
+            "product": "full-kit-gift-card"
+          }
+        }
+      },
+      "block_order": [
+        "accessory_bdxjRh",
+        "accessory_YqHyK6"
+      ],
+      "name": "System Builder",
+      "settings": {
+        "heading": "",
+        "subheading": "",
+        "optic_step_title": "1. Select Your Optic",
+        "manufacturer_label": "Manufacturer",
+        "model_label": "Model",
+        "ring_mount_step_title": "2. Ring Mount / Integrated Eyecup",
+        "mag_ring_step_title": "2. Your Mag Ring",
+        "adapter_step_title": "3. Your Adapter",
+        "adapter_product": "test-product-system-builder",
+        "phone_step_title": "4. Select Your Phone Case",
+        "phone_brand_label": "Phone Brand",
+        "phone_model_label": "Phone Model",
+        "accessories_step_title": "6. Accessories",
+        "summary_title": "Your Selection",
+        "total_label": "Total",
+        "add_to_cart_text": "Add to Cart"
       }
     }
   },
