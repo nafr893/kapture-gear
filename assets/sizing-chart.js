@@ -13,8 +13,8 @@ class SizingChartPopup extends HTMLElement {
     this.imageEl = this.querySelector('[data-sizing-image]');
     this.ringMountRow = this.querySelector('[data-sizing-ring-mount-row]');
     this.ringMountValues = this.querySelector('[data-sizing-ring-mount-values]');
-    this.magRingRow = this.querySelector('[data-sizing-mag-ring-row]');
-    this.magRingValues = this.querySelector('[data-sizing-mag-ring-values]');
+    this.integratedEyecupRow = this.querySelector('[data-sizing-integrated-eyecup-row]');
+    this.integratedEyecupValues = this.querySelector('[data-sizing-integrated-eyecup-values]');
     this.noSizes = this.querySelector('[data-sizing-no-sizes]');
 
     this._ready = false;
@@ -110,24 +110,26 @@ class SizingChartPopup extends HTMLElement {
       this.imageWrap.hidden = true;
     }
 
-    // Ring mount sizes
-    if (model.ringMount && model.ringMount.length > 0) {
-      this.ringMountValues.textContent = model.ringMount.join(' / ');
+    // Split ring_mount variants into sizes vs integrated eyecups
+    const variants = model.ringMountVariants || [];
+    const ringMountSizes = variants.filter(v => v.title !== 'Default Title').map(v => v.title);
+    const integratedEyecups = variants.filter(v => v.title === 'Default Title').map(v => v.productTitle);
+
+    if (ringMountSizes.length > 0) {
+      this.ringMountValues.textContent = ringMountSizes.join(' / ');
       this.ringMountRow.hidden = false;
     } else {
       this.ringMountRow.hidden = true;
     }
 
-    // Mag ring sizes
-    if (model.magRing && model.magRing.length > 0) {
-      this.magRingValues.textContent = model.magRing.join(' / ');
-      this.magRingRow.hidden = false;
+    if (integratedEyecups.length > 0) {
+      this.integratedEyecupValues.textContent = integratedEyecups.join(', ');
+      this.integratedEyecupRow.hidden = false;
     } else {
-      this.magRingRow.hidden = true;
+      this.integratedEyecupRow.hidden = true;
     }
 
-    const hasAnySize = (model.ringMount && model.ringMount.length > 0) || (model.magRing && model.magRing.length > 0);
-    this.noSizes.hidden = hasAnySize;
+    this.noSizes.hidden = ringMountSizes.length > 0 || integratedEyecups.length > 0;
 
     this.resultEl.hidden = false;
   }

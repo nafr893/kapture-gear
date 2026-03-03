@@ -29,14 +29,9 @@
           "name": {{ model.optic_model | json }},
           "brandHandle": {{ model.brand.value.system.handle | default: '' | json }},
           "modelImage": {% if model.model_image %}{{ model.model_image | image_url: width: 400 | json }}{% else %}null{% endif %},
-          "ringMount": [
+          "ringMountVariants": [
             {%- for variant in model.ring_mount.value -%}
-              {{ variant.title | json }}{%- unless forloop.last -%},{%- endunless -%}
-            {%- endfor -%}
-          ],
-          "magRing": [
-            {%- for variant in model.mag_ring.value -%}
-              {{ variant.title | json }}{%- unless forloop.last -%},{%- endunless -%}
+              {"title": {{ variant.title | json }}, "productTitle": {{ variant.product.title | json }}}{%- unless forloop.last -%},{%- endunless -%}
             {%- endfor -%}
           ]
         }{%- unless forloop.last -%},{%- endunless -%}
@@ -91,9 +86,9 @@
               <span class="sizing-chart__size-label">Ring Mount</span>
               <span class="sizing-chart__size-values" data-sizing-ring-mount-values></span>
             </div>
-            <div class="sizing-chart__size-row" data-sizing-mag-ring-row hidden>
-              <span class="sizing-chart__size-label">Mag Ring</span>
-              <span class="sizing-chart__size-values" data-sizing-mag-ring-values></span>
+            <div class="sizing-chart__size-row" data-sizing-integrated-eyecup-row hidden>
+              <span class="sizing-chart__size-label">Integrated Eyecup</span>
+              <span class="sizing-chart__size-values" data-sizing-integrated-eyecup-values></span>
             </div>
             <p class="sizing-chart__no-sizes" data-sizing-no-sizes hidden>No size data available for this model.</p>
           </div>
