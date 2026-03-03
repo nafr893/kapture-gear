@@ -647,6 +647,21 @@ class SystemBuilder extends HTMLElement {
         ? ' system-builder__product-card--backorder'
         : isOutOfStock ? ' system-builder__product-card--out-of-stock' : '';
 
+      let backorderBadgeHtml = '';
+      if (isBackorder) {
+        let badgeDateStr = '';
+        if (variantData.backorderDate) {
+          const parts = String(variantData.backorderDate).split('-').map(Number);
+          const d = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
+          if (d && !isNaN(d)) {
+            badgeDateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+          }
+        }
+        backorderBadgeHtml = '<div class="system-builder__backorder-badge">In Production'
+          + (badgeDateStr ? '<span class="system-builder__backorder-badge-date">' + badgeDateStr + '</span>' : '')
+          + '</div>';
+      }
+
       return `
         <div class="system-builder__product-card${cardClass}"
              data-product-card
@@ -661,17 +676,7 @@ class SystemBuilder extends HTMLElement {
           <div class="system-builder__product-select-indicator">
             <span class="system-builder__checkmark"></span>
           </div>
-          ${isBackorder ? (() => {
-            let dateStr = '';
-            if (variantData.backorderDate) {
-              const parts = String(variantData.backorderDate).split('-').map(Number);
-              const date = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
-              if (date && !isNaN(date)) {
-                dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-              }
-            }
-            return `<div class="system-builder__backorder-badge">In Production${dateStr ? `<span class="system-builder__backorder-badge-date">${dateStr}</span>` : ''}</div>`;
-          })() : ''}
+          ${backorderBadgeHtml}
           ${isOutOfStock ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
           <div class="system-builder__product-image">
             ${imageUrl
