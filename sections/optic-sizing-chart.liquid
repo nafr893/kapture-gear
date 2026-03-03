@@ -28,6 +28,7 @@
             "handle": {{ model.system.handle | json }},
             "name": {{ model.optic_model | json }},
             "brandHandle": {{ model.brand.value.system.handle | default: '' | json }},
+            "modelImage": {% if model.model_image %}{{ model.model_image | image_url: width: 400 | json }}{% else %}null{% endif %},
             "ringMount": [
               {%- for variant in model.ring_mount.value -%}
                 {{ variant.title | json }}{%- unless forloop.last -%},{%- endunless -%}

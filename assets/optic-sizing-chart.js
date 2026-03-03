@@ -32,6 +32,9 @@ class OpticSizingChart extends HTMLElement {
       <div class="osc__brand-panel" data-osc-panel hidden>
         <div class="osc__chips" data-osc-chips></div>
         <div class="osc__result" data-osc-result hidden>
+          <div class="osc__model-image-wrap" data-osc-image-wrap hidden>
+            <img class="osc__model-image" data-osc-image src="" alt="" loading="lazy">
+          </div>
           <div class="osc__sizes" data-osc-sizes></div>
         </div>
       </div>
@@ -70,7 +73,19 @@ class OpticSizingChart extends HTMLElement {
     });
 
     const resultEl = panelEl.querySelector('[data-osc-result]');
+    const imageWrap = panelEl.querySelector('[data-osc-image-wrap]');
+    const imageEl = panelEl.querySelector('[data-osc-image]');
     const sizesEl = panelEl.querySelector('[data-osc-sizes]');
+
+    if (imageWrap && imageEl) {
+      if (model.modelImage) {
+        imageEl.src = model.modelImage;
+        imageEl.alt = model.name;
+        imageWrap.hidden = false;
+      } else {
+        imageWrap.hidden = true;
+      }
+    }
 
     const hasRingMount = model.ringMount && model.ringMount.length > 0;
     const hasMagRing = model.magRing && model.magRing.length > 0;
