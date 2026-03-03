@@ -29,14 +29,9 @@
             "name": {{ model.optic_model | json }},
             "brandHandle": {{ model.brand.value.system.handle | default: '' | json }},
             "modelImage": {% if model.model_image %}{{ model.model_image | image_url: width: 400 | json }}{% else %}null{% endif %},
-            "ringMount": [
+            "ringMountVariants": [
               {%- for variant in model.ring_mount.value -%}
-                {{ variant.title | json }}{%- unless forloop.last -%},{%- endunless -%}
-              {%- endfor -%}
-            ],
-            "magRing": [
-              {%- for variant in model.mag_ring.value -%}
-                {{ variant.title | json }}{%- unless forloop.last -%},{%- endunless -%}
+                {"title": {{ variant.title | json }}, "productTitle": {{ variant.product.title | json }}}{%- unless forloop.last -%},{%- endunless -%}
               {%- endfor -%}
             ]
           }{%- unless forloop.last -%},{%- endunless -%}

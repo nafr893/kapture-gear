@@ -87,24 +87,19 @@ class OpticSizingChart extends HTMLElement {
       }
     }
 
-    const hasRingMount = model.ringMount && model.ringMount.length > 0;
-    const hasMagRing = model.magRing && model.magRing.length > 0;
-    const hasSizes = hasRingMount || hasMagRing;
+    const variants = model.ringMountVariants || [];
+    const ringMountSizes = variants.filter(v => v.title !== 'Default Title').map(v => v.title);
+    const integratedEyecups = variants.filter(v => v.title === 'Default Title').map(v => v.productTitle);
 
     sizesEl.innerHTML = `
-      ${hasRingMount ? `
-        <div class="osc__size-row">
-          <span class="osc__size-label">Ring Mount</span>
-          <span class="osc__size-values">${model.ringMount.join(' / ')}</span>
-        </div>
-      ` : ''}
-      ${hasMagRing ? `
-        <div class="osc__size-row">
-          <span class="osc__size-label">Mag Ring</span>
-          <span class="osc__size-values">${model.magRing.join(' / ')}</span>
-        </div>
-      ` : ''}
-      ${!hasSizes ? '<p class="osc__no-sizes">No size data available.</p>' : ''}
+      <div class="osc__size-row">
+        <span class="osc__size-label">Ring Mount</span>
+        <span class="osc__size-values">${ringMountSizes.length > 0 ? ringMountSizes.join(' / ') : 'N/A'}</span>
+      </div>
+      <div class="osc__size-row">
+        <span class="osc__size-label">Integrated Eyecup</span>
+        <span class="osc__size-values">${integratedEyecups.length > 0 ? integratedEyecups.join(', ') : 'N/A'}</span>
+      </div>
     `;
 
     resultEl.hidden = false;
