@@ -19,7 +19,7 @@ Supported variables
   {%- assign inside_block_group_context = false -%}
   {%- assign current_block_group_name = '' -%}
 
-  {%- for block in section.blocks -%}
+  {%- for block in section.blocks -%} 
     {%- liquid
       assign previous_block_index = forloop.index0 | minus: 1
       assign next_block_index = forloop.index0 | plus: 1
@@ -72,7 +72,7 @@ Supported variables
         {%- when '@app' -%}
           {%- render block -%}
 
-        {%- when '@theme' -%}
+        {%- when 'group' -%}
           {%- render block -%}
 
         {%- when 'vendor' -%}

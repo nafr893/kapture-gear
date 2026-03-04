@@ -1120,6 +1120,13 @@ class SystemBuilder extends HTMLElement {
         throw new Error(errorMessage || 'Failed to add to cart');
       }
 
+      // Tag the cart so the resulting order is identifiable as a System Builder order
+      await fetch(`${window.Shopify?.routes?.root || '/'}cart/update.js`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ attributes: { 'System Builder': 'true' } })
+      });
+
       const cartResponse = await fetch(`${window.Shopify?.routes?.root || '/'}cart.js`, {
         headers: { 'Accept': 'application/json' }
       });
