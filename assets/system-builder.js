@@ -648,7 +648,7 @@ class SystemBuilder extends HTMLElement {
         : isOutOfStock ? ' system-builder__product-card--out-of-stock' : '';
 
       let backorderBadgeHtml = '';
-      if (isBackorder) {
+      if (isBackorder && variantData.backorderDate) {
         let badgeDateStr = '';
         if (variantData.backorderDate) {
           const parts = String(variantData.backorderDate).split('-').map(Number);
