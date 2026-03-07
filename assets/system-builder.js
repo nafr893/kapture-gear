@@ -762,22 +762,39 @@ class SystemBuilder extends HTMLElement {
 
     const isSelected = !!this.selectedProducts[variantData.id];
     const isAvailable = variantData.available !== false;
-    const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
+    const isBackorder = variantData.inventoryPolicy === 'continue' && variantData.inventoryQuantity <= 0;
+    const isOutOfStock = !isAvailable && !isBackorder;
+    const cardClass = isBackorder
+      ? ' system-builder__product-card--backorder'
+      : isOutOfStock ? ' system-builder__product-card--out-of-stock' : '';
+
+    let backorderBadgeHtml = '';
+    if (isBackorder && variantData.backorderDate) {
+      let badgeDateStr = '';
+      const parts = String(variantData.backorderDate).split('-').map(Number);
+      const d = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
+      if (d && !isNaN(d)) badgeDateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+      backorderBadgeHtml = '<div class="system-builder__backorder-badge">In Production'
+        + (badgeDateStr ? '<span class="system-builder__backorder-badge-date">' + badgeDateStr + '</span>' : '')
+        + '</div>';
+    }
 
     container.innerHTML = `
-      <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${outOfStockClass}"
+      <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${cardClass}"
            data-product-card
            data-product-type="${productType}"
            data-variant-id="${variantData.id}"
            data-available="${isAvailable}"
+           data-backorder="${isBackorder}"
            role="button"
            tabindex="0"
            aria-pressed="${isSelected}"
-           aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}${!isAvailable ? ' (Out of Stock)' : ''}">
+           aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}${isBackorder ? ' (In Production)' : isOutOfStock ? ' (Out of Stock)' : ''}">
         <div class="system-builder__product-select-indicator">
           <span class="system-builder__checkmark"></span>
         </div>
-        ${!isAvailable ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
+        ${backorderBadgeHtml}
+        ${isOutOfStock ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
         <div class="system-builder__product-image">
           ${imageUrl
             ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
@@ -787,7 +804,7 @@ class SystemBuilder extends HTMLElement {
         <div class="system-builder__product-info">
           <h4 class="system-builder__product-title">${displayTitle}</h4>
           <p class="system-builder__product-price">${price}</p>
-          ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
+          ${isOutOfStock ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
         </div>
         <input type="hidden" name="variant_id" value="${variantData.id}">
       </div>
@@ -813,22 +830,39 @@ class SystemBuilder extends HTMLElement {
             : accessory.productTitle)
         : accessory.title || 'Product';
       const isAvailable = accessory.available !== false;
-      const outOfStockClass = !isAvailable ? ' system-builder__product-card--out-of-stock' : '';
+      const isBackorder = accessory.inventoryPolicy === 'continue' && accessory.inventoryQuantity <= 0;
+      const isOutOfStock = !isAvailable && !isBackorder;
+      const cardClass = isBackorder
+        ? ' system-builder__product-card--backorder'
+        : isOutOfStock ? ' system-builder__product-card--out-of-stock' : '';
+
+      let backorderBadgeHtml = '';
+      if (isBackorder && accessory.backorderDate) {
+        let badgeDateStr = '';
+        const parts = String(accessory.backorderDate).split('-').map(Number);
+        const d = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
+        if (d && !isNaN(d)) badgeDateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+        backorderBadgeHtml = '<div class="system-builder__backorder-badge">In Production'
+          + (badgeDateStr ? '<span class="system-builder__backorder-badge-date">' + badgeDateStr + '</span>' : '')
+          + '</div>';
+      }
 
       const cardHtml = `
-        <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${outOfStockClass}"
+        <div class="system-builder__product-card${isSelected ? ' system-builder__product-card--selected' : ''}${cardClass}"
              data-product-card
              data-product-type="accessory"
              data-variant-id="${accessory.id}"
              data-available="${isAvailable}"
+             data-backorder="${isBackorder}"
              role="button"
              tabindex="0"
              aria-pressed="${isSelected}"
-             aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}${!isAvailable ? ' (Out of Stock)' : ''}">
+             aria-label="Click to ${isSelected ? 'remove from' : 'add to'} your system: ${displayTitle}${isBackorder ? ' (In Production)' : isOutOfStock ? ' (Out of Stock)' : ''}">
           <div class="system-builder__product-select-indicator">
             <span class="system-builder__checkmark"></span>
           </div>
-          ${!isAvailable ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
+          ${backorderBadgeHtml}
+          ${isOutOfStock ? '<div class="system-builder__out-of-stock-badge">Out of Stock</div>' : ''}
           <div class="system-builder__product-image">
             ${imageUrl
               ? `<img src="${imageUrl}" alt="${displayTitle}" class="system-builder__product-img" loading="lazy">`
@@ -838,7 +872,7 @@ class SystemBuilder extends HTMLElement {
           <div class="system-builder__product-info">
             <h4 class="system-builder__product-title">${displayTitle}</h4>
             <p class="system-builder__product-price">${price}</p>
-            ${!isAvailable ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
+            ${isOutOfStock ? '<p class="system-builder__stock-status">This item is currently out of stock</p>' : ''}
           </div>
           <input type="hidden" name="variant_id" value="${accessory.id}">
         </div>

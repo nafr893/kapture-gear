@@ -93,7 +93,10 @@
         "price": {{ adapter_variant.price | json }},
         "productTitle": {{ adapter.title | json }},
         "image": {{ adapter_variant.image.src | default: adapter.featured_image | json }},
-        "available": {{ adapter_variant.available | json }}
+        "available": {{ adapter_variant.available | json }},
+        "inventoryPolicy": {{ adapter_variant.inventory_policy | json }},
+        "inventoryQuantity": {{ adapter_variant.inventory_quantity | json }},
+        "backorderDate": {{ adapter_variant.metafields.custom.backorder_date.value | json }}
       }
     {%- else -%}
       null
@@ -132,7 +135,10 @@
             "price": {{ phone_case_variant.price | json }},
             "productTitle": {{ phone_case_variant.product.title | json }},
             "image": {{ phone_case_variant.image.src | default: phone_case_variant.product.featured_image | json }},
-            "available": {{ phone_case_variant.available | json }}
+            "available": {{ phone_case_variant.available | json }},
+            "inventoryPolicy": {{ phone_case_variant.inventory_policy | json }},
+            "inventoryQuantity": {{ phone_case_variant.inventory_quantity | json }},
+            "backorderDate": {{ phone_case_variant.metafields.custom.backorder_date.value | json }}
           }{%- else -%}null{%- endif -%}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
@@ -154,7 +160,10 @@
             "price": {{ accessory_variant.price | json }},
             "productTitle": {{ accessory.title | json }},
             "image": {{ accessory_variant.image.src | default: accessory.featured_image | json }},
-            "available": {{ accessory_variant.available | json }}
+            "available": {{ accessory_variant.available | json }},
+            "inventoryPolicy": {{ accessory_variant.inventory_policy | json }},
+            "inventoryQuantity": {{ accessory_variant.inventory_quantity | json }},
+            "backorderDate": {{ accessory_variant.metafields.custom.backorder_date.value | json }}
           }{%- unless forloop.last -%},{%- endunless -%}
         {%- endif -%}
       {%- endfor -%}
