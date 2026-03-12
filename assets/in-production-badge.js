@@ -53,10 +53,29 @@ class InProductionBadge extends HTMLElement {
       this._dateEl.textContent = dateStr;
       this._badge.hidden = false;
       this._setButtonText('Backorder' + (dateStr ? ' – ' + dateStr : ''));
+      this._setLineItemProperty(dateStr || variantData.backorderDate);
     } else {
       this._badge.hidden = true;
       this._restoreButton();
+      this._removeLineItemProperty();
     }
+  }
+
+  _setLineItemProperty(dateStr) {
+    let input = document.querySelector(`#${this._formId} [name="properties[Backorder Date]"]`);
+    if (!input) {
+      input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'properties[Backorder Date]';
+      const form = document.getElementById(this._formId);
+      if (form) form.appendChild(input);
+    }
+    input.value = dateStr;
+  }
+
+  _removeLineItemProperty() {
+    const input = document.querySelector(`#${this._formId} [name="properties[Backorder Date]"]`);
+    if (input) input.remove();
   }
 
   _setButtonText(text) {
