@@ -69,15 +69,12 @@
             "size_chart_page": ""
           }
         },
-        "sizing_chart2_fAqCVk": {
-          "type": "sizing_chart2",
-          "settings": {
-            "button_text": "KNEKT SYSTEM SIZE GUIDE",
-            "brand_handle": ""
-          }
-        },
         "quantity_selector": {
           "type": "quantity_selector",
+          "settings": {}
+        },
+        "backorder_FKbgCk": {
+          "type": "backorder",
           "settings": {}
         },
         "buy_buttons": {
@@ -107,8 +104,8 @@
         "smartsize_app_block_rWMFNe",
         "description",
         "variant_picker",
-        "sizing_chart2_fAqCVk",
         "quantity_selector",
+        "backorder_FKbgCk",
         "buy_buttons",
         "judge_me_reviews_preview_badge_6X3GeR"
       ],
