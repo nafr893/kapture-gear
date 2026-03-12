@@ -361,6 +361,9 @@ Supported variables
         {%- when 'sizing_chart' -%}
           {%- render 'sizing-chart-popup', block: block -%}
 
+        {%- when 'in_production' -%}
+          {%- render block -%}
+
         {%- when 'liquid' -%}
           {%- if block.settings.liquid != blank -%}
             <div class="product-info__liquid">
