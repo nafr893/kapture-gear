@@ -368,7 +368,8 @@ Supported variables
           {{ 'in-production-badge.css' | asset_url | stylesheet_tag }}
           <in-production-badge
             data-form-id="{{ product_form_id }}"
-            data-selected-variant-id="{{ product.selected_or_first_available_variant.id }}">
+            data-selected-variant-id="{{ product.selected_or_first_available_variant.id }}"
+            {{ block.shopify_attributes }}>
             <script type="application/json" data-ipb-variants>
               [
                 {%- for variant in product.variants -%}
