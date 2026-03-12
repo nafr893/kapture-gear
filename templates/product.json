@@ -38,6 +38,10 @@
             "show_empty": false
           }
         },
+        "backorder_FKbgCk": {
+          "type": "backorder",
+          "settings": {}
+        },
         "payment_terms": {
           "type": "payment_terms",
           "settings": {}
@@ -73,10 +77,6 @@
           "type": "quantity_selector",
           "settings": {}
         },
-        "backorder_FKbgCk": {
-          "type": "backorder",
-          "settings": {}
-        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -99,13 +99,13 @@
         "badges",
         "price",
         "rating",
+        "backorder_FKbgCk",
         "payment_terms",
         "separator",
         "smartsize_app_block_rWMFNe",
         "description",
         "variant_picker",
         "quantity_selector",
-        "backorder_FKbgCk",
         "buy_buttons",
         "judge_me_reviews_preview_badge_6X3GeR"
       ],
