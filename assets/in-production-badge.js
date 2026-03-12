@@ -52,7 +52,7 @@ class InProductionBadge extends HTMLElement {
 
       this._dateEl.textContent = dateStr;
       this._badge.hidden = false;
-      this._setButtonText('Backorder' + (dateStr ? ' – ' + dateStr : ''));
+      this._setButtonText('Order' + (dateStr ? ' – ' + dateStr : ''));
       this._setLineItemProperty(dateStr || variantData.backorderDate);
     } else {
       this._badge.hidden = true;
