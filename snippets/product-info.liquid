@@ -75,9 +75,6 @@ Supported variables
         {%- when 'group' -%}
           {%- render block -%}
 
-        {%- when 'in-production' -%}
-          {%- render block -%}
-
         {%- when 'vendor' -%}
           {%- if product.vendor != blank -%}
             <div class="product-info__vendor">
