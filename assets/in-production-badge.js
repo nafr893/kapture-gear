@@ -3,6 +3,15 @@ class InProductionBadge extends HTMLElement {
     this._variants = JSON.parse(this.querySelector('[data-ipb-variants]').textContent);
     this._badge = this.querySelector('[data-ipb-badge]');
     this._dateEl = this.querySelector('[data-ipb-date]');
+    this._formId = this.dataset.formId;
+
+    // Cache original button text after DOM is ready
+    requestAnimationFrame(() => {
+      this._atcButtons = this._getAtcButtons();
+      this._originalButtonText = this._atcButtons.length
+        ? this._atcButtons[0].textContent.trim()
+        : 'Add to cart';
+    });
 
     // Show badge for the initially selected variant
     const initialId = parseInt(this.dataset.selectedVariantId, 10);
@@ -10,17 +19,25 @@ class InProductionBadge extends HTMLElement {
     if (initial) this._update(initial);
 
     // Listen for variant changes dispatched by the theme's variant picker
-    const formId = this.dataset.formId;
     document.addEventListener('variant:change', (event) => {
-      if (event.detail.formId !== formId) return;
+      if (event.detail.formId !== this._formId) return;
       const variant = event.detail.variant;
       if (!variant) {
         this._badge.hidden = true;
+        this._restoreButton();
         return;
       }
       const data = this._variants.find(v => v.id === variant.id);
       if (data) this._update(data);
     });
+  }
+
+  _getAtcButtons() {
+    const id = this._formId;
+    return [
+      ...document.querySelectorAll(`#${id} [type="submit"]`),
+      ...document.querySelectorAll(`[form="${id}"][type="submit"]`)
+    ];
   }
 
   _update(variantData) {
@@ -35,9 +52,29 @@ class InProductionBadge extends HTMLElement {
 
       this._dateEl.textContent = dateStr;
       this._badge.hidden = false;
+      this._setButtonText('Backorder' + (dateStr ? ' – ' + dateStr : ''));
     } else {
       this._badge.hidden = true;
+      this._restoreButton();
     }
+  }
+
+  _setButtonText(text) {
+    const buttons = this._getAtcButtons();
+    buttons.forEach(btn => {
+      // Only update the visible text node, not any hidden child elements
+      const textNode = [...btn.childNodes].find(n => n.nodeType === Node.TEXT_NODE);
+      if (textNode) {
+        textNode.textContent = text;
+      } else {
+        btn.textContent = text;
+      }
+    });
+  }
+
+  _restoreButton() {
+    if (!this._originalButtonText) return;
+    this._setButtonText(this._originalButtonText);
   }
 }
 
