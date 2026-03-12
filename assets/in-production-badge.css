@@ -28,3 +28,21 @@ in-production-badge {
 .ipb__date:empty {
   display: none;
 }
+
+/* Theme editor placeholder */
+.ipb__editor-placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.ipb__editor-note {
+  font-size: 0.6875rem;
+  color: #999;
+  font-style: italic;
+}
