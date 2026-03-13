@@ -19,22 +19,12 @@ class InProductionBadge extends HTMLElement {
 
     // Listen for variant changes dispatched by the theme's variant picker
     document.addEventListener('variant:change', (event) => {
-      if (event.detail.formId !== this._formId) return;
       const variant = event.detail.variant;
-      if (!variant) {
-        this._badge.hidden = true;
-        this._removeLineItemProperty();
-        requestAnimationFrame(() => this._restoreButton());
-        return;
-      }
+      if (!variant) return;
+      // Only respond to variants belonging to this product
       const data = this._variants.find(v => v.id === variant.id);
-      if (data) {
-        this._update(data);
-      } else {
-        this._badge.hidden = true;
-        this._removeLineItemProperty();
-        requestAnimationFrame(() => this._restoreButton());
-      }
+      if (!data) return;
+      this._update(data);
     });
   }
 
