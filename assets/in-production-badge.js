@@ -28,7 +28,13 @@ class InProductionBadge extends HTMLElement {
         return;
       }
       const data = this._variants.find(v => v.id === variant.id);
-      if (data) this._update(data);
+      if (data) {
+        this._update(data);
+      } else {
+        this._badge.hidden = true;
+        this._restoreButton();
+        this._removeLineItemProperty();
+      }
     });
   }
 
