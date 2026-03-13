@@ -5,18 +5,17 @@ class InProductionBadge extends HTMLElement {
     this._dateEl = this.querySelector('[data-ipb-date]');
     this._formId = this.dataset.formId;
 
-    // Cache original button text after DOM is ready
+    // Cache original button text first, then show initial state
     requestAnimationFrame(() => {
       this._atcButtons = this._getAtcButtons();
       this._originalButtonText = this._atcButtons.length
         ? this._atcButtons[0].textContent.trim()
         : 'Add to cart';
-    });
 
-    // Show badge for the initially selected variant
-    const initialId = parseInt(this.dataset.selectedVariantId, 10);
-    const initial = this._variants.find(v => v.id === initialId);
-    if (initial) this._update(initial);
+      const initialId = parseInt(this.dataset.selectedVariantId, 10);
+      const initial = this._variants.find(v => v.id === initialId);
+      if (initial) this._update(initial);
+    });
 
     // Listen for variant changes dispatched by the theme's variant picker
     document.addEventListener('variant:change', (event) => {
@@ -24,7 +23,8 @@ class InProductionBadge extends HTMLElement {
       const variant = event.detail.variant;
       if (!variant) {
         this._badge.hidden = true;
-        this._restoreButton();
+        this._removeLineItemProperty();
+        requestAnimationFrame(() => this._restoreButton());
         return;
       }
       const data = this._variants.find(v => v.id === variant.id);
@@ -32,8 +32,8 @@ class InProductionBadge extends HTMLElement {
         this._update(data);
       } else {
         this._badge.hidden = true;
-        this._restoreButton();
         this._removeLineItemProperty();
+        requestAnimationFrame(() => this._restoreButton());
       }
     });
   }
@@ -58,12 +58,13 @@ class InProductionBadge extends HTMLElement {
 
       this._dateEl.textContent = dateStr;
       this._badge.hidden = false;
-      this._setButtonText('Order' + (dateStr ? ' – ' + dateStr : ''));
       this._setLineItemProperty(dateStr || variantData.backorderDate);
+      // Delay so we run after the theme's variant:change handler resets the button
+      requestAnimationFrame(() => this._setButtonText('Order' + (dateStr ? ' \u2013 ' + dateStr : '')));
     } else {
       this._badge.hidden = true;
-      this._restoreButton();
       this._removeLineItemProperty();
+      requestAnimationFrame(() => this._restoreButton());
     }
   }
 

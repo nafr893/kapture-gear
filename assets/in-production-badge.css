@@ -2,6 +2,10 @@ in-production-badge {
   display: block;
 }
 
+.ipb__badge[hidden] {
+  display: none;
+}
+
 .ipb__badge {
   display: inline-flex;
   align-items: center;
