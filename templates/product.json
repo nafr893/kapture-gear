@@ -38,7 +38,7 @@
             "show_empty": false
           }
         },
-        "backorder_FKbgCk": {
+        "backorder_AQ3BWm": {
           "type": "backorder",
           "settings": {}
         },
@@ -99,7 +99,7 @@
         "badges",
         "price",
         "rating",
-        "backorder_FKbgCk",
+        "backorder_AQ3BWm",
         "payment_terms",
         "separator",
         "smartsize_app_block_rWMFNe",
