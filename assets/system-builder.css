@@ -697,6 +697,17 @@
   border-top: 1px solid var(--color-border, #e5e5e5);
 }
 
+/* Dimmed state — shown on unchosen options when another is selected (radio-style) */
+.system-builder__product-card--dimmed {
+  opacity: 0.4;
+  filter: grayscale(0.4);
+}
+
+.system-builder__product-card--dimmed:hover {
+  border-color: var(--color-border, #e5e5e5);
+  box-shadow: none;
+}
+
 /* Out of Stock Styles */
 .system-builder__product-card--out-of-stock {
   opacity: 0.7;

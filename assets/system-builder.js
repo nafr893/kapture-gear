@@ -399,21 +399,34 @@ class SystemBuilder extends HTMLElement {
     const cardIsSelected = card.classList.contains('system-builder__product-card--selected');
 
     if (productType === 'ring-mount' || productType === 'mag-ring') {
+      // Radio-style: only one selection allowed at a time within this product type
+      const siblingCards = opticConfig
+        ? opticConfig.querySelectorAll(`[data-product-card][data-product-type="${productType}"]`)
+        : [];
+
       if (cardIsSelected) {
-        // This card is selected — decrement or remove
-        const qty = this.selectedProducts[variantId]?.quantity || 1;
-        if (qty <= 1) {
-          delete this.selectedProducts[variantId];
-        } else {
-          this.selectedProducts[variantId].quantity = qty - 1;
-        }
+        // Deselect this card and remove dimming from siblings
+        delete this.selectedProducts[variantId];
+        card.classList.remove('system-builder__product-card--selected');
+        card.setAttribute('aria-pressed', 'false');
+        siblingCards.forEach(c => c.classList.remove('system-builder__product-card--dimmed'));
       } else {
-        // This card is not selected — add or increment
-        if (this.selectedProducts[variantId]) {
-          this.selectedProducts[variantId].quantity = (this.selectedProducts[variantId].quantity || 1) + 1;
-        } else if (productData) {
+        // Deselect and dim all other cards of this type, then select this one
+        siblingCards.forEach(c => {
+          const sid = c.dataset.variantId;
+          if (sid && sid !== variantId) {
+            delete this.selectedProducts[sid];
+            c.classList.remove('system-builder__product-card--selected');
+            c.setAttribute('aria-pressed', 'false');
+            c.classList.add('system-builder__product-card--dimmed');
+          }
+        });
+        if (productData) {
           this.selectedProducts[variantId] = { ...productData, productType, quantity: 1 };
         }
+        card.classList.add('system-builder__product-card--selected');
+        card.setAttribute('aria-pressed', 'true');
+        card.classList.remove('system-builder__product-card--dimmed');
       }
     } else {
       // All other types: simple toggle
@@ -422,15 +435,11 @@ class SystemBuilder extends HTMLElement {
       } else if (productData) {
         this.selectedProducts[variantId] = { ...productData, productType, quantity: 1 };
       }
-    }
 
-    // For ring/mag ring, each card tracks its own state independently of global quantity
-    // For other types, derive from selectedProducts as normal
-    const isSelected = (productType === 'ring-mount' || productType === 'mag-ring')
-      ? !cardIsSelected
-      : !!this.selectedProducts[variantId];
-    card.classList.toggle('system-builder__product-card--selected', isSelected);
-    card.setAttribute('aria-pressed', isSelected);
+      const isSelected = !!this.selectedProducts[variantId];
+      card.classList.toggle('system-builder__product-card--selected', isSelected);
+      card.setAttribute('aria-pressed', isSelected);
+    }
 
     this.updateSummary();
   }
